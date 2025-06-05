@@ -1,0 +1,7 @@
+.unity-webgl-block {
+    border: 5px solid red;
+    padding: 10px;
+    min-height: 200px;
+    text-align: center;
+    background: #f9f9f9;
+}
