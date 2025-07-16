@@ -44,7 +44,7 @@ registerBlockType("mon-plugin/unity-webgl", {
     return createElement(
       "div",
       { style: { border: "1px solid grey", padding: "10px" } },
-      createElement("label", null, "Choisissez un build Unity :"),
+      createElement("label", null, WP_I18N.buildChoose),
       createElement(
         "select",
         {

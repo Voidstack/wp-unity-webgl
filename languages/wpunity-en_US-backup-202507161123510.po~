@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: WP Unity WebGL\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-01 10:57+0000\n"
-"PO-Revision-Date: 2025-07-01 10:59+0000\n"
+"PO-Revision-Date: 2025-07-16 11:23+0000\n"
 "Last-Translator: \n"
 "Language-Team: English (United States)\n"
 "Language: en_US\n"
@@ -15,18 +15,26 @@ msgstr ""
 "X-Loco-Version: 2.8.0; wp-6.8.1; php-8.4.4\n"
 "X-Domain: wpunity"
 
+#: admin-page.php:54
+msgid "Current language"
+msgstr "English"
+
 #. Description of the plugin
 msgid "Displays a Unity WebGL game inside an iframe."
 msgstr "Displays a Unity WebGL game inside an iframe."
 
 #. URI of the plugin
 msgid "https://enosistudio.com/"
-msgstr ""
+msgstr "https://enosistudio.com/"
 
 #. Author of the plugin
 msgid "MARTIN Baptiste / Voidstack"
+msgstr "MARTIN Baptiste / Voidstack"
+
+#: wpunity.php:58
+msgid "TempMsg"
 msgstr ""
 
 #. Name of the plugin
 msgid "WP Unity WebGL"
-msgstr ""
+msgstr "WP Unity WebGL"

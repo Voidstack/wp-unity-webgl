@@ -51,7 +51,7 @@ function unity_webgl_admin_page(): void
     ☕ Support me
     </a>
     </div>
-    
+<!--    <?php _e('Current language', 'wpunity'); ?> -->
     <p>Use this page to add your Unity project by uploading the <strong>.zip</strong> folder of your project and manage
     it easily within your admin dashboard.</p>
     <form style="margin: 20px" method="post" enctype="multipart/form-data">

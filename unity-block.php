@@ -1,5 +1,12 @@
 <?php
 
+// Tableau des string à traduirer.
+function wpunity_get_translatable_strings(): array {
+    return [
+        'buildChoose' => __('buildChoose', 'wpunity'),
+    ];
+}
+
 // Unity WebGL Block, ajoute le bloc Unity Webgl dans les blocs wordpress.
 function unity_enqueue_block(): void
 {
@@ -7,10 +14,13 @@ function unity_enqueue_block(): void
     wp_register_script(
         'mon-plugin-unity-block',
         plugins_url('block/index.js', __FILE__),
-        ['wp-blocks', 'wp-element', 'wp-editor'],
+        ['wp-blocks', 'wp-element', 'wp-editor', 'wp-i18n'],
         filemtime(plugin_dir_path(__FILE__) . 'block/index.js')
     );
 
+    // Ajout des trad dans le script
+    wp_localize_script('mon-plugin-unity-block', 'WP_I18N', wpunity_get_translatable_strings());
+    
     // Ajout du css pour le block
     wp_register_style(
         'mon-plugin-unity-block-style',

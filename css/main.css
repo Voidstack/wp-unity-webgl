@@ -1,0 +1,33 @@
+#unity-toolbar {
+    position: absolute;
+    width: 100%;
+    background-color: #111;
+    padding: 4px;
+    box-sizing: border-box;
+    z-index: 10;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.3);
+    font-family: system-ui, sans-serif;
+}
+
+#unity-toolbar button {
+    background: #1e1e1e;
+    color: #f0f0f0;
+    border: 1px solid #333;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+#unity-toolbar button:hover {
+    background: #2c2c2c;
+    color: white;
+}
+
+#unity-toolbar button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #555;
+}

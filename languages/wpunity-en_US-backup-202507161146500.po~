@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: WP Unity WebGL\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-01 10:57+0000\n"
-"PO-Revision-Date: 2025-07-16 11:55+0000\n"
+"PO-Revision-Date: 2025-07-16 11:23+0000\n"
 "Last-Translator: \n"
 "Language-Team: English (United States)\n"
 "Language: en_US\n"
@@ -14,10 +14,6 @@ msgstr ""
 "X-Generator: Loco https://localise.biz/\n"
 "X-Loco-Version: 2.8.0; wp-6.8.1; php-8.4.4\n"
 "X-Domain: wpunity"
-
-#: unity-block.php:5 unity-block.php:23
-msgid "buildChoose"
-msgstr "Choose a unity build : "
 
 #: admin-page.php:54
 msgid "Current language"
