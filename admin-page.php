@@ -1,4 +1,6 @@
 <?php
+require_once 'php/Utils.php';
+
 /**
 * Ce fichier contient toutes les méthodes nécessaires à la gestion
 * de la page d'administration de l'extension WordPress.
@@ -51,7 +53,7 @@ function unity_webgl_admin_page(): void
     ☕ Support me
     </a>
     </div>
-<!--    <?php _e('Current language', 'wpunity'); ?> -->
+    <!--    <?php _e('Current language', 'wpunity'); ?> -->
     <p>Use this page to add your Unity project by uploading the <strong>.zip</strong> folder of your project and manage
     it easily within your admin dashboard.</p>
     <form style="margin: 20px" method="post" enctype="multipart/form-data">
@@ -77,27 +79,32 @@ function unity_webgl_admin_page(): void
         $build_to_delete = basename($_POST['build_name']); // sécurité
         $full_path = $builds_dir . '/' . $build_to_delete;
         
-        if (is_dir($full_path)) {
-            require_once(ABSPATH . 'wp-admin/includes/file.php');
-            WP_Filesystem();
-            global $wp_filesystem;
-            $wp_filesystem->delete($full_path, true);
-            echo "<div style='color:green;'>✅ Succès : build '{$build_to_delete}' supprimé avec succès.</div>";
-        }
+        Utils::delete_folder($full_path);
     }
+
+    $builds = Utils::list_builds($builds_dir);
     
-    // Liste des builds
-    $builds = [];
-    foreach (scandir($builds_dir) as $entry) {
-        if ($entry !== '.' && $entry !== '..' && is_dir($builds_dir . '/' . $entry)) {
-            $builds[] = $entry;
+    // Supprimer tout les builds si demandé.
+    if (isset($_POST['delete_all_builds'])) {
+        foreach ($builds as $build) {
+            $path = $builds_dir . '/' . $build;
+            Utils::delete_folder($path);
         }
+        $builds = Utils::list_builds($builds_dir);
+        echo '<div class="notice notice-success"><p>Tous les builds ont été supprimés.</p></div>';
     }
-    
+
+    // Aucun build ou création d'un btn de suppression de tt les builds.
     if (empty($builds)) {
         echo '<p>Aucun build trouvé.</p>';
         return;
+    }else {
+        echo '<form method="post" onsubmit="return confirm(\'❌ Supprimer TOUS les builds ?\');" style="margin-bottom: 16px;">';
+        echo '<input type="hidden" name="delete_all_builds" value="1">';
+        submit_button('🧨 Supprimer tous les builds', 'delete');
+        echo '</form>';
     }
+
     
     echo '<table style="width: 100%; border-collapse: collapse;">';
     echo '<tr>
@@ -108,7 +115,7 @@ function unity_webgl_admin_page(): void
     
     foreach ($builds as $build) {
         $build_path = $builds_dir . '/' . $build;
-        $size_bytes = folder_size($build_path);
+        $size_bytes = Utils::getSize($build_path);
         $size_mb = round($size_bytes / 1048576, 2);
         
         echo '<tr>';
@@ -123,41 +130,9 @@ function unity_webgl_admin_page(): void
         echo '</td>';
         echo '</tr>';
     }
-    echo '</table>';
-    ?>
-    </ul>
+    echo '</table></ul>';
     
-    <?php
-    if (!empty($builds)) {
-        echo '<form method="post" onsubmit="return confirm(\'❌ Supprimer TOUS les builds ?\');" style="margin-bottom: 16px;">';
-        echo '<input type="hidden" name="delete_all_builds" value="1">';
-        submit_button('🧨 Supprimer tous les builds', 'delete');
-        echo '</form>';
-    }
-    
-
-    function delete_folder($folder) {
-        if (!is_dir($folder)) return;
-        foreach (scandir($folder) as $item) {
-            if ($item === '.' || $item === '..') continue;
-            $path = $folder . '/' . $item;
-            is_dir($path) ? delete_folder($path) : unlink($path);
-        }
-        rmdir($folder);
-    }    
-
-    if (isset($_POST['delete_all_builds'])) {
-        foreach ($builds as $build) {
-            $path = $builds_dir . '/' . $build;
-            delete_folder($builds_dir);
-        }
-        echo '<div class="notice notice-success"><p>Tous les builds ont été supprimés.</p></div>';
-    }
-    
-    ?>
-    
-    </div>
-    <?php
+    echo '</div>';
 }
 
 // Méthod de téléversement d'un projet unity .zip
@@ -256,14 +231,4 @@ function unity_webgl_handle_upload(): void
     } else {
         echo "<p style='color:red;'>❌ Erreur : impossible d’ouvrir le fichier .zip (" . $file['tmp_name'] . ")</p>";
     }
-}
-
-// Fonction récursive pour calculer la taille d'un dossier
-function folder_size($dir): float|int
-{
-    $size = 0;
-    foreach (new RecursiveIteratorIterator(iterator: new RecursiveDirectoryIterator(directory: $dir, flags: FilesystemIterator::SKIP_DOTS)) as $file) {
-        $size += $file->getSize();
-    }
-    return $size;
 }

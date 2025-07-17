@@ -1,4 +1,5 @@
 <?php
+require_once 'php/Utils.php';
 
 // Tableau des string à traduirer.
 function wpunity_get_translatable_strings(): array {
@@ -50,14 +51,7 @@ function unity_webgl_localize_builds(): void
     $upload_dir = wp_upload_dir();
     $builds_dir = $upload_dir['basedir'] . '/unity_webgl';
 
-    $builds = [];
-    if (is_dir($builds_dir)) {
-        foreach (scandir($builds_dir) as $entry) {
-            if ($entry !== '.' && $entry !== '..' && is_dir($builds_dir . '/' . $entry)) {
-                $builds[] = $entry;
-            }
-        }
-    }
+    $builds = Utils::list_builds($builds_dir);
 
     wp_localize_script('mon-plugin-unity-block', 'unityBuildsData', ['builds' => $builds]);
 }
