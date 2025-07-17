@@ -48,6 +48,15 @@ function unity_enqueue_scripts($build_url, $loader_name, $showOptions, $showOnMo
         'currentUserIsAdmin' => current_user_can('administrator'),
         'admMessage' => __('TempMsg', 'wpunity'),
     ]);
+
+    // Permet au script client-unity-block d'import client-unity-toolbar
+    add_filter('script_loader_tag', function($tag, $handle) {
+        if ($handle === 'unity-webgl') {
+            return str_replace('<script ', '<script type="module" ', $tag);
+        }
+        return $tag;
+    }, 10, 2);
+    
 }
 
 // Définition du shortcut [unity_webgl build="${attributes.selectedBuild}"]
