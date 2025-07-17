@@ -146,17 +146,12 @@ function unity_build_shortcode($atts)
         });
 
         toolbar.appendChild(fullscreenBtn);
-
-
-        
-
         
         // Ajoute la barre dans le conteneur du canvas
         const container = canvas.parentElement;
         container.style.position = 'relative';
         container.appendChild(toolbar);
     }
-    
     
     script.onload = () => {
         createUnityInstance(unityCanvas, config, (progress) => {
