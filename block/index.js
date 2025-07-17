@@ -1,5 +1,7 @@
 const { registerBlockType } = wp.blocks;
 const { createElement: el, useEffect } = wp.element;
+const { InspectorControls } = wp.blockEditor;
+const { CheckboxControl, PanelBody } = wp.components;
 
 // Définition de l'icône personnalisée SVG pour le bloc Unity
 const iconUnity = {
@@ -16,18 +18,19 @@ registerBlockType("mon-plugin/unity-webgl", {
   title: "Unity WebGL", // Nom affiché du bloc
   icon: iconUnity, // Icône personnalisée
   category: "embed", // Catégorie du bloc dans l’éditeur
-
   attributes: {
     selectedBuild: {
       type: "string",
       default: "", // Attribut qui stocke le build Unity sélectionné
     },
+    showOptions: { type: "boolean", default: true },
+    showOnMobile: { type: "boolean", default: false },
   },
 
   // Fonction d’édition du bloc (affichage dans l’admin WordPress)
   edit: (props) => {
     const { attributes, setAttributes } = props;
-    const { selectedBuild } = attributes;
+    const { selectedBuild, showOptions, showOnMobile } = attributes;
 
     // Si aucun build n’est disponible dans la variable globale, on affiche un message
     if (!window.unityBuildsData || !window.unityBuildsData.builds.length) {
@@ -49,7 +52,7 @@ registerBlockType("mon-plugin/unity-webgl", {
     }, [selectedBuild, validSelectedBuild, setAttributes]);
 
     // Retourne l’interface d’édition : label + select + affichage build sélectionné
-    return el(
+    const mainContent = el(
       "div",
       { style: { border: "1px solid grey", padding: "10px" } },
       el("label", { htmlFor: "select-build" }, WP_I18N.buildChoose),
@@ -71,9 +74,38 @@ registerBlockType("mon-plugin/unity-webgl", {
           `Build sélectionné : ${validSelectedBuild}`
         )
     );
+
+    // Panel à droite
+    const inspector = el(
+      InspectorControls,
+      null,
+      el(
+        PanelBody,
+        { title: "Options", initialOpen: true },
+        el(CheckboxControl, {
+          label: "Afficher les options",
+          checked: props.attributes.showOptions,
+          onChange: (value) => props.setAttributes({ showOptions: value }),
+        }),
+        el(CheckboxControl, {
+          label: "Afficher sur mobile",
+          checked: props.attributes.showOnMobile,
+          onChange: (value) => props.setAttributes({ showOnMobile: value }),
+        })
+      )
+    );
+
+    // retourne les deux
+    return [inspector, mainContent];
   },
 
   // Fonction qui sauvegarde la sortie HTML du bloc (affichage côté front)
-  save: ({ attributes }) =>
-    el("div", null, `[unity_webgl build="${attributes.selectedBuild}"]`),
+  save: ({ attributes }) => {
+    const { selectedBuild, showOptions, showOnMobile } = attributes;
+    const shortcode = `[unity_webgl build="${selectedBuild}" showOptions="${
+      showOptions ? "true" : "false"
+    }" showOnMobile="${showOnMobile ? "true" : "false"}"]`;
+    console.log("Shortcode:", shortcode);
+    return el("div", null, shortcode);
+  },
 });

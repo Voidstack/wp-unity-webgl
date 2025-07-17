@@ -31,13 +31,38 @@ add_action('wp_enqueue_scripts', 'unity_enqueue_toolbar_css');
 
 load_plugin_textdomain('wpunity', false, dirname(plugin_basename(__FILE__)) . '/languages');
 
+function unity_enqueue_scripts($build_url, $loader_name, $showOptions, $showOnMobile):void {
+    wp_enqueue_script(
+        'unity-webgl',
+        plugins_url('js/client-unity-block.js', __FILE__),
+        [],
+        filemtime(plugin_dir_path(__FILE__) . 'js/client-unity-block.js'),
+        true
+    );
+
+    wp_localize_script('unity-webgl', 'UnityWebGLData', [
+        'buildUrl' => $build_url,
+        'loaderName' => $loader_name,
+        'showOptions' => $showOptions,
+        'showOnMobile' => $showOnMobile,
+        'currentUserIsAdmin' => current_user_can('administrator'),
+        'admMessage' => __('TempMsg', 'wpunity'),
+    ]);
+}
+
 // Définition du shortcut [unity_webgl build="${attributes.selectedBuild}"]
 function unity_build_shortcode($atts)
 {
+    // Magie noir de wordpress qui fait de la merde avec les Uppercases.
     $atts = shortcode_atts([
         'build' => '',
-    ], $atts, 'unity_webgl');
+        'showoptions' => 'true',     // minuscules !
+        'showonmobile' => 'false',
+    ], array_change_key_case($atts, CASE_LOWER), 'unity_webgl');
     
+    $showOptions = filter_var($atts['showoptions'], FILTER_VALIDATE_BOOLEAN);
+    $showOnMobile = filter_var($atts['showonmobile'], FILTER_VALIDATE_BOOLEAN);
+
     if (empty($atts['build'])) {
         return '<p>❌ Unity WebGL Aucun build spécifié.</p>';
     }
@@ -60,112 +85,16 @@ function unity_build_shortcode($atts)
     $data_file = $build_url . 'Build/' . $loader_name . '.data';
     $wasm_file = $build_url . 'Build/' . $loader_name . '.wasm';
     
+    if (wp_is_mobile() && !$showOnMobile) {
+        return '<p>🚫 Le jeu n’est pas disponible sur mobile. Merci de le lancer depuis un ordinateur pour une meilleure expérience.</p>';
+    }else{
+        unity_enqueue_scripts($build_url, $loader_name, $showOptions, $showOnMobile);
+    }
+
     ob_start(); ?>
     <div id="unity-error" style="display: none; padding: 1rem; color:white;"></div>
     <div id="unity-container" style="width: 100%; height: 600px; color:white;">
-    <canvas id="unity-canvas" width="960" height="600" style="width: 100%; height: 100%; background: #000;"></canvas>
-    <script>
-    const MY_PLUGIN_I18N = {
-        adm_message: <?php echo json_encode(__('TempMsg', 'wpunity')); ?>
-    };
-    
-    const WP_DATA = {
-        currentUserIsAdmin: <?php echo json_encode(current_user_can('administrator')); ?>
-    };
-    
-    const buildUrl = "<?php echo esc_js($build_url); ?>Build";
-    const loaderUrl = buildUrl + "/<?php echo esc_js($loader_name); ?>.loader.js"; // <- ici on utilise loader_name
-    
-    const unityCanvas = document.getElementById("unity-canvas");
-    const errorDiv = document.getElementById("unity-error");
-    const unityContainer = document.getElementById("unity-container");
-    
-    // Fonction appelée par la config du jeu.
-    function unityShowBanner(msg, type) {
-        function updateBannerVisibility() {
-            errorDiv.style.display = errorDiv.children.length ? 'block' : 'none';
-            unityCanvas.style.display = errorDiv.children.length ? 'none' : 'block';
-            unityContainer.style.display = errorDiv.children.length ? 'none' : 'block';
-        }
-        var div = document.createElement('div');
-        ///
-        div.innerHTML = MY_PLUGIN_I18N.adm_message + " : " + msg;
-        ///
-        errorDiv.appendChild(div);
-        if (type == 'error') div.style = 'background: darkred; padding: 10px;';
-        else {
-            if (type == 'warning'){
-                if(WP_DATA.currentUserIsAdmin){
-                    div.style = 'background: darkorange; padding: 10px;';
-                    setTimeout(function () {
-                        errorDiv.removeChild(div);
-                        updateBannerVisibility();
-                    }, 4000);
-                }else{
-                    errorDiv.removeChild(div);
-                    updateBannerVisibility();
-                }
-            }
-        }
-        updateBannerVisibility();
-    }
-    
-    // La config du jeu.
-    var config = {
-        dataUrl: buildUrl + "/<?php echo esc_js($loader_name); ?>.data",
-        frameworkUrl: buildUrl + "/<?php echo esc_js($loader_name); ?>.framework.js",
-        codeUrl: buildUrl + "/<?php echo esc_js($loader_name); ?>.wasm",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "EnosiStudio",
-        productName: "EnosiStudio",
-        productVersion: "1.0",
-        showBanner: unityShowBanner,
-    };
-    
-    const script = document.createElement("script");
-    script.src = loaderUrl;
-    
-    function createToolbar(canvas) {
-        // Crée la barre
-        const toolbar = document.createElement('div');
-        toolbar.id = 'unity-toolbar';
-        
-        // Crée le bouton fullscreen
-        const fullscreenBtn = document.createElement('button');
-        fullscreenBtn.id = 'fullscreen-btn';
-        fullscreenBtn.textContent = '⛶';
-        
-        fullscreenBtn.addEventListener('click', () => {
-            if (canvas.requestFullscreen) {
-                canvas.requestFullscreen();
-            } else if (canvas.webkitRequestFullscreen) {
-                canvas.webkitRequestFullscreen();
-            } else if (canvas.msRequestFullscreen) {
-                canvas.msRequestFullscreen();
-            }
-        });
-
-        toolbar.appendChild(fullscreenBtn);
-        
-        // Ajoute la barre dans le conteneur du canvas
-        const container = canvas.parentElement;
-        container.style.position = 'relative';
-        container.appendChild(toolbar);
-    }
-    
-    script.onload = () => {
-        createUnityInstance(unityCanvas, config, (progress) => {
-        }).then((unityInstance) => {
-            // quand l'instance est chargé
-            createToolbar(unityCanvas);
-        }).catch((message) => {
-            alert(message);
-        });
-    };
-    
-    document.body.appendChild(script);
-    
-    </script>
+        <canvas id="unity-canvas" width="960" height="600" style="width: 100%; height: 100%; background: #000;"></canvas>
     </div>
     <?php
     return ob_get_clean();
