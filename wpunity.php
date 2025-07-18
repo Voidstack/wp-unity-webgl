@@ -39,7 +39,7 @@ function unity_enqueue_scripts($build_url, $loader_name, $showOptions, $showOnMo
         filemtime(plugin_dir_path(__FILE__) . 'js/client-unity-block.js'),
         true
     );
-
+    
     wp_localize_script('unity-webgl', 'UnityWebGLData', [
         'buildUrl' => $build_url,
         'loaderName' => $loader_name,
@@ -48,7 +48,7 @@ function unity_enqueue_scripts($build_url, $loader_name, $showOptions, $showOnMo
         'currentUserIsAdmin' => current_user_can('administrator'),
         'admMessage' => __('TempMsg', 'wpunity'),
     ]);
-
+    
     // Permet au script client-unity-block d'import client-unity-toolbar
     add_filter('script_loader_tag', function($tag, $handle) {
         if ($handle === 'unity-webgl') {
@@ -71,7 +71,7 @@ function unity_build_shortcode($atts)
     
     $showOptions = filter_var($atts['showoptions'], FILTER_VALIDATE_BOOLEAN);
     $showOnMobile = filter_var($atts['showonmobile'], FILTER_VALIDATE_BOOLEAN);
-
+    
     if (empty($atts['build'])) {
         return '<p>❌ Unity WebGL Aucun build spécifié.</p>';
     }
@@ -99,11 +99,11 @@ function unity_build_shortcode($atts)
     }else{
         unity_enqueue_scripts($build_url, $loader_name, $showOptions, $showOnMobile);
     }
-
+    
     ob_start(); ?>
     <div id="unity-error" style="display: none; padding: 1rem; color:white;"></div>
-    <div id="unity-container" style="width: 100%; height: 600px; color:white;">
-        <canvas id="unity-canvas" width="960" height="600" style="width: 100%; height: 100%; background: #000;"></canvas>
+    <div id="unity-container">
+    <canvas id="unity-canvas"></canvas>
     </div>
     <?php
     return ob_get_clean();

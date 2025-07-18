@@ -1,7 +1,7 @@
 const { registerBlockType } = wp.blocks;
 const { createElement: el, useEffect } = wp.element;
 const { InspectorControls } = wp.blockEditor;
-const { CheckboxControl, PanelBody } = wp.components;
+const { CheckboxControl, PanelBody, SelectControl, TextControl, ToggleControl } = wp.components;
 
 // Définition de l'icône personnalisée SVG pour le bloc Unity
 const iconUnity = {
@@ -25,33 +25,39 @@ registerBlockType("mon-plugin/unity-webgl", {
     },
     showOptions: { type: "boolean", default: true },
     showOnMobile: { type: "boolean", default: false },
+    sizeMode: { type: "string", default: "aspect-ratio"},
+    fixedHeight: { type: "number", default: 500 },
+    aspectRatio: { type: "string", default: "16/9" },
   },
-
+  
   // Fonction d’édition du bloc (affichage dans l’admin WordPress)
   edit: (props) => {
-    const { attributes, setAttributes } = props;
-    const { selectedBuild, showOptions, showOnMobile } = attributes;
-
-    // Si aucun build n’est disponible dans la variable globale, on affiche un message
-    if (!window.unityBuildsData || !window.unityBuildsData.builds.length) {
+    const {
+      attributes: {
+        selectedBuild = "",
+        showOptions = false,
+        showOnMobile = false,
+        sizeMode = "aspect-ratio",
+        fixedHeight = 500,
+        aspectRatio = "16/9",
+      },
+      setAttributes,
+    } = props;
+    
+    const builds = window.unityBuildsData?.builds || [];
+    
+    if (!builds.length) {
       return el("p", null, "Aucun build Unity trouvé.");
     }
-
-    const builds = window.unityBuildsData.builds;
-
-    // On vérifie que le build sélectionné est bien dans la liste des builds valides
-    const validSelectedBuild = builds.includes(selectedBuild)
-      ? selectedBuild
-      : "";
-
-    // Effet React : si le build sélectionné est invalide, on le reset à vide
+    
+    const validSelectedBuild = builds.includes(selectedBuild) ? selectedBuild : "";
+    
     useEffect(() => {
       if (validSelectedBuild !== selectedBuild) {
         setAttributes({ selectedBuild: "" });
       }
-    }, [selectedBuild, validSelectedBuild, setAttributes]);
-
-    // Retourne l’interface d’édition : label + select + affichage build sélectionné
+    }, [selectedBuild, validSelectedBuild]);
+    
     const mainContent = el(
       "div",
       { style: { border: "1px solid grey", padding: "10px" } },
@@ -65,47 +71,72 @@ registerBlockType("mon-plugin/unity-webgl", {
           "aria-label": WP_I18N.buildChoose,
         },
         el("option", { value: "" }, "-- Aucun --"),
-        builds.map((build) => el("option", { key: build, value: build }, build))
-      ),
-      validSelectedBuild &&
-        el(
-          "div",
-          { style: { marginTop: "10px" } },
-          `Build sélectionné : ${validSelectedBuild}`
-        )
-    );
-
-    // Panel à droite
-    const inspector = el(
-      InspectorControls,
-      null,
-      el(
-        PanelBody,
-        { title: "Options", initialOpen: true },
-        el(CheckboxControl, {
-          label: "Afficher les options",
-          checked: props.attributes.showOptions,
-          onChange: (value) => props.setAttributes({ showOptions: value }),
-        }),
-        el(CheckboxControl, {
-          label: "Afficher sur mobile",
-          checked: props.attributes.showOnMobile,
-          onChange: (value) => props.setAttributes({ showOnMobile: value }),
-        })
+        builds.map((build) =>
+          el("option", { key: build, value: build }, build)
       )
-    );
+    ),
+    validSelectedBuild &&
+    el(
+      "div",
+      { style: { marginTop: "10px" } },
+      `Build sélectionné : ${validSelectedBuild}`
+    )
+  );
+  
+  const inspector = el(
+    InspectorControls,
+    null,
+    el(
+      PanelBody,
+      { title: "Options", initialOpen: true },
+      el(CheckboxControl, {
+        label: "Afficher les options",
+        checked: showOptions,
+        onChange: (value) => setAttributes({ showOptions: value }),
+      }),
+      el(CheckboxControl, {
+        label: "Afficher sur mobile",
+        checked: showOnMobile,
+        onChange: (value) => setAttributes({ showOnMobile: value }),
+      }),
+      el(SelectControl, {
+        label: "Display Mode",
+        value: sizeMode,
+        options: [
+          { label: "Aspect Ratio", value: "aspect-ratio" },
+          { label: "Fixed Height", value: "fixed-height" },
+        ],
+        onChange: (value) => setAttributes({ sizeMode: value }),
+      }),
+      sizeMode === "aspect-ratio" &&
+      el(TextControl, {
+        label: "Aspect Ratio (ex: 16/9)",
+        value: aspectRatio,
+        onChange: (value) => setAttributes({ aspectRatio: value }),
+      }),
+      sizeMode === "fixed-height" &&
+      el(TextControl, {
+        label: "Hauteur fixe (px)",
+        value: fixedHeight,
+        onChange: (value) => setAttributes({ fixedHeight: parseInt(value) || 500 }),
+      })
+    )
+  );
+  
+  return [inspector, mainContent];
+},
 
-    // retourne les deux
-    return [inspector, mainContent];
-  },
-
-  // Fonction qui sauvegarde la sortie HTML du bloc (affichage côté front)
-  save: ({ attributes }) => {
-    const { selectedBuild, showOptions, showOnMobile } = attributes;
-    const shortcode = `[unity_webgl build="${selectedBuild}" showOptions="${
-      showOptions ? "true" : "false"
-    }" showOnMobile="${showOnMobile ? "true" : "false"}"]`;
-    console.log("Shortcode:", shortcode);
-    return el("div", null, shortcode);
-  },
+// Fonction qui sauvegarde la sortie HTML du bloc (affichage côté front)
+save: ({ attributes }) => {
+  const { selectedBuild, showOptions, showOnMobile, sizeMode, aspectRatio, fixedHeight } = attributes;
+  const shortcode = `[unity_webgl 
+  build="${selectedBuild}" 
+  showOptions="${showOptions ? "true" : "false"}" 
+  showOnMobile="${showOnMobile ? "true" : "false"}" 
+  sizeMode="${sizeMode}" 
+  aspectRatio="${aspectRatio || "16/9"}" 
+  fixedHeight="${fixedHeight || 500}"]`;
+  console.log("Shortcode:", shortcode);
+  return el("div", null, shortcode);
+},
 });

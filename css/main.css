@@ -1,3 +1,16 @@
+#unity-container {
+    /* Soit l'un soit l'autre */
+    height: 600px; 
+    aspect-ratio: 16 / 9;
+
+    width: 100%; 
+    color:white;
+}
+
+#unity-canvas {
+width: 100%; height: 100%; background: #00000000;
+}
+
 #unity-toolbar {
     position: absolute;
     width: 100%;
@@ -7,9 +20,18 @@
     z-index: 10;
     display: flex;
     justify-content: flex-end;
-    gap: 12px;
+    gap: 6px;
     box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.3);
     font-family: system-ui, sans-serif;
+}
+
+#unity-toolbar * {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* si tu veux centrer aussi horizontalement */
+    color: #f0f0f0;
+    font-size: 16px;
+    cursor: pointer;
 }
 
 #unity-toolbar button {
