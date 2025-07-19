@@ -2,13 +2,16 @@
     /* Soit l'un soit l'autre */
     /* height: 600px; 
     aspect-ratio: 16 / 9; */
-
+    box-sizing: border-box;
     width: 100%; 
     color:white;
 }
 
 #unity-canvas {
-width: 100%; height: 100%; background: #00000000;
+    display: block;
+    width: 100%; 
+    height: 100%; 
+    background: #00000000;
 }
 
 #unity-toolbar {

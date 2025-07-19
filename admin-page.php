@@ -51,48 +51,70 @@ function unity_webgl_admin_page(): void
     <div style="display: flex; align-items: center;">
     <img style="width: 32px; height: 32px; margin-right: 10px;"
     src="<?php echo plugins_url('res/unity_icon.svg', __FILE__); ?>" alt="Logo" class="logo" />
-    <span style="font-size: 18px; color: #333; margin-right: 20px;">Upload Build Unity WebGL</span>
+    <span style="font-size: 18px; color: #333; margin-right: 20px;">Unity WebGL</span>
     </div>
     <a href="https://coff.ee/EnosiStudio" target="_blank" style="text-decoration: none; font-size: 16px; color: #0073aa; white-space: nowrap;">
     ☕ Support me
     </a>
     </div>
     
-    
     <?php
     
-    echo "<h1>" . Utils::detectServer() . "</h1>";
-
-    if (isset($_POST['add_wasm_mime'])) {
-        Utils::setupWasmMime();
-    }else if (isset($_POST['del_wasm_mime'])) {
-        Utils::removeWasmMimeSetup();
-    }
+    // _e('Current language', 'wpunity');
     
-    // Check htaccess pour le type MIME
-    if(Utils::isWasmMimeConfigured()){
-        echo "<div style='color:green;'>✅ Le type MIME pour les fichiers .wasm est déjà configuré dans le .htaccess.</div>";
-        echo "<form method='post' style='margin-top: 10px;'>";
-        submit_button('Delete le type MIME pour .wasm', 'primary', 'del_wasm_mime');
-        echo "</form>";
-    }else{
-        echo "<div style='color:orange;'>⚠️ Le type MIME pour les fichiers .wasm n'est pas configuré dans le .htaccess.</div>";
-        echo "<form method='post' style='margin-top: 10px;'>";
-        submit_button('Configurer le type MIME pour .wasm', 'primary', 'add_wasm_mime');
-        echo "</form>";
+    $serverType = Utils::detectServer();
+    echo "<div class='simpleblock'>";
+    switch($serverType) {
+        case 'apache': {
+            echo "<h2>Configuration serveur : Apache détecté.</h2>";
+            if (isset($_POST['add_wasm_mime'])) {
+                Utils::setupWasmMime();
+            }else if (isset($_POST['del_wasm_mime'])) {
+                Utils::removeWasmMimeSetup();
+            }
+            
+            // Check htaccess pour le type MIME
+            if(Utils::isWasmMimeConfigured()){
+                echo "<div style='color:green;'>✅ Le type MIME pour les fichiers .wasm est déjà configuré dans le .htaccess.</div>";
+                echo "<form method='post'>";
+                submit_button('Delete le type MIME pour .wasm', 'primary', 'del_wasm_mime');
+                echo "</form>";
+            }else{
+                echo "<div style='color:orange;'>⚠️ Le type MIME pour les fichiers .wasm n'est pas configuré dans le .htaccess. un warning sera envoyé dans la console à chaque lancement de build</div>";
+                echo "<form method='post'>";
+                submit_button('Configurer le type MIME pour .wasm', 'primary', 'add_wasm_mime');
+                echo "</form>";
+            }
+            echo "<p>La tentative d'ajout ou de suppression peut échouer pour des raisons de sécurité. </br> 
+            Dans ce cas, la configuration doit être effectuée manuellement dans le fichier .htaccess.</br>
+            Toute modification de la configuration du serveur nécessitera un redémarrage manuel du serveur.</p>";
+            break;
+        }
+        case 'nginx': {
+            echo "<h2>Configuration serveur : Nginx détecté.</h2> 
+                <p>Veuillez configurer le type MIME pour les fichiers .wasm dans votre configuration Nginx.</br>
+                La détection et configuration automatique du MIME type pour les fichiers .wasm n'est pris en charge que sous serveur Apache.</p>";
+            break;
+            
+        }
+        default:{
+            echo "<h2>Configuration serveur : $serverType détecté.</h2>
+            <p>La détection et configuration automatique du MIME type pour les fichiers .wasm n'est pris en charge que sous serveur Apache.</p>";
+        }
     }
+    echo "</div>";
+    
+    echo "<div class='simpleblock'>";
     ?>
-    
-    <!--    <?php _e('Current language', 'wpunity'); ?> -->
+    <h2>Gestionnaire des builds</h2>
     <p>Use this page to add your Unity project by uploading the <strong>.zip</strong> folder of your project and manage
-    it easily within your admin dashboard.</p>
+    it easily within the admin dashboard.</p>
     
     <form method="post" enctype="multipart/form-data">
     <input type="file" name="unity_zip" accept=".zip" required>
     <?php submit_button('Upload and Extract'); ?>
     </form>
     
-    <h2>Builds téléversés</h2>
     <ul>
     <?php
     
@@ -125,18 +147,6 @@ function unity_webgl_admin_page(): void
         echo '<div class="notice notice-success"><p>Tous les builds ont été supprimés.</p></div>';
     }
     
-    // Aucun build ou création d'un btn de suppression de tt les builds.
-    if (empty($builds)) {
-        echo '<p>Aucun build trouvé.</p>';
-        return;
-    }else {
-        echo '<form method="post" onsubmit="return confirm(\'❌ Supprimer TOUS les builds ?\');" style="margin-bottom: 16px;">';
-        echo '<input type="hidden" name="delete_all_builds" value="1">';
-        submit_button('🧨 Supprimer tous les builds', 'delete');
-        echo '</form>';
-    }
-    
-    
     echo '<table style="width: 100%; border-collapse: collapse;">';
     echo '<tr>
     <th style="text-align:left; border-bottom: 1px solid #ccc;">Name</th>
@@ -163,6 +173,20 @@ function unity_webgl_admin_page(): void
     }
     echo '</table></ul>';
     
+    // Aucun build ou création d'un btn de suppression de tt les builds.
+    if (empty($builds)) {
+        echo '<p>Aucun build trouvé.</p>';
+        // return;
+    }else {
+        echo '<form method="post" onsubmit="return confirm(\'❌ Supprimer TOUS les builds ?\');" style="margin-bottom: 16px;">';
+        echo '<input type="hidden" name="delete_all_builds" value="1">';
+        submit_button('🧨 Supprimer tous les builds', 'delete');
+        echo '</form>';
+    }
+    
+    echo '</div></div>';
+    echo '<div class="footer">';
+    echo '<p>Plugin développé par <a href="https://enosistudio.com/" target="_blank">Enosi Studio</a>.';
     echo '</div>';
 }
 
@@ -263,3 +287,4 @@ function unity_webgl_handle_upload(): void
         echo "<p style='color:red;'>❌ Erreur : impossible d’ouvrir le fichier .zip (" . $file['tmp_name'] . ")</p>";
     }
 }
+?>

@@ -72,16 +72,16 @@ script.src = loaderUrl;
 script.onload = () => {
   const originalLog = console.log;
   if(!UnityWebGLData.showLogs){
-    console.log("Unity logs are hidden. Enable in the block settings to see them.");
+    console.log("Unity logs are hidden.");
     console.log = () => {};
   }
   
   createUnityInstance(unityCanvas, config, (progress) => {})
   .then((unityInstance) => {
     if(UnityWebGLData.sizeMode === "fixed-height") {
-      unityCanvas.style.height = UnityWebGLData.fixedHeight + "px";
+      unityContainer.style.height = UnityWebGLData.fixedHeight + "px";
     }else if(UnityWebGLData.sizeMode === "aspect-ratio") {
-      unityCanvas.style.aspectRatio = UnityWebGLData.aspectRatio;
+      unityContainer.style.aspectRatio = UnityWebGLData.aspectRatio;
     }
     if (UnityWebGLData.showOptions) {
       new UnityToolbar(unityCanvas);

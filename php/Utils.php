@@ -48,7 +48,7 @@ class Utils {
         $serverSoftware = $_SERVER['SERVER_SOFTWARE'] ?? '';
         if (stripos($serverSoftware, 'apache') !== false) return 'apache';
         if (stripos($serverSoftware, 'nginx') !== false) return 'nginx';
-        return 'unknown';
+        return $serverSoftware || 'unknown';
     }
     
     /**

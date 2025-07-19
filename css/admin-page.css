@@ -11,3 +11,16 @@ form[enctype="multipart/form-data"] input[type="submit"] {
     display: inline-block !important;
     margin: 0px !important;
 }
+
+form .submit{
+    margin: 0px !important;
+    padding: 5px !important;}
+
+.simpleblock {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
