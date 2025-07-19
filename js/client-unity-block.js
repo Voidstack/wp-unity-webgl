@@ -52,6 +52,10 @@ const config = {
   frameworkUrl: buildUrl + "/" + loaderName + ".framework.js",
   codeUrl: buildUrl + "/" + loaderName + ".wasm",
   streamingAssetsUrl: "StreamingAssets",
+  webglContextAttributes: {
+    // Permet de capturer le contenu du canvas pour les captures d'écran
+    preserveDrawingBuffer: true
+  },
   companyName: "EnosiStudio",
   productName: "EnosiStudio",
   productVersion: "1.0",
@@ -64,39 +68,17 @@ const loaderUrl = buildUrl + "/" + loaderName + ".loader.js";
 const script = document.createElement("script");
 script.src = loaderUrl;
 
-/** Fonction qui permet de créer la toolbar sous le canvas */
-function createToolbar(canvas) {
-  const toolbar = document.createElement("div");
-  toolbar.id = "unity-toolbar";
-
-  const fullscreenBtn = document.createElement("button");
-  fullscreenBtn.id = "fullscreen-btn";
-  fullscreenBtn.textContent = "⛶";
-
-  fullscreenBtn.addEventListener("click", () => {
-    // Appelle la méthode fullscreen compatible selon le navigateur
-    const requestFS =
-      canvas.requestFullscreen ||
-      canvas.webkitRequestFullscreen ||
-      canvas.msRequestFullscreen;
-    if (requestFS) requestFS.call(canvas);
-  });
-
-  toolbar.appendChild(fullscreenBtn);
-
-  // Ajoute la toolbar dans le conteneur du canvas
-  const container = canvas.parentElement;
-  container.style.position = "relative";
-  container.appendChild(toolbar);
-}
-
 // Quand le script Unity est chargé, on initialise l’instance
 script.onload = () => {
   createUnityInstance(unityCanvas, config, (progress) => {})
     .then((unityInstance) => {
+      if(UnityWebGLData.sizeMode === "fixed-height") {
+        unityCanvas.style.height = UnityWebGLData.fixedHeight + "px";
+      }else if(UnityWebGLData.sizeMode === "aspect-ratio") {
+        unityCanvas.style.aspectRatio = UnityWebGLData.aspectRatio;
+      }
       if (UnityWebGLData.showOptions) {
         new UnityToolbar(unityCanvas);
-        //        createToolbar(unityCanvas);
       }
     })
     .catch((message) => {

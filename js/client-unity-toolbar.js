@@ -11,7 +11,7 @@ export class UnityToolbar {
     this._createFPSCounter();
     this._createAlerteHardwareAcceleration();
     this._addInfoButton();
-    this._createScreenshotButton();    
+    this._createScreenshotButton(canvas);    
     this._createReloadButton();
     this._createFullscreenButton();
     
@@ -63,15 +63,14 @@ export class UnityToolbar {
     requestAnimationFrame(update);
   }
   
-  // Creates and adds a screenshot button to the toolbar
-  _createScreenshotButton() {
+  _createScreenshotButton(canvas) {
     const btn = document.createElement("button");
     btn.id = "screenshot-btn";
     btn.textContent = "📷";
     btn.title = "Take a screenshot";
     
-    btn.addEventListener("click", () => {
-      const dataURL = this.canvas.toDataURL("image/png");
+    btn.addEventListener("click", () => {      
+      const dataURL = canvas.toDataURL("image/png");
       const a = document.createElement("a");
       a.href = dataURL;
       a.download = "unity-screenshot.png";
@@ -80,6 +79,7 @@ export class UnityToolbar {
     
     this.toolbar.appendChild(btn);
   }
+  
   
   // Creates and adds a reload button to the toolbar
   _createReloadButton() {

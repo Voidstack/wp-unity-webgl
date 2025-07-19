@@ -31,7 +31,7 @@ add_action('wp_enqueue_scripts', 'unity_enqueue_toolbar_css');
 
 load_plugin_textdomain('wpunity', false, dirname(plugin_basename(__FILE__)) . '/languages');
 
-function unity_enqueue_scripts($build_url, $loader_name, $showOptions, $showOnMobile):void {
+function unity_enqueue_scripts($build_url, $loader_name, $showOptions, $showOnMobile, $sizeMode, $fixedHeight, $aspectRatio):void {
     wp_enqueue_script(
         'unity-webgl',
         plugins_url('js/client-unity-block.js', __FILE__),
@@ -45,6 +45,10 @@ function unity_enqueue_scripts($build_url, $loader_name, $showOptions, $showOnMo
         'loaderName' => $loader_name,
         'showOptions' => $showOptions,
         'showOnMobile' => $showOnMobile,
+        'sizeMode' => $sizeMode,
+        'fixedHeight' => $fixedHeight,
+        'aspectRatio' => $aspectRatio,
+        'urlAdmin' => admin_url('/wp-admin/admin.php'),
         'currentUserIsAdmin' => current_user_can('administrator'),
         'admMessage' => __('TempMsg', 'wpunity'),
     ]);
@@ -67,10 +71,17 @@ function unity_build_shortcode($atts)
         'build' => '',
         'showoptions' => 'true',     // minuscules !
         'showonmobile' => 'false',
+        'sizemode' => 'fixed-height', // fixed-height, full-width, or custom
+        'fixedheight' => 500,         // only used if sizeMode is fixed-height
+        'aspectratio' => '4/3',       // format attendu : nombre/nombre (ex: 4/3)
     ], array_change_key_case($atts, CASE_LOWER), 'unity_webgl');
     
     $showOptions = filter_var($atts['showoptions'], FILTER_VALIDATE_BOOLEAN);
     $showOnMobile = filter_var($atts['showonmobile'], FILTER_VALIDATE_BOOLEAN);
+
+    $sizeMode = $atts['sizemode'];
+    $fixedHeight = intval($atts['fixedheight']);
+    $aspectRatio = $atts['aspectratio'];
     
     if (empty($atts['build'])) {
         return '<p>❌ Unity WebGL Aucun build spécifié.</p>';
@@ -97,7 +108,7 @@ function unity_build_shortcode($atts)
     if (wp_is_mobile() && !$showOnMobile) {
         return '<p>🚫 Le jeu n’est pas disponible sur mobile. Merci de le lancer depuis un ordinateur pour une meilleure expérience.</p>';
     }else{
-        unity_enqueue_scripts($build_url, $loader_name, $showOptions, $showOnMobile);
+        unity_enqueue_scripts($build_url, $loader_name, $showOptions, $showOnMobile, $sizeMode, $fixedHeight, $aspectRatio);
     }
     
     ob_start(); ?>

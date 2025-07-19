@@ -3,6 +3,8 @@ const { createElement: el, useEffect } = wp.element;
 const { InspectorControls } = wp.blockEditor;
 const { CheckboxControl, PanelBody, SelectControl, TextControl, ToggleControl } = wp.components;
 
+const aspectRatioRegex = /^[1-9]\d*\/[1-9]\d*$/;
+
 // Définition de l'icône personnalisée SVG pour le bloc Unity
 const iconUnity = {
   src: el(
@@ -47,7 +49,13 @@ registerBlockType("mon-plugin/unity-webgl", {
     const builds = window.unityBuildsData?.builds || [];
     
     if (!builds.length) {
-      return el("p", null, "Aucun build Unity trouvé.");
+      return el("div", null,
+        el("p", null, "Aucun build Unity trouvé."),
+        el("a", {
+          href: UnityWebGLData.urlAdmin + "?page=unity_webgl_admin", // adapte l'URL si besoin
+          className: "button button-primary"
+        }, "Téléverser un build Unity")
+      );
     }
     
     const validSelectedBuild = builds.includes(selectedBuild) ? selectedBuild : "";
@@ -112,13 +120,16 @@ registerBlockType("mon-plugin/unity-webgl", {
       el(TextControl, {
         label: "Aspect Ratio (ex: 16/9)",
         value: aspectRatio,
-        onChange: (value) => setAttributes({ aspectRatio: value }),
+        onChange: (value) => {
+          setAttributes({ aspectRatio: value });
+        }, 
+        help: !aspectRatioRegex.test(aspectRatio) ? "⚠️ Format attendu : nombre/nombre (ex: 4/3) \nSi le format est invalide, la valeur par défaut utilisée sera 4/3." : undefined,
       }),
       sizeMode === "fixed-height" &&
       el(TextControl, {
         label: "Hauteur fixe (px)",
         value: fixedHeight,
-        onChange: (value) => setAttributes({ fixedHeight: parseInt(value) || 500 }),
+        onChange: (value) => setAttributes({ fixedHeight: parseInt(value) || 0 }),
       })
     )
   );
@@ -134,9 +145,8 @@ save: ({ attributes }) => {
   showOptions="${showOptions ? "true" : "false"}" 
   showOnMobile="${showOnMobile ? "true" : "false"}" 
   sizeMode="${sizeMode}" 
-  aspectRatio="${aspectRatio || "16/9"}" 
+  aspectRatio="${aspectRatioRegex.test(aspectRatio) ? aspectRatio : '4/3'}"
   fixedHeight="${fixedHeight || 500}"]`;
-  console.log("Shortcode:", shortcode);
   return el("div", null, shortcode);
 },
 });

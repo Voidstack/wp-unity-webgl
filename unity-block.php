@@ -14,22 +14,18 @@ function unity_enqueue_block(): void
     // Ajout du script JS pour le block
     wp_register_script(
         'mon-plugin-unity-block',
-        plugins_url('block/index.js', __FILE__),
+        plugins_url('js/editor-unity-block.js', __FILE__),
         ['wp-blocks', 'wp-element', 'wp-editor', 'wp-i18n'],
-        filemtime(plugin_dir_path(__FILE__) . 'block/index.js')
+        filemtime(plugin_dir_path(__FILE__) . 'js/editor-unity-block.js')
     );
-
+    
     // Ajout des trad dans le script
     wp_localize_script('mon-plugin-unity-block', 'WP_I18N', wpunity_get_translatable_strings());
     
-    // Ajout du css pour le block
-    wp_register_style(
-        'mon-plugin-unity-block-style',
-        plugins_url('block/style.css', __FILE__),
-        [],
-        filemtime(plugin_dir_path(__FILE__) . 'block/style.css')
-    );
-
+    wp_localize_script('mon-plugin-unity-block', 'UnityWebGLData', [
+        'urlAdmin' => admin_url('/admin.php'),
+    ]);
+    
     // Je sais pas
     register_block_type('mon-plugin/unity-webgl', [
         'editor_script' => 'mon-plugin-unity-block',
@@ -50,9 +46,9 @@ function unity_webgl_localize_builds(): void
 {
     $upload_dir = wp_upload_dir();
     $builds_dir = $upload_dir['basedir'] . '/unity_webgl';
-
+    
     $builds = Utils::list_builds($builds_dir);
-
+    
     wp_localize_script('mon-plugin-unity-block', 'unityBuildsData', ['builds' => $builds]);
 }
 add_action('enqueue_block_editor_assets', 'unity_webgl_localize_builds');
