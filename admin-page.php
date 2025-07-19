@@ -53,6 +53,32 @@ function unity_webgl_admin_page(): void
     ☕ Support me
     </a>
     </div>
+    
+    
+    <?php
+    
+    echo "<h1>" . Utils::detectServer() . "</h1>";
+
+    if (isset($_POST['add_wasm_mime'])) {
+        Utils::setupWasmMime();
+    }else if (isset($_POST['del_wasm_mime'])) {
+        Utils::removeWasmMimeSetup();
+    }
+    
+    // Check htaccess pour le type MIME
+    if(Utils::isWasmMimeConfigured()){
+        echo "<div style='color:green;'>✅ Le type MIME pour les fichiers .wasm est déjà configuré dans le .htaccess.</div>";
+        echo "<form method='post' style='margin-top: 10px;'>";
+        submit_button('Delete le type MIME pour .wasm', 'primary', 'del_wasm_mime');
+        echo "</form>";
+    }else{
+        echo "<div style='color:orange;'>⚠️ Le type MIME pour les fichiers .wasm n'est pas configuré dans le .htaccess.</div>";
+        echo "<form method='post' style='margin-top: 10px;'>";
+        submit_button('Configurer le type MIME pour .wasm', 'primary', 'add_wasm_mime');
+        echo "</form>";
+    }
+    ?>
+    
     <!--    <?php _e('Current language', 'wpunity'); ?> -->
     <p>Use this page to add your Unity project by uploading the <strong>.zip</strong> folder of your project and manage
     it easily within your admin dashboard.</p>
@@ -81,7 +107,7 @@ function unity_webgl_admin_page(): void
         
         Utils::delete_folder($full_path);
     }
-
+    
     $builds = Utils::list_builds($builds_dir);
     
     // Supprimer tout les builds si demandé.
@@ -93,7 +119,7 @@ function unity_webgl_admin_page(): void
         $builds = Utils::list_builds($builds_dir);
         echo '<div class="notice notice-success"><p>Tous les builds ont été supprimés.</p></div>';
     }
-
+    
     // Aucun build ou création d'un btn de suppression de tt les builds.
     if (empty($builds)) {
         echo '<p>Aucun build trouvé.</p>';
@@ -104,7 +130,7 @@ function unity_webgl_admin_page(): void
         submit_button('🧨 Supprimer tous les builds', 'delete');
         echo '</form>';
     }
-
+    
     
     echo '<table style="width: 100%; border-collapse: collapse;">';
     echo '<tr>

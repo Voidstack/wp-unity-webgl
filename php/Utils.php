@@ -42,4 +42,74 @@ class Utils {
         }
         return $size;
     }
+    
+    // Détecte le serveur web utilisé (Apache ou Nginx).
+    public static function detectServer(): string {
+        $serverSoftware = $_SERVER['SERVER_SOFTWARE'] ?? '';
+        if (stripos($serverSoftware, 'apache') !== false) return 'apache';
+        if (stripos($serverSoftware, 'nginx') !== false) return 'nginx';
+        return 'unknown';
+    }
+    
+    /**
+    * Vérifie si le type MIME pour les fichiers .wasm est configuré dans le .htaccess.
+    * @return bool True si la directive est présente, false sinon.
+    */
+    public static function isWasmMimeConfigured(): bool {
+        $server = self::detectServer();
+        if ($server === 'apache') {
+            $htaccessPath = $_SERVER['DOCUMENT_ROOT'] . '/.htaccess';
+            $directive = 'AddType application/wasm .wasm';
+            return file_exists($htaccessPath) && strpos(file_get_contents($htaccessPath), $directive) !== false;
+        } 
+        return false;
+    }
+    
+    /**
+     * Configure le type MIME pour les fichiers .wasm dans le .htaccess ou le fichier de configuration Nginx.
+     * @return bool True si la configuration a réussi, false sinon.
+     */
+    public static function setupWasmMime(): bool {
+        $server = self::detectServer();
+        
+        if ($server === 'apache') {
+            $htaccessPath = $_SERVER['DOCUMENT_ROOT'] . '/.htaccess';
+            $directive = "AddType application/wasm .wasm\n";
+            
+            if (!file_exists($htaccessPath)) {
+                return file_put_contents($htaccessPath, $directive) !== false;
+            }
+            
+            $content = file_get_contents($htaccessPath);
+            if (strpos($content, trim($directive)) !== false) return true;
+            
+            $content .= $directive;
+            return file_put_contents($htaccessPath, $content) !== false;  
+        } 
+        return false;
+    }
+    
+    /**
+    * Supprime la directive MIME pour les fichiers .wasm du .htaccess ou du fichier de configuration Nginx.
+    * @return bool True si la suppression a réussi, false sinon.
+    */
+    public static function removeWasmMimeSetup(): bool {
+        $server = self::detectServer();
+        
+        if ($server === 'apache') {
+            $htaccessPath = $_SERVER['DOCUMENT_ROOT'] . '/.htaccess';
+            $directive = "AddType application/wasm .wasm";
+            
+            if (!file_exists($htaccessPath)) return true;
+            
+            $content = file_get_contents($htaccessPath);
+            $newContent = str_replace($directive . "\n", '', $content);
+            $newContent = str_replace($directive, '', $newContent);
+            
+            return file_put_contents($htaccessPath, $newContent) !== false;
+            
+        }
+        return false;
+    }
+    
 }

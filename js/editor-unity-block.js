@@ -27,6 +27,7 @@ registerBlockType("mon-plugin/unity-webgl", {
     },
     showOptions: { type: "boolean", default: true },
     showOnMobile: { type: "boolean", default: false },
+    showLogs: { type: "boolean", default: false },
     sizeMode: { type: "string", default: "aspect-ratio"},
     fixedHeight: { type: "number", default: 500 },
     aspectRatio: { type: "string", default: "16/9" },
@@ -39,6 +40,7 @@ registerBlockType("mon-plugin/unity-webgl", {
         selectedBuild = "",
         showOptions = false,
         showOnMobile = false,
+        showLogs = false,
         sizeMode = "aspect-ratio",
         fixedHeight = 500,
         aspectRatio = "16/9",
@@ -107,6 +109,11 @@ registerBlockType("mon-plugin/unity-webgl", {
         checked: showOnMobile,
         onChange: (value) => setAttributes({ showOnMobile: value }),
       }),
+      el(CheckboxControl, {
+        label: "Afficher sur logs dans la console",
+        checked: showLogs,
+        onChange: (value) => setAttributes({ showLogs: value }),
+      }),
       el(SelectControl, {
         label: "Display Mode",
         value: sizeMode,
@@ -139,11 +146,12 @@ registerBlockType("mon-plugin/unity-webgl", {
 
 // Fonction qui sauvegarde la sortie HTML du bloc (affichage côté front)
 save: ({ attributes }) => {
-  const { selectedBuild, showOptions, showOnMobile, sizeMode, aspectRatio, fixedHeight } = attributes;
+  const { selectedBuild, showOptions, showOnMobile, showLogs,sizeMode, aspectRatio, fixedHeight } = attributes;
   const shortcode = `[unity_webgl 
   build="${selectedBuild}" 
   showOptions="${showOptions ? "true" : "false"}" 
   showOnMobile="${showOnMobile ? "true" : "false"}" 
+  showLogs="${showLogs ? "true" : "false"}"
   sizeMode="${sizeMode}" 
   aspectRatio="${aspectRatioRegex.test(aspectRatio) ? aspectRatio : '4/3'}"
   fixedHeight="${fixedHeight || 500}"]`;

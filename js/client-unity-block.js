@@ -6,10 +6,10 @@ const errorDiv = document.getElementById("unity-error");
 const unityContainer = document.getElementById("unity-container");
 
 /**
- * Affiche un message dans la bannière d'erreur ou d'avertissement
- * @param {string} msg - Le message à afficher
- * @param {string} type - Type de message: "error" ou "warning"
- */
+* Affiche un message dans la bannière d'erreur ou d'avertissement
+* @param {string} msg - Le message à afficher
+* @param {string} type - Type de message: "error" ou "warning"
+*/
 function unityShowBanner(msg, type) {
   // Met à jour la visibilité des éléments en fonction de la présence d'erreurs
   function updateBannerVisibility() {
@@ -18,10 +18,10 @@ function unityShowBanner(msg, type) {
     unityCanvas.style.display = hasError ? "none" : "block";
     unityContainer.style.display = hasError ? "none" : "block";
   }
-
+  
   const div = document.createElement("div");
   div.innerHTML = `${UnityWebGLData.admMessage} : ${msg}`;
-
+  
   if (type === "error") {
     div.style.background = "darkred";
   } else if (type === "warning") {
@@ -70,20 +70,32 @@ script.src = loaderUrl;
 
 // Quand le script Unity est chargé, on initialise l’instance
 script.onload = () => {
+  const originalLog = console.log;
+  if(!UnityWebGLData.showLogs){
+    console.log("Unity logs are hidden. Enable in the block settings to see them.");
+    console.log = () => {};
+  }
+  
   createUnityInstance(unityCanvas, config, (progress) => {})
-    .then((unityInstance) => {
-      if(UnityWebGLData.sizeMode === "fixed-height") {
-        unityCanvas.style.height = UnityWebGLData.fixedHeight + "px";
-      }else if(UnityWebGLData.sizeMode === "aspect-ratio") {
-        unityCanvas.style.aspectRatio = UnityWebGLData.aspectRatio;
-      }
-      if (UnityWebGLData.showOptions) {
-        new UnityToolbar(unityCanvas);
-      }
-    })
-    .catch((message) => {
-      alert(message);
-    });
+  .then((unityInstance) => {
+    if(UnityWebGLData.sizeMode === "fixed-height") {
+      unityCanvas.style.height = UnityWebGLData.fixedHeight + "px";
+    }else if(UnityWebGLData.sizeMode === "aspect-ratio") {
+      unityCanvas.style.aspectRatio = UnityWebGLData.aspectRatio;
+    }
+    if (UnityWebGLData.showOptions) {
+      new UnityToolbar(unityCanvas);
+    }
+  })
+  .finally(() => {
+    // Permet de cacher les logs de Unity
+    if(!UnityWebGLData.showLogs){
+      console.log = originalLog;
+    }
+  })
+  .catch((message) => {
+    alert(message);
+  });
 };
 
 // Ajoute le script Unity au DOM pour démarrer le chargement
