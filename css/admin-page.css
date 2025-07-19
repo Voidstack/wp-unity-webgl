@@ -1,0 +1,13 @@
+form[enctype="multipart/form-data"] {
+    display: flex !important;
+    align-items: center !important;
+}
+
+form[enctype="multipart/form-data"] input[type="file"] {
+    box-sizing: border-box;
+}
+
+form[enctype="multipart/form-data"] input[type="submit"] {
+    display: inline-block !important;
+    margin: 0px !important;
+}

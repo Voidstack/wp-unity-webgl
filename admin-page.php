@@ -16,6 +16,10 @@ add_action('admin_menu', function (): void {
     add_menu_page(STR_TITLE, STR_TITLE, 'manage_options', 'unity_webgl_admin', 'unity_webgl_admin_page', '', 6);
 });
 
+add_action('admin_enqueue_scripts', function () {
+    wp_enqueue_style('mon-style-admin', plugin_dir_url(__FILE__) . 'css/admin-page.css');
+});
+
 // Fonction WORDPRESS pour l'ajout d'un boutton pour la fenetre d'admin Unity GL
 add_action('admin_head', function () {
     ?>
@@ -82,7 +86,8 @@ function unity_webgl_admin_page(): void
     <!--    <?php _e('Current language', 'wpunity'); ?> -->
     <p>Use this page to add your Unity project by uploading the <strong>.zip</strong> folder of your project and manage
     it easily within your admin dashboard.</p>
-    <form style="margin: 20px" method="post" enctype="multipart/form-data">
+    
+    <form method="post" enctype="multipart/form-data">
     <input type="file" name="unity_zip" accept=".zip" required>
     <?php submit_button('Upload and Extract'); ?>
     </form>
