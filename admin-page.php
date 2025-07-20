@@ -236,7 +236,7 @@ function unity_webgl_handle_upload(): void
     $build_name = pathinfo($file['name'], PATHINFO_FILENAME);
     $target_dir = $upload_dir['basedir'] . '/unity_webgl/' . sanitize_title($build_name);
     
-    
+    // Vérifie si le dossier unity_webgl existe, sinon le crée
     if (!file_exists($upload_dir['basedir'] . '/unity_webgl/')) {
         if (!wp_mkdir_p($upload_dir['basedir'] . '/unity_webgl/')) {
             unity_webgl_error("impossible de créer le dossier unity_webgl.");
@@ -244,12 +244,14 @@ function unity_webgl_handle_upload(): void
         }
     }
     
+    // Initialise le système de fichiers WordPress
     if(!UploadUtils::unity_webgl_init_filesystem()){
         unity_webgl_error("impossible d'initialiser le système de fichiers WordPress.");
     }
     
     global $wp_filesystem;    
     
+    // Vérifie si le dossier cible existe déjà et le supprime si nécessaire
     $is_override = false;
     if (file_exists($target_dir) && is_dir($target_dir)) {
         $is_override = true;
@@ -259,7 +261,7 @@ function unity_webgl_handle_upload(): void
         }
     }
     
-    
+    // Crée le dossier cible s'il n'existe pas
     if (!$wp_filesystem->is_dir($target_dir)) {
         if (!wp_mkdir_p($target_dir)) {
             unity_webgl_error("impossible de créer le dossier cible : $target_dir");
@@ -267,6 +269,7 @@ function unity_webgl_handle_upload(): void
         }
     }
     
+    // Extrait le fichier ZIP dans le dossier cible
     $zip = new ZipArchive;
     if ($zip->open($file['tmp_name']) === TRUE) {
         if (!$zip->extractTo($target_dir)) {

@@ -1,11 +1,12 @@
 <?php
+require_once 'php/Utils.php';
+
 /**
 * Plugin Name: WP Unity WebGL
 * Plugin URI:  https://enosistudio.com/
 * Description: Displays a Unity WebGL game inside an iframe.
 * Version: 1.0
 * Author: MARTIN Baptiste / Voidstack
-* Plugin URI:  https://enosistudio.com/
 * License: GPL2+
 * License URI: https://www.gnu.org/licenses/gpl-2.0.html
 * Text Domain: wpunity
@@ -31,7 +32,7 @@ add_action('wp_enqueue_scripts', 'unity_enqueue_toolbar_css');
 
 load_plugin_textdomain('wpunity', false, dirname(plugin_basename(__FILE__)) . '/languages');
 
-function unity_enqueue_scripts($build_url, $loader_name, $showOptions, $showOnMobile, $showLogs, $sizeMode, $fixedHeight, $aspectRatio):void {
+function unity_enqueue_scripts(string $build_url, string $loader_name, bool $showOptions, bool $showOnMobile, bool $showLogs, string $sizeMode, int $fixedHeight, string $aspectRatio, string $uuid):void {
     wp_enqueue_script(
         'unity-webgl',
         plugins_url('js/client-unity-block.js', __FILE__),
@@ -52,20 +53,23 @@ function unity_enqueue_scripts($build_url, $loader_name, $showOptions, $showOnMo
         'urlAdmin' => admin_url('/wp-admin/admin.php'),
         'currentUserIsAdmin' => current_user_can('administrator'),
         'admMessage' => __('TempMsg', 'wpunity'),
+        'instanceId' => $uuid,
     ]);
     
     // Permet au script client-unity-block d'import client-unity-toolbar
-    add_filter('script_loader_tag', function($tag, $handle) {
-        if ($handle === 'unity-webgl') {
-            return str_replace('<script ', '<script type="module" ', $tag);
+    if (!function_exists('unity_script_type_module')) {
+        function unity_script_type_module(string $tag, string $handle): string {
+            if ($handle === 'unity-webgl') {
+                return str_replace('<script ', '<script type="module" ', $tag);
+            }
+            return $tag;
         }
-        return $tag;
-    }, 10, 2);
-    
+        add_filter('script_loader_tag', 'unity_script_type_module', 10, 2);
+    }
 }
 
 // Définition du shortcut [unity_webgl build="${attributes.selectedBuild}"]
-function unity_build_shortcode($atts)
+function unity_build_shortcode(array $atts): string
 {
     // Magie noir de wordpress qui fait de la merde avec les Uppercases.
     $atts = shortcode_atts([
@@ -78,46 +82,46 @@ function unity_build_shortcode($atts)
         'aspectratio' => '4/3',       // format attendu : nombre/nombre (ex: 4/3)
     ], array_change_key_case($atts, CASE_LOWER), 'unity_webgl');
     
+    $build_slug = sanitize_title($atts['build']);
     $showOptions = filter_var($atts['showoptions'], FILTER_VALIDATE_BOOLEAN);
     $showOnMobile = filter_var($atts['showonmobile'], FILTER_VALIDATE_BOOLEAN);
     $showLogs = filter_var($atts['showlogs'], FILTER_VALIDATE_BOOLEAN);
-
-    $sizeMode = $atts['sizemode'];
     $fixedHeight = intval($atts['fixedheight']);
-    $aspectRatio = $atts['aspectratio'];
+    $sizeMode = sanitize_text_field($atts['sizemode']);
+    $aspectRatio = sanitize_text_field($atts['aspectratio']);
     
-    if (empty($atts['build'])) {
+    if (empty($build_slug)) {
         return '<p>❌ Unity WebGL Aucun build spécifié.</p>';
     }
     
-    $build_slug = sanitize_title($atts['build']);
     $upload_dir = wp_upload_dir();
     $build_dir_path = trailingslashit($upload_dir['basedir']) . 'unity_webgl/' . $build_slug;
     $build_url = trailingslashit($upload_dir['baseurl']) . 'unity_webgl/' . trailingslashit($build_slug);
     
-    // Permet de recherche dynamiquement le Build.loader.js peut importe le nom dans le dossier, c'est l'extension qui prévaut
-    $loader_files = glob(pattern: $build_dir_path . '/Build/*.loader.js');
-    if (empty($loader_files)) {
-        return '<p style="color:red;">Unity build files not found in: ' . esc_html($build_dir_path . '/Build/') . '</p>';
-    }
-    $loader_filename = basename($loader_files[0]);
-    $loader_name = basename($loader_filename, '.loader.js');
+    // Vérifie si le dossier de build existe
+    /* if (!is_dir($build_dir_path . '/Build')) {
+    return '<p style="color:red;">' . esc_html__('Dossier Build non trouvé : ', 'wpunity') . esc_html($build_dir_path . '/Build/') . '</p>';
+    } */
     
-    $loader_js = $build_url . 'Build/' . $loader_name . '.loader.js';
-    $framework_js = $build_url . 'Build/' . $loader_name . '.framework.js';
-    $data_file = $build_url . 'Build/' . $loader_name . '.data';
-    $wasm_file = $build_url . 'Build/' . $loader_name . '.wasm';
+    $loader_file = $build_dir_path . '/Build.loader.js';
+    if (!file_exists($loader_file)) {
+        return '<p style="color:red;">Unity build file not found: ' . esc_html($loader_file) . '</p>';
+    }
+    
+    $loader_filename = basename($loader_file); // "Build.loader.js"
+    $loader_name = basename($loader_filename, '.loader.js'); // "Build"
     
     if (wp_is_mobile() && !$showOnMobile) {
         return '<p>🚫 Le jeu n’est pas disponible sur mobile. Merci de le lancer depuis un ordinateur pour une meilleure expérience.</p>';
-    }else{
-        unity_enqueue_scripts($build_url, $loader_name, $showOptions, $showOnMobile, $showLogs, $sizeMode, $fixedHeight, $aspectRatio);
     }
     
+    $uuid = Utils::generate_uuid();
+    unity_enqueue_scripts($build_url, $loader_name, $showOptions, $showOnMobile, $showLogs, $sizeMode, $fixedHeight, $aspectRatio, $uuid);
+    
     ob_start(); ?>
-    <div id="unity-error" style="display: none; padding: 1rem; color:white;"></div>
-    <div id="unity-container">
-    <canvas id="unity-canvas"></canvas>
+    <div id="<?=$uuid?>-error" style="display: none; padding: 1rem; color:white;"></div>
+    <div id="<?=$uuid?>-container">
+    <canvas id="<?=$uuid?>-canvas"></canvas>
     </div>
     <?php
     return ob_get_clean();

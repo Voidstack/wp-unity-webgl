@@ -1,6 +1,10 @@
 <?php
 
 class Utils {
+    public static function generate_uuid(): string {
+        return $uuid = uniqid('unity_', true);
+    }
+
     // Méthode qui permet la suppression d'un dossier Wordpress friendly.
     public static function delete_folder($folder) {
         if (is_dir($folder)) {

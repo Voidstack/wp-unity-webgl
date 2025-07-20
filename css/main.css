@@ -1,4 +1,4 @@
-#unity-container {
+.unity-container {
     /* Soit l'un soit l'autre */
     /* height: 600px; 
     aspect-ratio: 16 / 9; */
@@ -7,14 +7,14 @@
     color:white;
 }
 
-#unity-canvas {
+.unity-canvas {
     display: block;
     width: 100%; 
     height: 100%; 
     background: #00000000;
 }
 
-#unity-toolbar {
+.unity-toolbar {
     position: absolute;
     width: 100%;
     background-color: #111;
@@ -28,7 +28,7 @@
     font-family: system-ui, sans-serif;
 }
 
-#unity-toolbar * {
+.unity-toolbar * {
     display: flex;
     align-items: center;
     justify-content: center; /* si tu veux centrer aussi horizontalement */
@@ -37,7 +37,7 @@
     cursor: pointer;
 }
 
-#unity-toolbar button {
+.unity-toolbar button {
     background: #1e1e1e;
     color: #f0f0f0;
     border: 1px solid #333;
@@ -47,12 +47,12 @@
     transition: background 0.2s, color 0.2s;
 }
 
-#unity-toolbar button:hover {
+.unity-toolbar button:hover {
     background: #2c2c2c;
     color: white;
 }
 
-#unity-toolbar button:focus {
+.unity-toolbar button:focus {
     outline: none;
     box-shadow: 0 0 0 2px #555;
 }

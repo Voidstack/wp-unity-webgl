@@ -1,11 +1,12 @@
 export class UnityToolbar {
-  constructor(canvas) {
+  constructor(canvas, uuid) {
     // Store reference to the Unity canvas element
     this.canvas = canvas;
     
     // Create the toolbar container
     this.toolbar = document.createElement("div");
-    this.toolbar.id = "unity-toolbar";
+    this.toolbar.id = uuid + "-toolbar";
+    this.toolbar.className = "unity-toolbar";
     
     // Add toolbar buttons
     this._createFPSCounter();

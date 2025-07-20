@@ -1,9 +1,15 @@
 import { UnityToolbar } from "./client-unity-toolbar.js";
 
+const uuid = UnityWebGLData.instanceId;
+
 // Références aux éléments DOM principaux
-const unityCanvas = document.getElementById("unity-canvas");
-const errorDiv = document.getElementById("unity-error");
-const unityContainer = document.getElementById("unity-container");
+ const unityCanvas = document.getElementById(uuid + "-canvas");
+ const errorDiv = document.getElementById(uuid + "-error");
+ const unityContainer = document.getElementById(uuid + "-container");
+
+unityCanvas.className = "unity-canvas";
+errorDiv.className = "unity-error";
+unityContainer.className = "unity-container";
 
 /**
 * Affiche un message dans la bannière d'erreur ou d'avertissement
@@ -43,14 +49,14 @@ function unityShowBanner(msg, type) {
 }
 
 // Construction des URLs à partir des variables passées par PHP
-const buildUrl = UnityWebGLData.buildUrl + "Build";
+const buildUrl = UnityWebGLData.buildUrl;
 const loaderName = UnityWebGLData.loaderName;
 
 // Configuration de Unity WebGL
 const config = {
-  dataUrl: buildUrl + "/" + loaderName + ".data",
-  frameworkUrl: buildUrl + "/" + loaderName + ".framework.js",
-  codeUrl: buildUrl + "/" + loaderName + ".wasm",
+  dataUrl: buildUrl + "/Build.data",
+  frameworkUrl: buildUrl + "/Build.framework.js",
+  codeUrl: buildUrl + "/Build.wasm",
   streamingAssetsUrl: "StreamingAssets",
   webglContextAttributes: {
     // Permet de capturer le contenu du canvas pour les captures d'écran
@@ -84,7 +90,7 @@ script.onload = () => {
       unityContainer.style.aspectRatio = UnityWebGLData.aspectRatio;
     }
     if (UnityWebGLData.showOptions) {
-      new UnityToolbar(unityCanvas);
+      new UnityToolbar(unityCanvas, uuid);
     }
   })
   .finally(() => {
