@@ -15,8 +15,8 @@ require_once 'php/Utils.php';
 
 /** Permet de charger le script de la page d'administration, uniquement pour l'administration (optimisation) */
 if(is_admin()){
-    require_once plugin_dir_path(__FILE__) . 'admin-page.php';
-    require_once plugin_dir_path(__FILE__) . 'unity-block.php'; // ne s'exécute que dans l'éditeur de blocs (page/post avec Gutenberg)
+    require_once plugin_dir_path(__FILE__) . 'php/admin-page.php';
+    require_once plugin_dir_path(__FILE__) . 'php/unity-block.php'; // ne s'exécute que dans l'éditeur de blocs (page/post avec Gutenberg)
 }
 
 // Ajout du main.css
@@ -68,10 +68,11 @@ function unity_enqueue_scripts(string $build_url, string $loader_name, bool $sho
     }
 }
 
-// Définition du shortcut [unity_webgl build="${attributes.selectedBuild}"]
+// Definition of the shortcode [unity_webgl build="${attributes.selectedBuild}"]
 function unity_build_shortcode(array $atts): string
 {
-    // Magie noir de wordpress qui fait de la merde avec les Uppercases.
+    // Normalize shortcode attributes to lowercase keys and set default values
+    // WordPress sometimes messes with uppercase keys in shortcode attributes    
     $atts = shortcode_atts([
         'build' => '',
         'showoptions' => 'true',     // minuscules !
@@ -82,6 +83,7 @@ function unity_build_shortcode(array $atts): string
         'aspectratio' => '4/3',       // format attendu : nombre/nombre (ex: 4/3)
     ], array_change_key_case($atts, CASE_LOWER), 'unity_webgl');
     
+    // Sanitize and convert attribute values to proper types
     $build_slug = sanitize_title($atts['build']);
     $showOptions = filter_var($atts['showoptions'], FILTER_VALIDATE_BOOLEAN);
     $showOnMobile = filter_var($atts['showonmobile'], FILTER_VALIDATE_BOOLEAN);
@@ -90,40 +92,43 @@ function unity_build_shortcode(array $atts): string
     $sizeMode = sanitize_text_field($atts['sizemode']);
     $aspectRatio = sanitize_text_field($atts['aspectratio']);
     
+    // If no build specified, return an error message
     if (empty($build_slug)) {
-        return '<p>❌ Unity WebGL Aucun build spécifié.</p>';
+        return '<p>' . esc_html__('❌ Unity WebGL Aucun build spécifié.', 'wpunity') . '</p>';
     }
     
+    // Determine the local server path and URL to the Unity build directory
     $upload_dir = wp_upload_dir();
     $build_dir_path = trailingslashit($upload_dir['basedir']) . 'unity_webgl/' . $build_slug;
     $build_url = trailingslashit($upload_dir['baseurl']) . 'unity_webgl/' . trailingslashit($build_slug);
     
-    // Vérifie si le dossier de build existe
-    /* if (!is_dir($build_dir_path . '/Build')) {
-    return '<p style="color:red;">' . esc_html__('Dossier Build non trouvé : ', 'wpunity') . esc_html($build_dir_path . '/Build/') . '</p>';
-    } */
-    
+    // Construct the path to the Unity loader script
     $loader_file = $build_dir_path . '/Build.loader.js';
+
+    // Check if the loader script exists, else show an error
     if (!file_exists($loader_file)) {
-        return '<p style="color:red;">Unity build file not found: ' . esc_html($loader_file) . '</p>';
+        return '<p style="color:red;">' . sprintf(esc_html__('Unity build file not found: %s', 'wpunity'),esc_html($loader_file)) . '</p>';
     }
     
-    $loader_filename = basename($loader_file); // "Build.loader.js"
-    $loader_name = basename($loader_filename, '.loader.js'); // "Build"
+    // Extract the loader name from the loader filename (e.g. "Build")
+    $loader_name = basename($loader_file, '.loader.js');
     
+    // If visitor is on mobile and game is not allowed on mobile, show a message
     if (wp_is_mobile() && !$showOnMobile) {
-        return '<p>🚫 Le jeu n’est pas disponible sur mobile. Merci de le lancer depuis un ordinateur pour une meilleure expérience.</p>';
+        return '<p>' . esc_html__('🚫 Le jeu n’est pas disponible sur mobile. Merci de le lancer depuis un ordinateur pour une meilleure expérience.', 'wpunity') . '</p>';
     }
     
     $uuid = Utils::generate_uuid();
     unity_enqueue_scripts($build_url, $loader_name, $showOptions, $showOnMobile, $showLogs, $sizeMode, $fixedHeight, $aspectRatio, $uuid);
     
+    // Start output buffering to capture the HTML output
     ob_start(); ?>
     <div id="<?=$uuid?>-error" style="display: none; padding: 1rem; color:white;"></div>
     <div id="<?=$uuid?>-container">
     <canvas id="<?=$uuid?>-canvas"></canvas>
     </div>
     <?php
+    // Return the buffered HTML as the shortcode output
     return ob_get_clean();
 }
 add_shortcode('unity_webgl', 'unity_build_shortcode');

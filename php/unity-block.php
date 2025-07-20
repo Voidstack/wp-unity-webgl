@@ -1,5 +1,5 @@
 <?php
-require_once 'php/Utils.php';
+require_once 'utils.php';
 
 // Tableau des string à traduirer.
 function wpunity_get_translatable_strings(): array {
@@ -14,9 +14,9 @@ function unity_enqueue_block(): void
     // Ajout du script JS pour le block
     wp_register_script(
         'mon-plugin-unity-block',
-        plugins_url('js/editor-unity-block.js', __FILE__),
+        plugins_url('../js/editor-unity-block.js', __FILE__),
         ['wp-blocks', 'wp-element', 'wp-editor', 'wp-i18n'],
-        filemtime(plugin_dir_path(__FILE__) . 'js/editor-unity-block.js')
+        filemtime(plugin_dir_path(__FILE__) . '../js/editor-unity-block.js')
     );
     
     // Ajout des trad dans le script

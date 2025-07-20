@@ -1,6 +1,6 @@
 <?php
-require_once 'php/Utils.php';
-require_once 'php/UploadUtils.php';
+require_once 'utils.php';
+require_once 'utils-upload.php';
 
 /**
 * Ce fichier contient toutes les méthodes nécessaires à la gestion
@@ -18,7 +18,7 @@ add_action('admin_menu', function (): void {
 });
 
 add_action('admin_enqueue_scripts', function () {
-    wp_enqueue_style('mon-style-admin', plugin_dir_url(__FILE__) . 'css/admin-page.css');
+    wp_enqueue_style('mon-style-admin', plugin_dir_url(__FILE__) . '../css/admin-page.css');
 });
 
 // Fonction WORDPRESS pour l'ajout d'un boutton pour la fenetre d'admin Unity GL
@@ -51,7 +51,7 @@ function unity_webgl_admin_page(): void
     <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px;">
     <div style="display: flex; align-items: center;">
     <img style="width: 32px; height: 32px; margin-right: 10px;"
-    src="<?php echo plugins_url('res/unity_icon.svg', __FILE__); ?>" alt="Logo" class="logo" />
+    src="<?php echo plugins_url('../res/unity_icon.svg', __FILE__); ?>" alt="Logo" class="logo" />
     <span style="font-size: 18px; color: #333; margin-right: 20px;">Unity WebGL</span>
     </div>
     <a href="https://coff.ee/EnosiStudio" target="_blank" style="text-decoration: none; font-size: 16px; color: #0073aa; white-space: nowrap;">
