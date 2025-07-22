@@ -82,7 +82,7 @@ script.onload = () => {
     console.log = () => {};
   }
   
-  createUnityInstance(unityCanvas, config, (progress) => {})
+  UnityLoaderSingleton.load(unityCanvas, config, (progress) => {})
   .then((unityInstance) => {
     if(UnityWebGLData.sizeMode === "fixed-height") {
       unityContainer.style.height = UnityWebGLData.fixedHeight + "px";
