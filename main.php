@@ -101,19 +101,14 @@ function unity_build_shortcode(array $atts): string
     $sizeMode = sanitize_text_field($atts['sizemode']);
     $aspectRatio = sanitize_text_field($atts['aspectratio']);
     
-    // If no build specified, return an error message
-    if (empty($build_slug)) {
-        return '<p>' . esc_html__('❌ Unity WebGL Aucun build spécifié.', 'wpunity') . '</p>';
-    }
-    
     // Determine the local server path and URL to the Unity build directory
     $upload_dir = wp_upload_dir();
     $build_dir_path = trailingslashit($upload_dir['basedir']) . 'unity_webgl/' . $build_slug;
     $build_url = trailingslashit($upload_dir['baseurl']) . 'unity_webgl/' . trailingslashit($build_slug);
     
     // Construct the path to the Unity loader script
-    $loader_file = $build_dir_path . '/Build.loader.js';
-
+    $loader_file = $build_dir_path . '/' . $build_slug . '.loader.js';
+    
     // Check if the loader script exists, else show an error
     if (!file_exists($loader_file)) {
         return '<p style="color:red;">' . sprintf(esc_html__('Unity build file not found: %s', 'wpunity'),esc_html($loader_file)) . '</p>';
@@ -127,14 +122,30 @@ function unity_build_shortcode(array $atts): string
         return '<p>' . esc_html__('🚫 Le jeu n’est pas disponible sur mobile. Merci de le lancer depuis un ordinateur pour une meilleure expérience.', 'wpunity') . '</p>';
     }
     
+    $styleSizeMode = match ($sizeMode) {
+        'fixed-height' => "height: {$fixedHeight}px;",
+        'aspect-ratio' => "aspect-ratio: {$aspectRatio};",
+        default => 'ERROR',
+    };
+    
     $uuid = Utils::generate_uuid();
     unity_enqueue_scripts($build_url, $loader_name, $showOptions, $showOnMobile, $showLogs, $sizeMode, $fixedHeight, $aspectRatio, $uuid);
     
     // Start output buffering to capture the HTML output
     ob_start(); ?>
-    <div id="<?=$uuid?>-error" style="display: none; padding: 1rem; color:white;"></div>
-    <div id="<?=$uuid?>-container">
-    <canvas id="<?=$uuid?>-canvas"></canvas>
+    <div id="<?=$uuid?>-error" class="unity-error"></div>
+    <div id="<?=$uuid?>-container" class="unity-container" style="<?=$styleSizeMode?>">
+    <canvas 
+    id="<?= $uuid ?>-canvas" 
+    class="unity-canvas" 
+    data-build-url="<?= esc_attr($build_url) ?>"
+    data-loader-name="<?= esc_attr($loader_name) ?>"
+    data-show-options="<?= $showOptions ? 'true' : 'false' ?>"
+    data-show-logs="<?= $showLogs ? 'true' : 'false' ?>"
+    data-size-mode="<?= esc_attr($sizeMode) ?>"
+    data-fixed-height="<?= intval($fixedHeight) ?>"
+    data-aspect-ratio="<?= esc_attr($aspectRatio) ?>"
+    ></canvas>
     </div>
     <?php
     // Return the buffered HTML as the shortcode output

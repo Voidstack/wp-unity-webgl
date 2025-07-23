@@ -5,6 +5,13 @@
     box-sizing: border-box;
     width: 100%; 
     color:white;
+    background-color: pink;
+}
+
+.unity-error{
+    display: none; 
+    padding: 1rem; 
+    color:white;
 }
 
 .unity-canvas {
