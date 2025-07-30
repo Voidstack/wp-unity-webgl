@@ -102,7 +102,7 @@ function unity_webgl_admin_page(): void
         }
         default:{
             echo '<h2>' . sprintf(
-                esc_html__('Server configuration: %s detected.', 'wpunity'),
+                esc_html__('Server configuration: unknown(%s) detected.', 'wpunity'),
                 esc_html($serverType)) . '</h2>';
                 echo '<p>' . esc_html__('Automatic detection and configuration of the MIME type for .wasm files is only supported on Apache servers.', 'wpunity') . '</p>';
             }

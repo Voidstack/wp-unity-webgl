@@ -8,18 +8,18 @@ class UnityInstanceManager {
     this.unityContainer = document.getElementById(uuid + "-container");
     this.config = null;
     this.unityInstance = null;
-    
+
     this.canvasData = {
       buildUrl: this.unityCanvas.dataset.buildUrl,
       loaderName: this.unityCanvas.dataset.loaderName,
-      showOptions: this.unityCanvas.dataset.showOptions === 'true',
-      showLogs: this.unityCanvas.dataset.showLogs === 'true',
+      showOptions: this.unityCanvas.dataset.showOptions === "true",
+      showLogs: this.unityCanvas.dataset.showLogs === "true",
       sizeMode: this.unityCanvas.dataset.sizeMode,
       fixedHeight: parseInt(this.unityCanvas.dataset.fixedHeight, 10),
       aspectRatio: this.unityCanvas.dataset.aspectRatio,
     };
   }
-  
+
   showBanner(msg, type) {
     const updateBannerVisibility = () => {
       const hasError = this.errorDiv.children.length > 0;
@@ -27,10 +27,10 @@ class UnityInstanceManager {
       this.unityCanvas.style.display = hasError ? "none" : "block";
       this.unityContainer.style.display = hasError ? "none" : "block";
     };
-    
+
     const div = document.createElement("div");
     div.innerHTML = `${UnityWebGLData.admMessage} : ${msg}`;
-    
+
     if (type === "error") {
       div.style.background = "darkred";
     } else if (type === "warning") {
@@ -48,28 +48,22 @@ class UnityInstanceManager {
     this.errorDiv.appendChild(div);
     updateBannerVisibility();
   }
-  
-  async getUnityBuildFiles(buildUrl) {
-    const res = await fetch(buildUrl);
-    const text = await res.text();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(text, "text/html");
-    const links = Array.from(doc.querySelectorAll("a")).map(a => a.getAttribute("href"));
-    
-    const resolveFile = (ext) => links.find(href => href.endsWith(ext));
-    
+
+  getUnityBuildFiles(buildUrl, loaderName) {
+    console.log("CANVAS DATA" + loaderName);
+
     return {
-      dataUrl: buildUrl + "/" + resolveFile(".data"),
-      frameworkUrl: buildUrl + "/" + resolveFile(".framework.js"),
-      loaderUrl: buildUrl + "/" + resolveFile(".loader.js"),
-      wasmUrl: buildUrl + "/" + resolveFile(".wasm"),
+      dataUrl: buildUrl + loaderName + ".data",
+      frameworkUrl: buildUrl + loaderName + ".framework.js",
+      loaderUrl: buildUrl + loaderName + ".loader.js",
+      wasmUrl: buildUrl + loaderName + ".wasm",
     };
   }
-  
+
   async load(buildUrl, loaderName, configOverrides = {}) {
-    const files = await this.getUnityBuildFiles(buildUrl);
+    const files = this.getUnityBuildFiles(buildUrl, loaderName);
     console.log("Unity files loaded:", files);
-    
+
     this.config = {
       dataUrl: files.dataUrl,
       frameworkUrl: files.frameworkUrl,
@@ -80,16 +74,16 @@ class UnityInstanceManager {
       productName: "EnosiStudio",
       productVersion: "1.0",
       showBanner: this.showBanner.bind(this),
-      ...configOverrides
+      ...configOverrides,
     };
-    
+
     await this.loadScript(files.loaderUrl);
-    
+
     const originalLog = console.log;
     if (!this.canvasData.showLogs) {
       console.log = () => {};
     }
-    
+
     try {
       this.unityInstance = await createUnityInstance(
         this.unityCanvas,
@@ -98,13 +92,13 @@ class UnityInstanceManager {
           // optionnel: progress callback
         }
       );
-      
+
       if (this.canvasData.sizeMode === "fixed-height") {
         this.unityContainer.style.height = this.canvasData.fixedHeight + "px";
       } else if (this.canvasData.sizeMode === "aspect-ratio") {
         this.unityContainer.style.aspectRatio = this.canvasData.aspectRatio;
       }
-      
+
       if (this.canvasData.showOptions) {
         new UnityToolbar(this.unityCanvas, this.uuid);
       }
@@ -116,7 +110,7 @@ class UnityInstanceManager {
       }
     }
   }
-  
+
   loadScript(src) {
     return new Promise((resolve, reject) => {
       const script = document.createElement("script");
@@ -132,7 +126,7 @@ class UnityInstanceManager {
 document.querySelectorAll("[id$='-canvas']").forEach((canvas) => {
   const uuid = canvas.id.replace("-canvas", "");
   const manager = new UnityInstanceManager(uuid);
-  
+
   // récupère buildUrl, loaderName dynamiquement depuis tes variables globales ou dataset HTML
   manager.load(manager.canvasData.buildUrl, manager.canvasData.loaderName);
 });
