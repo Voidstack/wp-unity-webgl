@@ -1,6 +1,6 @@
 <?php
-require_once 'utils.php';
-require_once 'utils-upload.php';
+require_once __DIR__ . '/utils.php';
+require_once __DIR__ . '/utils-upload.php';
 
 /**
 * Ce fichier contient toutes les méthodes nécessaires à la gestion

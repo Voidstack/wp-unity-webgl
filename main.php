@@ -1,5 +1,5 @@
 <?php
-require_once 'php/Utils.php';
+require_once plugin_dir_path(__FILE__) . 'php/utils.php';
 
 /**
 * Plugin Name: WP Unity WebGL
@@ -12,6 +12,9 @@ require_once 'php/Utils.php';
 * Text Domain: wpunity
 * Domain Path: /languages
 */
+
+// empêche l'accès direct au fichier PHP via l'URL 
+defined('ABSPATH') or die;
 
 /** Permet de charger le script de la page d'administration, uniquement pour l'administration (optimisation) */
 if(is_admin()){
