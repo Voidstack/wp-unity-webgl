@@ -1,0 +1,111 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: WP Unity WebGL\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-30 06:21+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.8.0; wp-6.8.1; php-8.4.4\n"
+"X-Domain: wpunity"
+
+#: php/admin-page.php:98
+msgid "Any server configuration change requires a manual server restart."
+msgstr ""
+
+#: php/admin-page.php:104 php/admin-page.php:111
+msgid ""
+"Automatic detection and configuration of the MIME type for .wasm files is "
+"only supported on Apache servers."
+msgstr ""
+
+#: php/unity-block.php:7
+msgid "buildChoose"
+msgstr ""
+
+#: php/admin-page.php:90
+msgid "Configure the MIME type for .wasm"
+msgstr ""
+
+#: php/admin-page.php:81
+msgid "Delete the MIME type for .wasm"
+msgstr ""
+
+#. Description of the plugin
+msgid "Displays a Unity WebGL game inside an iframe."
+msgstr ""
+
+#. URI of the plugin
+msgid "https://enosistudio.com/"
+msgstr ""
+
+#: php/admin-page.php:97
+msgid ""
+"In that case, the configuration must be done manually in the .htaccess file."
+msgstr ""
+
+#. Author of the plugin
+msgid "MARTIN Baptiste / Voidstack"
+msgstr ""
+
+#: php/admin-page.php:103
+msgid ""
+"Please configure the MIME type for .wasm files in your Nginx configuration."
+msgstr ""
+
+#: php/admin-page.php:109
+#, php-format
+msgid "Server configuration: %s detected."
+msgstr ""
+
+#: php/admin-page.php:70
+msgid "Server configuration: Apache detected."
+msgstr ""
+
+#: php/admin-page.php:102
+msgid "Server configuration: Nginx detected."
+msgstr ""
+
+#: main.php:65
+msgid "TempMsg"
+msgstr ""
+
+#: php/admin-page.php:96
+msgid "The attempt to add or remove may fail for security reasons."
+msgstr ""
+
+#: main.php:115
+#, php-format
+msgid "Unity build file not found: %s"
+msgstr ""
+
+#: php/admin-page.php:124
+msgid "Upload and Extract"
+msgstr ""
+
+#. Name of the plugin
+msgid "WP Unity WebGL"
+msgstr ""
+
+#: php/admin-page.php:86
+msgid ""
+"⚠️ The MIME type for .wasm files is not configured in the .htaccess. A "
+"warning will be shown in the console at each build launch."
+msgstr ""
+
+#: php/admin-page.php:79
+msgid "✅ The MIME type for .wasm files is already configured in the .htaccess."
+msgstr ""
+
+#: main.php:123
+msgid ""
+"🚫 Le jeu n’est pas disponible sur mobile. Merci de le lancer depuis un "
+"ordinateur pour une meilleure expérience."
+msgstr ""

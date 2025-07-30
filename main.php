@@ -39,6 +39,7 @@ function wp_unity_enqueue_singleton(): void {
 }
 add_action('wp_enqueue_scripts', 'wp_unity_enqueue_singleton');
 
+// Language
 load_plugin_textdomain('wpunity', false, dirname(plugin_basename(__FILE__)) . '/languages');
 
 function unity_enqueue_scripts(string $build_url, string $loader_name, bool $showOptions, bool $showOnMobile, bool $showLogs, string $sizeMode, int $fixedHeight, string $aspectRatio, string $uuid):void {

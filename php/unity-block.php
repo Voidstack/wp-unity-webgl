@@ -5,6 +5,11 @@ require_once 'utils.php';
 function wpunity_get_translatable_strings(): array {
     return [
         'buildChoose' => __('buildChoose', 'wpunity'),
+        'buildSelectionne' => __('Build sélectionné', 'wpunity'),
+        'warnExpectedRatio' => __("⚠️ Format attendu : nombre/nombre (ex: 4/3) \nSi le format est invalide, la valeur par défaut utilisée sera 4/3.", 'wpunity'),
+        'showOptions' => __('Afficher les options', 'wpunity'),
+        'showOnMobile' => __('Afficher sur mobile', 'wpunity'),
+        'showLogs' => __('Afficher les logs dans la console', 'wpunity')
     ];
 }
 

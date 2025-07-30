@@ -3,9 +3,9 @@ msgstr ""
 "Project-Id-Version: WP Unity WebGL\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-01 10:57+0000\n"
-"PO-Revision-Date: 2025-07-30 08:31+0000\n"
+"PO-Revision-Date: 2025-07-30 06:56+0000\n"
 "Last-Translator: \n"
-"Language-Team: French (France)\n"
+"Language-Team: Français\n"
 "Language: fr_FR\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "MIME-Version: 1.0\n"
@@ -15,29 +15,17 @@ msgstr ""
 "X-Loco-Version: 2.8.0; wp-6.8.2; php-8.2.27\n"
 "X-Domain: wpunity"
 
-#: php/unity-block.php:12
-msgid "Afficher les logs dans la console"
-msgstr "Afficher les logs dans la console"
-
-#: php/unity-block.php:10
-msgid "Afficher les options"
-msgstr "Afficher les options"
-
-#: php/unity-block.php:11
-msgid "Afficher sur mobile"
-msgstr "Afficher sur mobile"
-
-#: php/admin-page.php:148
+#: php/admin-page.php:152
 msgid "All builds have been deleted."
 msgstr "Touts les builds ont été supprimées."
 
-#: php/admin-page.php:94
+#: php/admin-page.php:98
 msgid "Any server configuration change requires a manual server restart."
 msgstr ""
 "Toute modification de configuration du serveur nécessite un redémarrage "
 "manuel du serveur."
 
-#: php/admin-page.php:100 php/admin-page.php:107
+#: php/admin-page.php:104 php/admin-page.php:111
 msgid ""
 "Automatic detection and configuration of the MIME type for .wasm files is "
 "only supported on Apache servers."
@@ -45,23 +33,19 @@ msgstr ""
 "La détection et la configuration automatiques du type MIME pour les fichiers "
 ".wasm ne sont prises en charge que sur les serveurs Apache."
 
-#: php/admin-page.php:113
+#: php/admin-page.php:117
 msgid "Build Manager"
 msgstr "Manager des builds"
-
-#: php/unity-block.php:8
-msgid "Build sélectionné"
-msgstr "Build sélectionné"
 
 #: php/unity-block.php:7
 msgid "buildChoose"
 msgstr "Choisissez un build Unity :"
 
-#: php/admin-page.php:85
+#: php/admin-page.php:90
 msgid "Configure the MIME type for .wasm"
 msgstr "Configurer le type MIME pour les .wasm"
 
-#: php/admin-page.php:79
+#: php/admin-page.php:81
 msgid "Delete the MIME type for .wasm"
 msgstr "Supprimer le type MIME pour .wasm"
 
@@ -69,7 +53,7 @@ msgstr "Supprimer le type MIME pour .wasm"
 msgid "Displays a Unity WebGL game inside an iframe."
 msgstr "Displays a Unity WebGL game inside an iframe."
 
-#: php/admin-page.php:114
+#: php/admin-page.php:118
 msgid "folder of your project and manage it easily within the admin dashboard."
 msgstr ""
 "dossier de votre projet et gérez-le facilement dans le tableau de bord "
@@ -79,14 +63,14 @@ msgstr ""
 msgid "https://enosistudio.com/"
 msgstr "https://enosistudio.com/"
 
-#: php/admin-page.php:93
+#: php/admin-page.php:97
 msgid ""
 "In that case, the configuration must be done manually in the .htaccess file."
 msgstr ""
 "Dans ce cas, la configuration doit être effectuée manuellement dans le "
 "fichier .htaccess."
 
-#: php/admin-page.php:209
+#: php/admin-page.php:213
 msgid "Insufficient permissions."
 msgstr "Permissions insuffisantes. "
 
@@ -94,31 +78,31 @@ msgstr "Permissions insuffisantes. "
 msgid "MARTIN Baptiste / Voidstack"
 msgstr "MARTIN Baptiste / Voidstack"
 
-#: php/admin-page.php:152
+#: php/admin-page.php:156
 msgid "Name"
 msgstr "Nom"
 
-#: php/admin-page.php:177
+#: php/admin-page.php:181
 msgid "No build found."
 msgstr "Pas de build trouvé."
 
-#: php/admin-page.php:214
+#: php/admin-page.php:218
 msgid "No file sent."
 msgstr "Aucun fichier envoyé."
 
-#: php/admin-page.php:233
+#: php/admin-page.php:237
 msgid "Only ZIP format is allowed."
 msgstr "Seul le format ZIP est autorisé."
 
-#: php/admin-page.php:153
+#: php/admin-page.php:157
 msgid "Path"
 msgstr "Chemin"
 
-#: php/admin-page.php:168
+#: php/admin-page.php:172
 msgid "Permanently delete build:"
 msgstr "Supprimer définitivement le build:"
 
-#: php/admin-page.php:99
+#: php/admin-page.php:103
 msgid ""
 "Please configure the MIME type for .wasm files in your Nginx configuration."
 msgstr ""
@@ -126,25 +110,25 @@ msgstr ""
 "configuration Nginx."
 
 #. %s is the link to Enosi Studio
-#: php/admin-page.php:190
+#: php/admin-page.php:194
 #, php-format
 msgid "Plugin developed by %s."
 msgstr "Plugin développé par %s."
 
-#: php/admin-page.php:105
+#: php/admin-page.php:109
 #, php-format
 msgid "Server configuration: %s detected."
 msgstr "Configuration du serveur : %s détecté."
 
-#: php/admin-page.php:69
+#: php/admin-page.php:70
 msgid "Server configuration: Apache detected."
 msgstr "Configuration serveur : Apache détecté."
 
-#: php/admin-page.php:98
+#: php/admin-page.php:102
 msgid "Server configuration: Nginx detected."
 msgstr "Configuration serveur : Nginx détecté."
 
-#: php/admin-page.php:154
+#: php/admin-page.php:158
 msgid "Size (MB)"
 msgstr "Taille (MB)"
 
@@ -154,40 +138,21 @@ msgstr ""
 "Ce message n'est visible que par l'administrateur et disparaîtra dans 4 "
 "secondes"
 
-#: php/admin-page.php:92
+#: php/admin-page.php:96
 msgid "The attempt to add or remove may fail for security reasons."
 msgstr ""
-"La tentative de modification du paramétrage serveur peut échouer pour des "
-"raisons de sécurité et/ou de configuration du serveur."
+"La tentative d'ajout ou de suppression peut échouer pour des raisons de "
+"sécurité et de configuration de du serveur."
 
-#: php/admin-page.php:80
-#| msgid ""
-#| "✅ The MIME type for .wasm files is already configured in the .htaccess."
-msgid "The MIME type for .wasm files is already configured in the .htaccess."
-msgstr ""
-"✅ Le type MIME pour les fichiers .wasm est déjà configuré dans le .htaccess."
-
-#: php/admin-page.php:89
-#| msgid ""
-#| "⚠️ The MIME type for .wasm files is not configured in the .htaccess. A "
-#| "warning will be shown in the console at each build launch."
-msgid ""
-"The MIME type for .wasm files is not configured in the .htaccess. A warning "
-"will be shown in the console at each build launch."
-msgstr ""
-"⚠️ Le type MIME des fichiers .wasm n'est pas configuré dans le fichier ."
-"htaccess. Un avertissement s'affichera dans la console à chaque lancement de "
-"build."
-
-#: php/admin-page.php:250
+#: php/admin-page.php:254
 msgid "Unable to create the unity_webgl folder."
 msgstr "Impossible de créer le dossier unity_webgl."
 
-#: php/admin-page.php:257
+#: php/admin-page.php:261
 msgid "Unable to initialize the WordPress filesystem."
 msgstr "Impossible d'initialiser le système de fichiers WordPress."
 
-#: php/admin-page.php:240
+#: php/admin-page.php:244
 msgid "Unable to retrieve the WordPress upload directory."
 msgstr "Impossible de récupérer le répertoire de téléchargement WordPress."
 
@@ -196,16 +161,16 @@ msgstr "Impossible de récupérer le répertoire de téléchargement WordPress."
 msgid "Unity build file not found: %s"
 msgstr "Fichier de build Unity introuvable : %s"
 
-#: php/admin-page.php:119
+#: php/admin-page.php:123
 msgid "Upload and Extract"
 msgstr "Téléverser"
 
 #. %d is the upload error code
-#: php/admin-page.php:222
+#: php/admin-page.php:226
 msgid "Upload failed, error code: %d"
 msgstr "Échec du téléchargement, code d'erreur : %d"
 
-#: php/admin-page.php:114
+#: php/admin-page.php:118
 msgid "Use this page to add your Unity project by uploading the"
 msgstr ""
 "Utilisez cette page pour ajouter votre projet Unity en téléchargeant le"
@@ -214,15 +179,21 @@ msgstr ""
 msgid "WP Unity WebGL"
 msgstr "WP Unity WebGL"
 
-#: php/unity-block.php:9
+#: php/admin-page.php:86
 msgid ""
-"⚠️ Format attendu : nombre/nombre (ex: 4/3) \n"
-"Si le format est invalide, la valeur par défaut utilisée sera 4/3."
+"⚠️ The MIME type for .wasm files is not configured in the .htaccess. A "
+"warning will be shown in the console at each build launch."
 msgstr ""
-"⚠️ Format attendu : nombre/nombre (ex: 4/3) \n"
-"Si le format est invalide, la valeur par défaut utilisée sera 4/3."
+"⚠️ Le type MIME des fichiers .wasm n'est pas configuré dans le fichier ."
+"htaccess. Un avertissement s'affichera dans la console à chaque lancement de "
+"build."
 
-#: php/admin-page.php:180
+#: php/admin-page.php:79
+msgid "✅ The MIME type for .wasm files is already configured in the .htaccess."
+msgstr ""
+"✅ Le type MIME pour les fichiers .wasm est déjà configuré dans le .htaccess."
+
+#: php/admin-page.php:184
 msgid "❌ Delete ALL builds?"
 msgstr "❌ Supprimer TOUTS les builds ?"
 
@@ -234,6 +205,6 @@ msgstr ""
 "🚫 Le jeu n’est pas disponible sur mobile. Merci de le lancer depuis un "
 "ordinateur pour une meilleure expérience."
 
-#: php/admin-page.php:182
+#: php/admin-page.php:186
 msgid "🧨 Delete all builds"
 msgstr "🧨 Supprimer tous les builds"

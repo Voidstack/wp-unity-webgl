@@ -1,7 +1,13 @@
 const { registerBlockType } = wp.blocks;
 const { createElement: el, useEffect } = wp.element;
 const { InspectorControls } = wp.blockEditor;
-const { CheckboxControl, PanelBody, SelectControl, TextControl, ToggleControl } = wp.components;
+const {
+  CheckboxControl,
+  PanelBody,
+  SelectControl,
+  TextControl,
+  ToggleControl,
+} = wp.components;
 
 const aspectRatioRegex = /^[1-9]\d*\/[1-9]\d*$/;
 
@@ -28,11 +34,11 @@ registerBlockType("mon-plugin/unity-webgl", {
     showOptions: { type: "boolean", default: true },
     showOnMobile: { type: "boolean", default: false },
     showLogs: { type: "boolean", default: false },
-    sizeMode: { type: "string", default: "aspect-ratio"},
+    sizeMode: { type: "string", default: "aspect-ratio" },
     fixedHeight: { type: "number", default: 500 },
     aspectRatio: { type: "string", default: "16/9" },
   },
-  
+
   // Fonction d’édition du bloc (affichage dans l’admin WordPress)
   edit: (props) => {
     const {
@@ -47,27 +53,35 @@ registerBlockType("mon-plugin/unity-webgl", {
       },
       setAttributes,
     } = props;
-    
+
     const builds = window.unityBuildsData?.builds || [];
-    
+
     if (!builds.length) {
-      return el("div", null,
+      return el(
+        "div",
+        null,
         el("p", null, "Aucun build Unity trouvé."),
-        el("a", {
-          href: UnityWebGLData.urlAdmin + "?page=unity_webgl_admin", // adapte l'URL si besoin
-          className: "button button-primary"
-        }, "Téléverser un build Unity")
+        el(
+          "a",
+          {
+            href: UnityWebGLData.urlAdmin + "?page=unity_webgl_admin", // adapte l'URL si besoin
+            className: "button button-primary",
+          },
+          "Téléverser un build Unity"
+        )
       );
     }
-    
-    const validSelectedBuild = builds.includes(selectedBuild) ? selectedBuild : "";
-    
+
+    const validSelectedBuild = builds.includes(selectedBuild)
+      ? selectedBuild
+      : "";
+
     useEffect(() => {
       if (validSelectedBuild !== selectedBuild) {
         setAttributes({ selectedBuild: "" });
       }
     }, [selectedBuild, validSelectedBuild]);
-    
+
     const mainContent = el(
       "div",
       { style: { border: "1px solid grey", padding: "10px" } },
@@ -81,80 +95,89 @@ registerBlockType("mon-plugin/unity-webgl", {
           "aria-label": WP_I18N.buildChoose,
         },
         el("option", { value: "" }, "-- Aucun --"),
-        builds.map((build) =>
-          el("option", { key: build, value: build }, build)
-      )
-    ),
-    validSelectedBuild &&
-    el(
-      "div",
-      { style: { marginTop: "10px" } },
-      `Build sélectionné : ${validSelectedBuild}`
-    )
-  );
-  
-  const inspector = el(
-    InspectorControls,
-    null,
-    el(
-      PanelBody,
-      { title: "Options", initialOpen: true },
-      el(CheckboxControl, {
-        label: "Afficher les options",
-        checked: showOptions,
-        onChange: (value) => setAttributes({ showOptions: value }),
-      }),
-      el(CheckboxControl, {
-        label: "Afficher sur mobile",
-        checked: showOnMobile,
-        onChange: (value) => setAttributes({ showOnMobile: value }),
-      }),
-      el(CheckboxControl, {
-        label: "Afficher sur logs dans la console",
-        checked: showLogs,
-        onChange: (value) => setAttributes({ showLogs: value }),
-      }),
-      el(SelectControl, {
-        label: "Display Mode",
-        value: sizeMode,
-        options: [
-          { label: "Aspect Ratio", value: "aspect-ratio" },
-          { label: "Fixed Height", value: "fixed-height" },
-        ],
-        onChange: (value) => setAttributes({ sizeMode: value }),
-      }),
-      sizeMode === "aspect-ratio" &&
-      el(TextControl, {
-        label: "Aspect Ratio (ex: 16/9)",
-        value: aspectRatio,
-        onChange: (value) => {
-          setAttributes({ aspectRatio: value });
-        }, 
-        help: !aspectRatioRegex.test(aspectRatio) ? "⚠️ Format attendu : nombre/nombre (ex: 4/3) \nSi le format est invalide, la valeur par défaut utilisée sera 4/3." : undefined,
-      }),
-      sizeMode === "fixed-height" &&
-      el(TextControl, {
-        label: "Hauteur fixe (px)",
-        value: fixedHeight,
-        onChange: (value) => setAttributes({ fixedHeight: parseInt(value) || 0 }),
-      })
-    )
-  );
-  
-  return [inspector, mainContent];
-},
+        builds.map((build) => el("option", { key: build, value: build }, build))
+      ),
+      validSelectedBuild &&
+        el(
+          "div",
+          { style: { marginTop: "10px" } },
+          WP_I18N.buildSelectionne + `: ${validSelectedBuild}`
+        )
+    );
 
-// Fonction qui sauvegarde la sortie HTML du bloc (affichage côté front)
-save: ({ attributes }) => {
-  const { selectedBuild, showOptions, showOnMobile, showLogs,sizeMode, aspectRatio, fixedHeight } = attributes;
-  const shortcode = `[unity_webgl 
+    const inspector = el(
+      InspectorControls,
+      null,
+      el(
+        PanelBody,
+        { title: "Options", initialOpen: true },
+        el(CheckboxControl, {
+          label: WP_I18N.showOptions,
+          checked: showOptions,
+          onChange: (value) => setAttributes({ showOptions: value }),
+        }),
+        el(CheckboxControl, {
+          label: WP_I18N.showOnMobile,
+          checked: showOnMobile,
+          onChange: (value) => setAttributes({ showOnMobile: value }),
+        }),
+        el(CheckboxControl, {
+          label: WP_I18N.showLogs,
+          checked: showLogs,
+          onChange: (value) => setAttributes({ showLogs: value }),
+        }),
+        el(SelectControl, {
+          label: "Display Mode",
+          value: sizeMode,
+          options: [
+            { label: "Aspect Ratio", value: "aspect-ratio" },
+            { label: "Fixed Height", value: "fixed-height" },
+          ],
+          onChange: (value) => setAttributes({ sizeMode: value }),
+        }),
+        sizeMode === "aspect-ratio" &&
+          el(TextControl, {
+            label: "Aspect Ratio (ex: 16/9)",
+            value: aspectRatio,
+            onChange: (value) => {
+              setAttributes({ aspectRatio: value });
+            },
+            help: !aspectRatioRegex.test(aspectRatio)
+              ? WP_I18N.warnExpectedRatio
+              : undefined,
+          }),
+        sizeMode === "fixed-height" &&
+          el(TextControl, {
+            label: "Hauteur fixe (px)",
+            value: fixedHeight,
+            onChange: (value) =>
+              setAttributes({ fixedHeight: parseInt(value) || 0 }),
+          })
+      )
+    );
+
+    return [inspector, mainContent];
+  },
+
+  // Fonction qui sauvegarde la sortie HTML du bloc (affichage côté front)
+  save: ({ attributes }) => {
+    const {
+      selectedBuild,
+      showOptions,
+      showOnMobile,
+      showLogs,
+      sizeMode,
+      aspectRatio,
+      fixedHeight,
+    } = attributes;
+    const shortcode = `[unity_webgl 
   build="${selectedBuild}" 
   showOptions="${showOptions ? "true" : "false"}" 
   showOnMobile="${showOnMobile ? "true" : "false"}" 
   showLogs="${showLogs ? "true" : "false"}"
   sizeMode="${sizeMode}" 
-  aspectRatio="${aspectRatioRegex.test(aspectRatio) ? aspectRatio : '4/3'}"
+  aspectRatio="${aspectRatioRegex.test(aspectRatio) ? aspectRatio : "4/3"}"
   fixedHeight="${fixedHeight || 500}"]`;
-  return el("div", null, shortcode);
-},
+    return el("div", null, shortcode);
+  },
 });
