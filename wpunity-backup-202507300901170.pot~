@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP Unity WebGL\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-30 09:01+0000\n"
+"POT-Creation-Date: 2025-07-30 08:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -66,10 +66,6 @@ msgstr ""
 msgid "Displays a Unity WebGL game inside an iframe."
 msgstr ""
 
-#: php/admin-page.php:291
-msgid "Extraction failed to: "
-msgstr ""
-
 #: php/admin-page.php:114
 msgid "folder of your project and manage it easily within the admin dashboard."
 msgstr ""
@@ -103,8 +99,8 @@ msgstr ""
 msgid "No file sent."
 msgstr ""
 
-#: php/admin-page.php:239
-msgid "Only ZIP format MIME type is allowed."
+#: php/admin-page.php:233
+msgid "Only ZIP format is allowed."
 msgstr ""
 
 #: php/admin-page.php:153
@@ -161,28 +157,15 @@ msgid ""
 "will be shown in the console at each build launch."
 msgstr ""
 
-#: php/admin-page.php:282
-msgid "Unable to create target directory: "
-msgstr ""
-
-#: php/admin-page.php:256
+#: php/admin-page.php:250
 msgid "Unable to create the unity_webgl folder."
 msgstr ""
 
-#: php/admin-page.php:274
-msgid "Unable to delete the previous build at: "
-msgstr ""
-
-#: php/admin-page.php:263
+#: php/admin-page.php:257
 msgid "Unable to initialize the WordPress filesystem."
 msgstr ""
 
-#: php/admin-page.php:302
-#, php-format
-msgid "Unable to open the .zip file (%s)"
-msgstr ""
-
-#: php/admin-page.php:246
+#: php/admin-page.php:240
 msgid "Unable to retrieve the WordPress upload directory."
 msgstr ""
 
@@ -196,7 +179,7 @@ msgid "Upload and Extract"
 msgstr ""
 
 #. %d is the upload error code
-#: php/admin-page.php:221
+#: php/admin-page.php:222
 msgid "Upload failed, error code: %d"
 msgstr ""
 
@@ -212,15 +195,6 @@ msgstr ""
 msgid ""
 "⚠️ Format attendu : nombre/nombre (ex: 4/3) \n"
 "Si le format est invalide, la valeur par défaut utilisée sera 4/3."
-msgstr ""
-
-#: php/admin-page.php:297
-msgid "✅ Success: the existing build was successfully replaced."
-msgstr ""
-
-#: php/admin-page.php:299
-#, php-format
-msgid "✅ Success: the Unity build was successfully extracted to %s"
 msgstr ""
 
 #: php/admin-page.php:180

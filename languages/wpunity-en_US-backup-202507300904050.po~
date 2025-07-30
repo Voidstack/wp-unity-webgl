@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: WP Unity WebGL\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-01 10:57+0000\n"
-"PO-Revision-Date: 2025-07-30 08:28+0000\n"
+"PO-Revision-Date: 2025-07-30 09:03+0000\n"
 "Last-Translator: \n"
 "Language-Team: English (United States)\n"
 "Language: en_US\n"
@@ -21,11 +21,11 @@ msgstr "Display logs in the console"
 
 #: php/unity-block.php:10
 msgid "Afficher les options"
-msgstr ""
+msgstr "Display options"
 
 #: php/unity-block.php:11
 msgid "Afficher sur mobile"
-msgstr ""
+msgstr "Display game on mobile"
 
 #: php/admin-page.php:148
 msgid "All builds have been deleted."
@@ -49,7 +49,7 @@ msgstr "Build Manager"
 
 #: php/unity-block.php:8
 msgid "Build sélectionné"
-msgstr ""
+msgstr "Selected build"
 
 #: php/unity-block.php:7
 msgid "buildChoose"
@@ -66,6 +66,10 @@ msgstr "Delete the MIME type for .wasm"
 #. Description of the plugin
 msgid "Displays a Unity WebGL game inside an iframe."
 msgstr "Displays a Unity WebGL game inside an iframe."
+
+#: php/admin-page.php:291
+msgid "Extraction failed to: "
+msgstr "Extraction failed to: "
 
 #: php/admin-page.php:114
 msgid "folder of your project and manage it easily within the admin dashboard."
@@ -102,9 +106,9 @@ msgstr "No build found."
 msgid "No file sent."
 msgstr "No file sent."
 
-#: php/admin-page.php:233
-msgid "Only ZIP format is allowed."
-msgstr "Only ZIP format is allowed."
+#: php/admin-page.php:239
+msgid "Only ZIP format MIME type is allowed."
+msgstr "Only ZIP format MIME type is allowed."
 
 #: php/admin-page.php:153
 msgid "Path"
@@ -153,7 +157,6 @@ msgid "The attempt to add or remove may fail for security reasons."
 msgstr "The attempt to add or remove may fail for security reasons."
 
 #: php/admin-page.php:80
-#, fuzzy
 #| msgid ""
 #| "✅ The MIME type for .wasm files is already configured in the .htaccess."
 msgid "The MIME type for .wasm files is already configured in the .htaccess."
@@ -161,7 +164,6 @@ msgstr ""
 "✅ The MIME type for .wasm files is already configured in the .htaccess."
 
 #: php/admin-page.php:89
-#, fuzzy
 #| msgid ""
 #| "⚠️ The MIME type for .wasm files is not configured in the .htaccess. A "
 #| "warning will be shown in the console at each build launch."
@@ -172,15 +174,28 @@ msgstr ""
 "⚠️ The MIME type for .wasm files is not configured in the .htaccess. A "
 "warning will be shown in the console at each build launch."
 
-#: php/admin-page.php:250
+#: php/admin-page.php:282
+msgid "Unable to create target directory: "
+msgstr "Unable to create target directory: "
+
+#: php/admin-page.php:256
 msgid "Unable to create the unity_webgl folder."
 msgstr "Unable to create the unity_webgl folder."
 
-#: php/admin-page.php:257
+#: php/admin-page.php:274
+msgid "Unable to delete the previous build at: "
+msgstr "Unable to delete the previous build at: "
+
+#: php/admin-page.php:263
 msgid "Unable to initialize the WordPress filesystem."
 msgstr "Unable to initialize the WordPress filesystem."
 
-#: php/admin-page.php:240
+#: php/admin-page.php:302
+#, php-format
+msgid "Unable to open the .zip file (%s)"
+msgstr "Unable to open the .zip file (%s)"
+
+#: php/admin-page.php:246
 msgid "Unable to retrieve the WordPress upload directory."
 msgstr "Unable to retrieve the WordPress upload directory."
 
@@ -194,7 +209,7 @@ msgid "Upload and Extract"
 msgstr "Upload and Extract"
 
 #. %d is the upload error code
-#: php/admin-page.php:222
+#: php/admin-page.php:221
 msgid "Upload failed, error code: %d"
 msgstr "Upload failed, error code: %d"
 
@@ -211,6 +226,17 @@ msgid ""
 "⚠️ Format attendu : nombre/nombre (ex: 4/3) \n"
 "Si le format est invalide, la valeur par défaut utilisée sera 4/3."
 msgstr ""
+"⚠️ Expected format: number/number (4/3)\n"
+"If the format is invalid, the default value will be 4/3."
+
+#: php/admin-page.php:297
+msgid "✅ Success: the existing build was successfully replaced."
+msgstr "✅ Success: the existing build was successfully replaced."
+
+#: php/admin-page.php:299
+#, php-format
+msgid "✅ Success: the Unity build was successfully extracted to %s"
+msgstr "✅ Success: the Unity build was successfully extracted to %s"
 
 #: php/admin-page.php:180
 msgid "❌ Delete ALL builds?"

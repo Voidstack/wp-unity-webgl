@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: WP Unity WebGL\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-01 10:57+0000\n"
-"PO-Revision-Date: 2025-07-30 08:28+0000\n"
+"PO-Revision-Date: 2025-07-30 08:30+0000\n"
 "Last-Translator: \n"
 "Language-Team: English (United States)\n"
 "Language: en_US\n"
@@ -49,7 +49,7 @@ msgstr "Build Manager"
 
 #: php/unity-block.php:8
 msgid "Build sélectionné"
-msgstr ""
+msgstr "Selected build"
 
 #: php/unity-block.php:7
 msgid "buildChoose"
@@ -153,7 +153,6 @@ msgid "The attempt to add or remove may fail for security reasons."
 msgstr "The attempt to add or remove may fail for security reasons."
 
 #: php/admin-page.php:80
-#, fuzzy
 #| msgid ""
 #| "✅ The MIME type for .wasm files is already configured in the .htaccess."
 msgid "The MIME type for .wasm files is already configured in the .htaccess."
@@ -161,7 +160,6 @@ msgstr ""
 "✅ The MIME type for .wasm files is already configured in the .htaccess."
 
 #: php/admin-page.php:89
-#, fuzzy
 #| msgid ""
 #| "⚠️ The MIME type for .wasm files is not configured in the .htaccess. A "
 #| "warning will be shown in the console at each build launch."
@@ -211,6 +209,8 @@ msgid ""
 "⚠️ Format attendu : nombre/nombre (ex: 4/3) \n"
 "Si le format est invalide, la valeur par défaut utilisée sera 4/3."
 msgstr ""
+"⚠️ Expected format: number/number (4/3)\n"
+"If the format is invalid, the default value will be 4/3."
 
 #: php/admin-page.php:180
 msgid "❌ Delete ALL builds?"

@@ -117,7 +117,7 @@ function unity_webgl_admin_page(): void
         <form method="post" enctype="multipart/form-data">
         <input type="file" name="unity_zip" accept=".zip" required>
         <?php submit_button(__('Upload and Extract', 'wpunity')); 
-        echo "</form><ul>";
+        echo "</form>";
         
         unity_webgl_handle_upload();
         
@@ -170,7 +170,7 @@ function unity_webgl_admin_page(): void
             submit_button('Delete', 'delete', 'delete_build', false);
             echo '</form></td></tr>';
         }
-        echo '</table></ul>';
+        echo '</table>';
         
         // Aucun build ou création d'un btn de suppression de tt les builds.
         if (empty($builds)) {
@@ -217,82 +217,89 @@ function unity_webgl_admin_page(): void
             
             if ($_FILES['unity_zip']['error'] !== UPLOAD_ERR_OK) {
                 unity_webgl_error(
-                    sprintf(
-                        /* translators: %d is the upload error code */
-                        __('Upload failed, error code: %d', 'wpunity'),
-                        intval($_FILES['unity_zip']['error'])
-                        )
-                    );
+                    /* translators: %d is the upload error code */
+                    sprintf(__('Upload failed, error code: %d', 'wpunity'),intval($_FILES['unity_zip']['error']))
+                );
+                return;
+            }
+            
+            // Vérification du type MIME.
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mime = finfo_file($finfo, $_FILES['unity_zip']['tmp_name']);
+            finfo_close($finfo);
+            if ($mime !== 'application/zip') {
+                unity_webgl_error("seul le format ZIP est autorisé.");
+                return;
+            }
+            
+            $file = $_FILES['unity_zip'];
+            $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+            
+            if (strtolower($ext) !== 'zip') {
+                unity_webgl_error(__('Only ZIP format MIME type is allowed.', 'wpunity'));
+                return;
+            }
+            
+            $upload_dir = wp_upload_dir();
+            
+            if (!is_array($upload_dir) || empty($upload_dir['basedir'])) {
+                unity_webgl_error(__('Unable to retrieve the WordPress upload directory.', 'wpunity'));
+                return;
+            }
+            
+            $build_name = pathinfo($file['name'], PATHINFO_FILENAME);
+            $target_dir = $upload_dir['basedir'] . '/unity_webgl/' . sanitize_title($build_name);
+            
+            // Vérifie si le dossier unity_webgl existe, sinon le crée
+            if (!file_exists($upload_dir['basedir'] . '/unity_webgl/')) {
+                if (!wp_mkdir_p($upload_dir['basedir'] . '/unity_webgl/')) {
+                    unity_webgl_error(__('Unable to create the unity_webgl folder.', 'wpunity'));
                     return;
-                }
-                
-                $file = $_FILES['unity_zip'];
-                $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-                
-                if (strtolower($ext) !== 'zip') {
-                    unity_webgl_error(__('Only ZIP format is allowed.', 'wpunity'));
-                    return;
-                }
-                
-                $upload_dir = wp_upload_dir();
-                
-                if (!is_array($upload_dir) || empty($upload_dir['basedir'])) {
-                    unity_webgl_error(__('Unable to retrieve the WordPress upload directory.', 'wpunity'));
-                    return;
-                }
-                
-                $build_name = pathinfo($file['name'], PATHINFO_FILENAME);
-                $target_dir = $upload_dir['basedir'] . '/unity_webgl/' . sanitize_title($build_name);
-                
-                // Vérifie si le dossier unity_webgl existe, sinon le crée
-                if (!file_exists($upload_dir['basedir'] . '/unity_webgl/')) {
-                    if (!wp_mkdir_p($upload_dir['basedir'] . '/unity_webgl/')) {
-                        unity_webgl_error(__('Unable to create the unity_webgl folder.', 'wpunity'));
-                        return;
-                    }
-                }
-                
-                // Initialise le système de fichiers WordPress
-                if(!UploadUtils::unity_webgl_init_filesystem()){
-                    unity_webgl_error(__('Unable to initialize the WordPress filesystem.', 'wpunity'));
-                }
-                
-                global $wp_filesystem;    
-                
-                // Vérifie si le dossier cible existe déjà et le supprime si nécessaire
-                $is_override = false;
-                if (file_exists($target_dir) && is_dir($target_dir)) {
-                    $is_override = true;
-                    if (!$wp_filesystem->delete($target_dir, true)) {
-                        unity_webgl_error("impossible de supprimer l’ancien build à l'emplacement : $target_dir");
-                        return;
-                    }
-                }
-                
-                // Crée le dossier cible s'il n'existe pas
-                if (!$wp_filesystem->is_dir($target_dir)) {
-                    if (!wp_mkdir_p($target_dir)) {
-                        unity_webgl_error("impossible de créer le dossier cible : $target_dir");
-                        return;
-                    }
-                }
-                
-                // Extrait le fichier ZIP dans le dossier cible
-                $zip = new ZipArchive;
-                if ($zip->open($file['tmp_name']) === TRUE) {
-                    if (!$zip->extractTo($target_dir)) {
-                        unity_webgl_error("l'extraction a échoué vers $target_dir");
-                        $zip->close();
-                        return;
-                    }
-                    $zip->close();
-                    if ($is_override) {
-                        echo "<p style='color:green;'>✅ Succès : le build existant a été remplacé avec succès.</p>";
-                    } else {
-                        echo "<p style='color:green;'>✅ Succès : le build Unity a été extrait avec succès dans $target_dir</p>";
-                    }
-                } else {
-                    unity_webgl_error("impossible d’ouvrir le fichier .zip (" . $file['tmp_name'] . ")");
                 }
             }
-            ?>
+            
+            // Initialise le système de fichiers WordPress
+            if(!UploadUtils::unity_webgl_init_filesystem()){
+                unity_webgl_error(__('Unable to initialize the WordPress filesystem.', 'wpunity'));
+                return;
+            }
+            
+            global $wp_filesystem;    
+            
+            // Vérifie si le dossier cible existe déjà et le supprime si nécessaire
+            $is_override = false;
+            if (file_exists($target_dir) && is_dir($target_dir)) {
+                $is_override = true;
+                if (!$wp_filesystem->delete($target_dir, true)) {
+                    unity_webgl_error(__('Unable to delete the previous build at: ', 'wpunity') . $target_dir);
+                    return;
+                }
+            }
+            
+            // Crée le dossier cible s'il n'existe pas
+            if (!$wp_filesystem->is_dir($target_dir)) {
+                if (!wp_mkdir_p($target_dir)) {
+                    unity_webgl_error(__('Unable to create target directory: ', 'wpunity') . $target_dir);
+                    return;
+                }
+            }
+            
+            // Extrait le fichier ZIP dans le dossier cible
+            $zip = new ZipArchive;
+            if ($zip->open($file['tmp_name']) === TRUE) {
+                if (!$zip->extractTo($target_dir)) {
+                    unity_webgl_error(__('Extraction failed to: ', 'wpunity') . $target_dir);
+                    $zip->close();
+                    return;
+                }
+                $zip->close();
+                if ($is_override) {
+                    echo '<p style="color:green;">' . __('✅ Success: the existing build was successfully replaced.', 'wpunity') . '</p>';
+                } else {
+                    echo '<p style="color:green;">' . sprintf(__('✅ Success: the Unity build was successfully extracted to %s', 'wpunity'), esc_html($target_dir)) . '</p>';
+                }
+            } else {
+                unity_webgl_error(sprintf(__('Unable to open the .zip file (%s)', 'wpunity'), esc_html($file['tmp_name'])));
+            }
+        }
+        ?>
