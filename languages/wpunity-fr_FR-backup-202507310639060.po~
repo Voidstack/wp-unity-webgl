@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: WP Unity WebGL\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-01 10:57+0000\n"
-"PO-Revision-Date: 2025-07-30 09:05+0000\n"
+"PO-Revision-Date: 2025-07-31 06:37+0000\n"
 "Last-Translator: \n"
 "Language-Team: French (France)\n"
 "Language: fr_FR\n"
@@ -43,7 +43,9 @@ msgid ""
 "only supported on Apache servers."
 msgstr ""
 "La détection et la configuration automatiques du type MIME pour les fichiers "
-".wasm ne sont prises en charge que sur les serveurs Apache."
+".wasm sont prises en charge uniquement sur les serveurs Apache.\n"
+"Si le type MIME n'est pas configuré un message d'erreur peut survenir dans "
+"la console lors du chargement du jeu."
 
 #: php/admin-page.php:113
 msgid "Build Manager"
@@ -71,7 +73,7 @@ msgstr "Displays a Unity WebGL game inside an iframe."
 
 #: php/admin-page.php:291
 msgid "Extraction failed to: "
-msgstr "Extraction failed to: "
+msgstr "L'extraction a échoué :"
 
 #: php/admin-page.php:114
 msgid "folder of your project and manage it easily within the admin dashboard."
@@ -241,12 +243,12 @@ msgstr ""
 
 #: php/admin-page.php:297
 msgid "✅ Success: the existing build was successfully replaced."
-msgstr "✅ Succès : la version existante a été remplacée avec succès."
+msgstr "✅ Succès : le build existant a été remplacé avec succès."
 
 #: php/admin-page.php:299
 #, php-format
 msgid "✅ Success: the Unity build was successfully extracted to %s"
-msgstr "✅ Success: the Unity build was successfully extracted to %s"
+msgstr "✅ Succès : le build Unity a été extrait avec succès vers %s"
 
 #: php/admin-page.php:180
 msgid "❌ Delete ALL builds?"

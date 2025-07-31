@@ -50,8 +50,6 @@ class UnityInstanceManager {
   }
 
   getUnityBuildFiles(buildUrl, loaderName) {
-    console.log("CANVAS DATA" + loaderName);
-
     return {
       dataUrl: buildUrl + loaderName + ".data",
       frameworkUrl: buildUrl + loaderName + ".framework.js",
@@ -62,7 +60,6 @@ class UnityInstanceManager {
 
   async load(buildUrl, loaderName, configOverrides = {}) {
     const files = this.getUnityBuildFiles(buildUrl, loaderName);
-    console.log("Unity files loaded:", files);
 
     this.config = {
       dataUrl: files.dataUrl,
