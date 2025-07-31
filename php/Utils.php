@@ -4,7 +4,7 @@ class Utils {
     public static function generate_uuid(): string {
         return $uuid = uniqid('unity_', true);
     }
-
+    
     // Méthode qui permet la suppression d'un dossier Wordpress friendly.
     public static function delete_folder($folder) {
         if (is_dir($folder)) {
@@ -15,6 +15,28 @@ class Utils {
             echo "<div style='color:green;'>✅ Succès : build '{$folder}' supprimé avec succès.</div>";
         }
     }
+
+    // Supprime un dossier
+    public static function delete_folder2(string $dir): void {
+        if (!file_exists($dir)) {
+            return;
+        }
+        $it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
+        $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
+        foreach($files as $file) {
+            if ($file->isDir()){
+                rmdir($file->getRealPath());
+            } else {
+                unlink($file->getRealPath());
+            }
+        }
+        rmdir($dir);
+    }
+    
+    public static function array_to_string(array $arr): string {
+        return implode(', ', $arr);
+    }
+    
     
     // Retourne la liste des sous-dossiers présents dans $builds_dir.
     public static function list_builds($builds_dir) {
@@ -70,9 +92,9 @@ class Utils {
     }
     
     /**
-     * Configure le type MIME pour les fichiers .wasm dans le .htaccess ou le fichier de configuration Nginx.
-     * @return bool True si la configuration a réussi, false sinon.
-     */
+    * Configure le type MIME pour les fichiers .wasm dans le .htaccess ou le fichier de configuration Nginx.
+    * @return bool True si la configuration a réussi, false sinon.
+    */
     public static function setupWasmMime(): bool {
         $server = self::detectServer();
         
@@ -115,5 +137,29 @@ class Utils {
         }
         return false;
     }
+    
+    /**
+    * Renomme tous les fichiers et dossiers extraits en minuscules, récursivement.
+    */
+    public static function lowercase_recursive(string $dir): void {
+        $items = scandir($dir);
+        foreach ($items as $item) {
+            if ($item === '.' || $item === '..') continue;
+            
+            $oldPath = $dir . DIRECTORY_SEPARATOR . $item;
+            $newName = mb_strtolower($item);
+            $newPath = $dir . DIRECTORY_SEPARATOR . $newName;
+            
+            // Si le nom change, renommer
+            if ($newPath !== $oldPath) {
+                rename($oldPath, $newPath);
+            }
+            
+            if (is_dir($newPath)) {
+                self::lowercase_recursive($newPath);
+            }
+        }
+    }
+    
     
 }
