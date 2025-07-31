@@ -16,21 +16,22 @@ class BuildExtractor {
     }
     
     public function extract(): bool {
+        $this->info("Début de l'extraction");
         if (!wp_mkdir_p($this->tmpDir)) {
-            $this->error("Unable to create temporary extraction folder.");
+            $this->error(__('Unable to create temporary extraction folder.', 'wpunity'));
             return false;
         }
         
         $zip = new ZipArchive;
         if ($zip->open($this->zipPath) !== TRUE) {
-            $this->error("Unable to open the .zip file ({$this->zipPath})");
+            $this->error(sprintf(__('Unable to open the .zip file (%s)', 'wpunity'), $this->zipPath));
             return false;
         }
         
         if (!$zip->extractTo($this->tmpDir)) {
             $zip->close();
             Utils::delete_folder2($this->tmpDir);
-            $this->error("Extraction failed to temporary folder.");
+            $this->error(__('Extraction failed to temporary folder.', 'wpunity'));
             return false;
         }
         $zip->close();
@@ -40,7 +41,7 @@ class BuildExtractor {
         if (!$this->verifyExtractedFiles($this->tmpDir)) {
             Utils::delete_folder2($this->tmpDir);
             $this->error("Missing expected build files. " . 
-            Utils::array_to_string($this->expectedFiles));
+            Utils::array_to_string($this->expectedFiles) . "</br>" . "le fichier .zip doit OBLIGATOIREMENT avoir le même nom que les fichiers qu'il contient");
             return false;
         }
         
@@ -91,7 +92,7 @@ class BuildExtractor {
     private function error(string $message): void {
         echo "<p style='color:red;'>" . __('❌ Erreur extraction : ', 'wpunity') . wp_kses_post($message) . "</p>";
     }
-
+    
     private function info(string $message):void {
         echo "<p style='color:black;'>" . __('ℹ️ Info extraction : ', 'wpunity') . wp_kses_post($message) . "</p>";
     }
