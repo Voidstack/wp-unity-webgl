@@ -115,16 +115,19 @@ registerBlockType("mon-plugin/unity-webgl", {
           label: WP_I18N.showOptions,
           checked: showOptions,
           onChange: (value) => setAttributes({ showOptions: value }),
+          __nextHasNoMarginBottom: true,
         }),
         el(CheckboxControl, {
           label: WP_I18N.showOnMobile,
           checked: showOnMobile,
           onChange: (value) => setAttributes({ showOnMobile: value }),
+          __nextHasNoMarginBottom: true,
         }),
         el(CheckboxControl, {
           label: WP_I18N.showLogs,
           checked: showLogs,
           onChange: (value) => setAttributes({ showLogs: value }),
+          __nextHasNoMarginBottom: true,
         }),
         el(SelectControl, {
           label: "Display Mode",
@@ -134,6 +137,8 @@ registerBlockType("mon-plugin/unity-webgl", {
             { label: "Fixed Height", value: "fixed-height" },
           ],
           onChange: (value) => setAttributes({ sizeMode: value }),
+          __nextHasNoMarginBottom: true,
+          __next40pxDefaultSize: true,
         }),
         sizeMode === "aspect-ratio" &&
           el(TextControl, {
@@ -145,6 +150,8 @@ registerBlockType("mon-plugin/unity-webgl", {
             help: !aspectRatioRegex.test(aspectRatio)
               ? WP_I18N.warnExpectedRatio
               : undefined,
+            __nextHasNoMarginBottom: true,
+            __next40pxDefaultSize: true,
           }),
         sizeMode === "fixed-height" &&
           el(TextControl, {
@@ -152,6 +159,8 @@ registerBlockType("mon-plugin/unity-webgl", {
             value: fixedHeight,
             onChange: (value) =>
               setAttributes({ fixedHeight: parseInt(value) || 0 }),
+            __nextHasNoMarginBottom: true,
+            __next40pxDefaultSize: true,
           })
       )
     );
