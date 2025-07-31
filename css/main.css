@@ -3,21 +3,21 @@
     /* height: 600px; 
     aspect-ratio: 16 / 9; */
     box-sizing: border-box;
-    width: 100%; 
-    color:white;
+    width: 100%;
+    color: white;
     background-color: pink;
 }
 
-.unity-error{
-    display: none; 
-    padding: 1rem; 
-    color:white;
+.unity-error {
+    display: none;
+    padding: 1rem;
+    color: white;
 }
 
 .unity-canvas {
     display: block;
-    width: 100%; 
-    height: 100%; 
+    width: 100%;
+    height: 100%;
     background: #00000000;
 }
 
@@ -38,7 +38,8 @@
 .unity-toolbar * {
     display: flex;
     align-items: center;
-    justify-content: center; /* si tu veux centrer aussi horizontalement */
+    justify-content: center;
+    /* si tu veux centrer aussi horizontalement */
     color: #f0f0f0;
     font-size: 16px;
     cursor: pointer;
@@ -49,6 +50,7 @@
     color: #f0f0f0;
     border: 1px solid #333;
     border-radius: 4px;
+    padding: 1px 6px;
     font-size: 16px;
     cursor: pointer;
     transition: background 0.2s, color 0.2s;
