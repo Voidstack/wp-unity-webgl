@@ -33,15 +33,6 @@ function unity_enqueue_toolbar_css(): void {
 }
 add_action('wp_enqueue_scripts', 'unity_enqueue_toolbar_css');
 
-// Singleton unity
-function wp_unity_enqueue_singleton(): void {
-    wp_enqueue_script(
-        'unity-loader-singleton',
-        plugins_url('js/unity-loader-singleton.js', __FILE__),[],1.0,true
-    );
-}
-add_action('wp_enqueue_scripts', 'wp_unity_enqueue_singleton');
-
 // Language
 load_plugin_textdomain('wpunity', false, dirname(plugin_basename(__FILE__)) . '/languages');
 

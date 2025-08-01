@@ -5,8 +5,9 @@
     box-sizing: border-box;
     width: 100%;
     color: white;
-    background-color: pink;
+    background-color: black;
     margin-bottom: 50px;
+    position: relative;
 }
 
 .unity-error {
@@ -66,4 +67,84 @@
 .unity-toolbar button:focus {
     outline: none;
     box-shadow: 0 0 0 2px #555;
+}
+
+.unity-loader {
+    position: absolute;
+    inset: 0;
+    /* équivaut à top: 0; right: 0; bottom: 0; left: 0 */
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* centre verticalement aussi */
+    gap: 10px;
+    pointer-events: none;
+    /* optionnel si tu veux que les clics passent à travers */
+}
+
+.progress-bar {
+    width: 40%;
+    height: 10px;
+    background: #ffffff00;
+    border: 2px solid #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 4px white;
+}
+
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: white;
+    transition: width 0.4s ease;
+}
+
+.loading-svg svg path,
+.loading-svg svg rect {
+    fill: white;
+}
+
+/* HTML: <div class="loader"></div> */
+.is-alive-loading {
+    display: inline-flex;
+    gap: 5px;
+}
+
+.is-alive-loading:before,
+.is-alive-loading:after {
+    content: "";
+    width: 15px;
+    aspect-ratio: 1;
+    box-shadow: 0 0 0 3px inset white;
+    animation: l4 1.5s infinite;
+}
+
+.is-alive-loading:after {
+    --s: -1;
+    animation-delay: 0.75s
+}
+
+@keyframes l4 {
+    0% {
+        transform: scaleX(var(--s, 1)) translate(0) rotate(0)
+    }
+
+    16.67% {
+        transform: scaleX(var(--s, 1)) translate(-50%) rotate(0)
+    }
+
+    33.33% {
+        transform: scaleX(var(--s, 1)) translate(-50%) rotate(90deg)
+    }
+
+    50%,
+    100% {
+        transform: scaleX(var(--s, 1)) translate(0) rotate(90deg)
+    }
 }
