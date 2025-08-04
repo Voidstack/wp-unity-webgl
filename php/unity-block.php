@@ -1,7 +1,10 @@
 <?php
 require_once __DIR__ . '/utils.php';
 
-// Tableau des string à traduirer.
+
+/**
+ * Returns an array of strings to translate for the JS interface.
+ */
 function wpunity_get_translatable_strings(): array {
     return [
         'buildChoose' => __('buildChoose', 'wpunity'),
@@ -13,29 +16,32 @@ function wpunity_get_translatable_strings(): array {
     ];
 }
 
-// Unity WebGL Block, ajoute le bloc Unity Webgl dans les blocs wordpress.
+/**
+ * Registers the Unity WebGL block and enqueues the necessary editor script.
+ */
 function unity_enqueue_block(): void
 {
-    // Ajout du script JS pour le block
+    // Register the editor JavaScript file
     wp_register_script(
-        'mon-plugin-unity-block',
+        'wpunity-unity-block',
         plugins_url('../js/editor-unity-block.js', __FILE__),
         ['wp-blocks', 'wp-element', 'wp-editor', 'wp-i18n'],
         filemtime(plugin_dir_path(__FILE__) . '../js/editor-unity-block.js')
     );
     
     // Ajout des trad dans le script
-    wp_localize_script('mon-plugin-unity-block', 'WP_I18N', wpunity_get_translatable_strings());
+    wp_localize_script('wpunity-unity-block', 'WP_I18N', wpunity_get_translatable_strings());
     
-    wp_localize_script('mon-plugin-unity-block', 'UnityWebGLData', [
+    // Pass global plugin data to JS
+    wp_localize_script('wpunity-unity-block', 'UnityWebGLData', [
         'urlAdmin' => admin_url('/admin.php'),
     ]);
     
-    // Je sais pas
-    register_block_type('mon-plugin/unity-webgl', [
-        'editor_script' => 'mon-plugin-unity-block',
-        'editor_style' => 'mon-plugin-unity-block-style',
-        'style' => 'mon-plugin-unity-block-style',
+    // Register the block type
+    register_block_type('wpunity/unity-webgl', [
+        'editor_script' => 'wpunity-unity-block',
+        'editor_style' => 'wpunity-unity-block-style',
+        'style' => 'wpunity-unity-block-style',
     ]);
 }
 
@@ -54,6 +60,6 @@ function unity_webgl_localize_builds(): void
     
     $builds = Utils::list_builds($builds_dir);
     
-    wp_localize_script('mon-plugin-unity-block', 'unityBuildsData', ['builds' => $builds]);
+    wp_localize_script('wpunity-unity-block', 'unityBuildsData', ['builds' => $builds]);
 }
 add_action('enqueue_block_editor_assets', 'unity_webgl_localize_builds');

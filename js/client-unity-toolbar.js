@@ -1,11 +1,14 @@
 export class UnityToolbar {
-  constructor(canvas, uuid) {
+  constructor(canvas, uuid, options = {}) {
+
+
     // Store reference to the Unity canvas element
     this.canvas = canvas;
 
     // Create the toolbar container
     this.toolbar = document.createElement("div");
     this.toolbar.id = uuid + "-toolbar";
+    this.toolbar.reload = options.reload;
     this.toolbar.className = "unity-toolbar";
 
     // Add toolbar buttons
@@ -89,7 +92,8 @@ export class UnityToolbar {
     btn.title = "Reload the page";
 
     btn.addEventListener("click", () => {
-      location.reload();
+      if(this.toolbar.reload) this.toolbar.reload();
+      // location.reload();
     });
 
     this.toolbar.appendChild(btn);
