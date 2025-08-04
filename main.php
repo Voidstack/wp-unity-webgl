@@ -23,7 +23,7 @@ if(is_admin()){
 }
 
 // Ajout du main.css
-function unity_enqueue_toolbar_css(): void {
+function unityEnqueueToolbarCss(): void {
     wp_enqueue_style(
         'unity-toolbar-style',
         plugins_url('css/main.css', __FILE__),
@@ -31,12 +31,12 @@ function unity_enqueue_toolbar_css(): void {
         filemtime(plugin_dir_path(__FILE__) . 'css/main.css')
     );
 }
-add_action('wp_enqueue_scripts', 'unity_enqueue_toolbar_css');
+add_action('wp_enqueue_scripts', 'unityEnqueueToolbarCss');
 
 // Language
 load_plugin_textdomain('wpunity', false, dirname(plugin_basename(__FILE__)) . '/languages');
 
-function unity_enqueue_scripts(string $build_url, string $loader_name, bool $showOptions, bool $showOnMobile, bool $showLogs, string $sizeMode, int $fixedHeight, string $aspectRatio, string $uuid):void {
+function unityEnqueueScripts(array $unityArgs): void {
     wp_enqueue_script(
         'unity-webgl',
         plugins_url('js/client-unity-block.js', __FILE__),
@@ -46,37 +46,37 @@ function unity_enqueue_scripts(string $build_url, string $loader_name, bool $sho
     );
     
     wp_localize_script('unity-webgl', 'UnityWebGLData', [
-        'buildUrl' => $build_url,
-        'loaderName' => $loader_name,
-        'showOptions' => $showOptions,
-        'showOnMobile' => $showOnMobile,
-        'showLogs' => $showLogs,
-        'sizeMode' => $sizeMode,
-        'fixedHeight' => $fixedHeight,
-        'aspectRatio' => $aspectRatio,
+        'buildUrl' => $unityArgs['buildUrl'],
+        'loaderName' => $unityArgs['loaderName'],
+        'showOptions' => $unityArgs['showOptions'],
+        'showOnMobile' => $unityArgs['showOnMobile'],
+        'showLogs' => $unityArgs['showLogs'],
+        'sizeMode' => $unityArgs['sizeMode'],
+        'fixedHeight' => $unityArgs['fixedHeight'],
+        'aspectRatio' => $unityArgs['aspectRatio'],
         'urlAdmin' => admin_url('/wp-admin/admin.php'),
         'currentUserIsAdmin' => current_user_can('administrator'),
         'admMessage' => __('TempMsg', 'wpunity'),
-        'instanceId' => $uuid,
+        'instanceId' => $unityArgs['uuid'],
     ]);
     
     // Permet au script client-unity-block d'import client-unity-toolbar
-    if (!function_exists('unity_script_type_module')) {
-        function unity_script_type_module(string $tag, string $handle): string {
+    if (!function_exists('unityScriptTypeModule')) {
+        function unityScriptTypeModule(string $tag, string $handle): string {
             if ($handle === 'unity-webgl') {
                 return str_replace('<script ', '<script type="module" ', $tag);
             }
             return $tag;
         }
-        add_filter('script_loader_tag', 'unity_script_type_module', 10, 2);
+        add_filter('script_loader_tag', 'unityScriptTypeModule', 10, 2);
     }
 }
 
 // Definition of the shortcode [unity_webgl build="${attributes.selectedBuild}"]
-function unity_build_shortcode(array $atts): string
+function unityBuildShortcode(array $atts): string
 {
     // Normalize shortcode attributes to lowercase keys and set default values
-    // WordPress sometimes messes with uppercase keys in shortcode attributes    
+    // WordPress sometimes messes with uppercase keys in shortcode attributes
     $atts = shortcode_atts([
         'build' => '',
         'showoptions' => 'true',     // minuscules !
@@ -124,15 +124,25 @@ function unity_build_shortcode(array $atts): string
     };
     
     $uuid = Utils::generate_uuid();
-    unity_enqueue_scripts($build_url, $loader_name, $showOptions, $showOnMobile, $showLogs, $sizeMode, $fixedHeight, $aspectRatio, $uuid);
+    unityEnqueueScripts([
+        'buildUrl' => $build_url,
+        'loaderName' => $loader_name,
+        'showOptions' => $showOptions,
+        'showOnMobile' => $showOnMobile,
+        'showLogs' => $showLogs,
+        'sizeMode' => $sizeMode,
+        'fixedHeight' => $fixedHeight,
+        'aspectRatio' => $aspectRatio,
+        'uuid' => $uuid,
+    ]);
     
     // Start output buffering to capture the HTML output
     ob_start(); ?>
     <div id="<?=$uuid?>-error" class="unity-error"></div>
     <div id="<?=$uuid?>-container" class="unity-container" style="<?=$styleSizeMode?>">
-    <canvas 
-    id="<?= $uuid ?>-canvas" 
-    class="unity-canvas" 
+    <canvas
+    id="<?= $uuid ?>-canvas"
+    class="unity-canvas"
     data-build-url="<?= esc_attr($build_url) ?>"
     data-loader-name="<?= esc_attr($loader_name) ?>"
     data-show-options="<?= $showOptions ? 'true' : 'false' ?>"
@@ -146,4 +156,4 @@ function unity_build_shortcode(array $atts): string
     // Return the buffered HTML as the shortcode output
     return ob_get_clean();
 }
-add_shortcode('unity_webgl', 'unity_build_shortcode');
+add_shortcode('unity_webgl', 'unityBuildShortcode');

@@ -63,50 +63,7 @@ function unity_webgl_admin_page(): void
     
     // _e('Current language', 'wpunity');
     
-    $serverType = Utils::detectServer();
-    echo "<div class='simpleblock'>";
-    switch($serverType) {
-        case 'apache': {
-            echo '<h2>' . __('Server configuration: Apache detected.', 'wpunity') . '</h2>';
-            if (isset($_POST['add_wasm_mime'])) {
-                Utils::setupWasmMime();
-            }else if (isset($_POST['del_wasm_mime'])) {
-                Utils::removeWasmMimeSetup();
-            }
-            
-            // Check htaccess pour le type MIME
-            if(Utils::isWasmMimeConfigured()){
-                echo '<form method="post" style="display: flex; align-items: center; gap: 10px;">';
-                submit_button(__('Delete the MIME type for .wasm', 'wpunity'), 'primary', 'del_wasm_mime');
-                echo '<span style="color:green;">✅ ' . esc_html__('The MIME type for .wasm files is already configured in the .htaccess.', 'wpunity') . '</span>';
-                echo '</form>';
-            }else{
-                echo '<form method="post" style="display: flex; align-items: center; gap: 10px;">';
-                submit_button(
-                    esc_html__('Configure the MIME type for .wasm', 'wpunity'),
-                    'primary',
-                    'add_wasm_mime'
-                );
-                echo '<span style="color:orange;">⚠️ ' . esc_html__('The MIME type for .wasm files is not configured in the .htaccess. A warning will be shown in the console at each build launch.', 'wpunity') . '</span>';
-                echo '</form>';
-            }
-            echo '<p>' . esc_html__('The attempt to add or remove may fail for security reasons.', 'wpunity') . '<br />' .
-            esc_html__('In that case, the configuration must be done manually in the .htaccess file.', 'wpunity') . '<br />' .
-            esc_html__('Any server configuration change requires a manual server restart.', 'wpunity') . '</p>';
-            break;
-        }
-        case 'nginx': {
-            echo '<h2>' . esc_html__('Server configuration: Nginx detected.', 'wpunity') . '</h2>';
-            echo '<p>' . esc_html__('Please configure the MIME type for .wasm files in your Nginx configuration.', 'wpunity') . '<br />' .
-            esc_html__('Automatic detection and configuration of the MIME type for .wasm files is only supported on Apache servers.', 'wpunity') . '</p>';
-            break;            
-        }
-        default:{
-            echo '<h2>' . sprintf(esc_html__('Server configuration: unknown(%s) detected.', 'wpunity'),esc_html($serverType)) . '</h2>';
-            echo '<p>' . esc_html__('Automatic detection and configuration of the MIME type for .wasm files is only supported on Apache servers.', 'wpunity') . '</p>';
-        }
-    }
-    echo "</div>";
+    unity_webgl_admin_server_config();
     
     echo "<div class='simpleblock'>";
     echo '<h2>' . esc_html__('Build Manager', 'wpunity') . '</h2>';
@@ -190,8 +147,59 @@ function unity_webgl_admin_page(): void
     echo '</div>';
 }
 
+/**
+ * Extracted server configuration block to reduce cognitive complexity.
+ */
+function unity_webgl_admin_server_config(): void
+{
+    $serverType = Utils::detectServer();
+    echo "<div class='simpleblock'>";
+    switch($serverType) {
+        case 'apache': {
+            echo '<h2>' . __('Server configuration: Apache detected.', 'wpunity') . '</h2>';
+            if (isset($_POST['add_wasm_mime'])) {
+                Utils::setupWasmMime();
+            }else if (isset($_POST['del_wasm_mime'])) {
+                Utils::removeWasmMimeSetup();
+            }
+            
+            // Check htaccess pour le type MIME
+            if(Utils::isWasmMimeConfigured()){
+                echo '<form method="post" style="display: flex; align-items: center; gap: 10px;">';
+                submit_button(__('Delete the MIME type for .wasm', 'wpunity'), 'primary', 'del_wasm_mime');
+                echo '<span style="color:green;">✅ ' . esc_html__('The MIME type for .wasm files is already configured in the .htaccess.', 'wpunity') . '</span>';
+                echo '</form>';
+            }else{
+                echo '<form method="post" style="display: flex; align-items: center; gap: 10px;">';
+                submit_button(
+                    esc_html__('Configure the MIME type for .wasm', 'wpunity'),
+                    'primary',
+                    'add_wasm_mime'
+                );
+                echo '<span style="color:orange;">⚠️ ' . esc_html__('The MIME type for .wasm files is not configured in the .htaccess. A warning will be shown in the console at each build launch.', 'wpunity') . '</span>';
+                echo '</form>';
+            }
+            echo '<p>' . esc_html__('The attempt to add or remove may fail for security reasons.', 'wpunity') . '<br />' .
+            esc_html__('In that case, the configuration must be done manually in the .htaccess file.', 'wpunity') . '<br />' .
+            esc_html__('Any server configuration change requires a manual server restart.', 'wpunity') . '</p>';
+            break;
+        }
+        case 'nginx': {
+            echo '<h2>' . esc_html__('Server configuration: Nginx detected.', 'wpunity') . '</h2>';
+            echo '<p>' . esc_html__('Please configure the MIME type for .wasm files in your Nginx configuration.', 'wpunity') . '<br />' .
+            esc_html__('Automatic detection and configuration of the MIME type for .wasm files is only supported on Apache servers.', 'wpunity') . '</p>';
+            break;            
+        }
+        default:{
+            echo '<h2>' . sprintf(esc_html__('Server configuration: unknown(%s) detected.', 'wpunity'),esc_html($serverType)) . '</h2>';
+            echo '<p>' . esc_html__('Automatic detection and configuration of the MIME type for .wasm files is only supported on Apache servers.', 'wpunity') . '</p>';
+        }
+    }
+    echo "</div>";
+}
+
 // Affiche un message d'erreur dans l'interface admin
-function unity_webgl_error(string $message): void {
+function unityWebglError(string $message): void {
     echo "<p style='color:red;'>❌ Erreur : $message</p>";
 }
 
@@ -205,19 +213,16 @@ function unity_webgl_handle_upload(): void
     
     // Problème de permission
     if (!current_user_can('manage_options')) {
-        unity_webgl_error(__('Insufficient permissions.', 'wpunity'));
+        unityWebglError(__('Insufficient permissions.', 'wpunity'));
         return;
     }
     
-    // Le transfert est vide
+    // Le transfert est vide ou erreur autre
     if (empty($_FILES['unity_zip'])) {
-        unity_webgl_error(__('No file sent.', 'wpunity'));
+        unityWebglError(__('No file sent.', 'wpunity'));
         return;
-    }
-    
-    // Erreur autre
-    if ($_FILES['unity_zip']['error'] !== UPLOAD_ERR_OK) {
-        unity_webgl_error(
+    } else if ($_FILES['unity_zip']['error'] !== UPLOAD_ERR_OK) {
+        unityWebglError(
             /* translators: %d is the upload error code */
             sprintf(__('Upload failed, error code: %d', 'wpunity'),intval($_FILES['unity_zip']['error']))
         );
@@ -229,7 +234,7 @@ function unity_webgl_handle_upload(): void
     $mime = finfo_file($finfo, $_FILES['unity_zip']['tmp_name']);
     finfo_close($finfo);
     if ($mime !== 'application/zip') {
-        unity_webgl_error("seul le format ZIP est autorisé.");
+        unityWebglError("seul le format ZIP est autorisé.");
         return;
     }
     $file = $_FILES['unity_zip'];
@@ -237,7 +242,7 @@ function unity_webgl_handle_upload(): void
     // Check si l'extension est bien .zip ou .ZIP
     $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
     if (strtolower($ext) !== 'zip') {
-        unity_webgl_error(__('Only ZIP format MIME type is allowed.', 'wpunity'));
+        unityWebglError(__('Only ZIP format MIME type is allowed.', 'wpunity'));
         return;
     }
     
@@ -245,7 +250,7 @@ function unity_webgl_handle_upload(): void
     
     // Check si wordpress renvoi bien le upload directory.
     if (!is_array($upload_dir) || empty($upload_dir['basedir'])) {
-        unity_webgl_error(__('Unable to retrieve the WordPress upload directory.', 'wpunity'));
+        unityWebglError(__('Unable to retrieve the WordPress upload directory.', 'wpunity'));
         return;
     }
     
@@ -255,14 +260,14 @@ function unity_webgl_handle_upload(): void
     // Vérifie si le dossier unity_webgl existe, sinon le crée
     if (!file_exists($upload_dir['basedir'] . '/unity_webgl/')) {
         if (!wp_mkdir_p($upload_dir['basedir'] . '/unity_webgl/')) {
-            unity_webgl_error(__('Unable to create the unity_webgl folder.', 'wpunity'));
+            unityWebglError(__('Unable to create the unity_webgl folder.', 'wpunity'));
             return;
         }
     }
     
     // Initialise le système de fichiers WordPress
-    if(!UploadUtils::unity_webgl_init_filesystem()){
-        unity_webgl_error(__('Unable to initialize the WordPress filesystem.', 'wpunity'));
+    if(!UploadUtils::unityWebglInitFilesystem()){
+        unityWebglError(__('Unable to initialize the WordPress filesystem.', 'wpunity'));
         return;
     }
     
@@ -273,7 +278,7 @@ function unity_webgl_handle_upload(): void
     if (file_exists($target_dir) && is_dir($target_dir)) {
         $is_override = true;
         if (!$wp_filesystem->delete($target_dir, true)) {
-            unity_webgl_error(__('Unable to delete the previous build at: ', 'wpunity') . $target_dir);
+            unityWebglError(__('Unable to delete the previous build at: ', 'wpunity') . $target_dir);
             return;
         }
     }
@@ -281,7 +286,7 @@ function unity_webgl_handle_upload(): void
     // Crée le dossier cible s'il n'existe pas
     if (!$wp_filesystem->is_dir($target_dir)) {
         if (!wp_mkdir_p($target_dir)) {
-            unity_webgl_error(__('Unable to create target directory: ', 'wpunity') . $target_dir);
+            unityWebglError(__('Unable to create target directory: ', 'wpunity') . $target_dir);
             return;
         }
     }

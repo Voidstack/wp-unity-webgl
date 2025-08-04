@@ -29,7 +29,7 @@ class BuildExtractor {
         
         $zip = new ZipArchive;
         // Open the ZIP file
-        if ($zip->open($this->zipPath) !== TRUE) {
+        if ($zip->open($this->zipPath) !== true) {
             $this->error(sprintf(__('Unable to open the .zip file (%s)', 'wpunity'), $this->zipPath));
             return false;
         }

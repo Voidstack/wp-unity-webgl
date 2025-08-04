@@ -159,7 +159,5 @@ class Utils {
                 self::lowercase_recursive($newPath);
             }
         }
-    }
-    
-    
+    }   
 }

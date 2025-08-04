@@ -1,11 +1,10 @@
 <?php
 require_once __DIR__ . '/utils.php';
 
-
 /**
  * Returns an array of strings to translate for the JS interface.
  */
-function wpunity_get_translatable_strings(): array {
+function wpunityGetTranslatableStrings(): array {
     return [
         'buildChoose' => __('buildChoose', 'wpunity'),
         'buildSelectionne' => __('Build sélectionné', 'wpunity'),
@@ -19,7 +18,7 @@ function wpunity_get_translatable_strings(): array {
 /**
  * Registers the Unity WebGL block and enqueues the necessary editor script.
  */
-function unity_enqueue_block(): void
+function unityEnqueueBlock(): void
 {
     // Register the editor JavaScript file
     wp_register_script(
@@ -30,7 +29,7 @@ function unity_enqueue_block(): void
     );
     
     // Ajout des trad dans le script
-    wp_localize_script('wpunity-unity-block', 'WP_I18N', wpunity_get_translatable_strings());
+    wp_localize_script('wpunity-unity-block', 'WP_I18N', wpunityGetTranslatableStrings());
     
     // Pass global plugin data to JS
     wp_localize_script('wpunity-unity-block', 'UnityWebGLData', [
@@ -46,14 +45,14 @@ function unity_enqueue_block(): void
 }
 
 // enqueue_block_editor_assets ne s'exécute que dans l'éditeur de blocs (page/post avec Gutenberg).
-add_action('enqueue_block_editor_assets', 'unity_enqueue_block');
+add_action('enqueue_block_editor_assets', 'unityEnqueueBlock');
 
 /*
 Cette fonction crée un tableau builds des dossiers présents dans uploads/unity_webgl.
 Elle le passe à JS sous le nom global unityBuildsData.
 JS peut ensuite lire unityBuildsData.builds pour afficher la liste.
 */
-function unity_webgl_localize_builds(): void
+function unityWebglLocalizeBuilds(): void
 {
     $upload_dir = wp_upload_dir();
     $builds_dir = $upload_dir['basedir'] . '/unity_webgl';
@@ -62,4 +61,4 @@ function unity_webgl_localize_builds(): void
     
     wp_localize_script('wpunity-unity-block', 'unityBuildsData', ['builds' => $builds]);
 }
-add_action('enqueue_block_editor_assets', 'unity_webgl_localize_builds');
+add_action('enqueue_block_editor_assets', 'unityWebglLocalizeBuilds');
