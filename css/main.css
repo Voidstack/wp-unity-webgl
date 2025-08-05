@@ -87,7 +87,7 @@
     /* optionnel si tu veux que les clics passent à travers */
 }
 
-.progress-bar {
+.unitygl-progress-bar {
     width: 40%;
     height: 10px;
     background: #ffffff00;
@@ -97,8 +97,7 @@
     box-shadow: 0 0 4px white;
 }
 
-
-.progress-fill {
+.unitygl-progress-fill {
     height: 100%;
     width: 0%;
     background: white;
