@@ -6,12 +6,12 @@ export class UnityLoader {
     this.loaderDiv.innerHTML = /* html */ ` 
       <div class="is-alive-loading"></div>
       
-      <div class="progress-bar">    
-        <div class="progress-fill"></div>
+      <div class="unitygl-progress-bar">    
+        <div class="unitygl-progress-fill"></div>
       </div>
     `;
     this.container.appendChild(this.loaderDiv);
-    this.progressFill = this.loaderDiv.querySelector(".progress-fill");
+    this.progressFill = this.loaderDiv.querySelector(".unitygl-progress-fill");
   }
 
   updateProgress(progress) {
