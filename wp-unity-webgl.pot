@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP Unity WebGL\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 18:21+0000\n"
+"POT-Creation-Date: 2025-08-08 16:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Loco-Version: 2.8.0; wp-6.8.1; php-8.4.4\n"
-"X-Domain: wpunity"
+"X-Domain: wp-unity-webgl"
 
 #: php/unity-block.php:14
 msgid "Afficher les logs dans la console"
@@ -63,7 +63,7 @@ msgid "Delete the MIME type for .wasm"
 msgstr ""
 
 #. Description of the plugin
-msgid "Displays a Unity WebGL game inside an iframe."
+msgid "Displays a Unity WebGL game inside your page."
 msgstr ""
 
 #: php/build-extractor.php:41
@@ -76,6 +76,10 @@ msgstr ""
 
 #. URI of the plugin
 msgid "https://enosistudio.com/"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://www.linkedin.com/in/baptiste-martin56/"
 msgstr ""
 
 #: php/admin-page.php:183
@@ -147,7 +151,7 @@ msgstr ""
 msgid "Starting extraction"
 msgstr ""
 
-#: main.php:59
+#: main.php:60
 msgid "TempMsg"
 msgstr ""
 
@@ -194,7 +198,7 @@ msgstr ""
 msgid "Unable to retrieve the WordPress upload directory."
 msgstr ""
 
-#: main.php:109
+#: main.php:110
 #, php-format
 msgid "Unity build file not found: %s"
 msgstr ""
@@ -234,7 +238,7 @@ msgstr ""
 msgid "❌ Extraction error: "
 msgstr ""
 
-#: main.php:117
+#: main.php:118
 msgid ""
 "🚫 Le jeu n’est pas disponible sur mobile. Merci de le lancer depuis un "
 "ordinateur pour une meilleure expérience."

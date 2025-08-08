@@ -19,18 +19,18 @@ class BuildExtractor {
     }
     
     public function extract(): bool {
-        $this->info(__('Starting extraction', 'wpunity'));
+        $this->info(__('Starting extraction', 'wp-unity-webgl'));
         
         // Create the temporary directory
         if (!wp_mkdir_p($this->tmpDir)) {
-            $this->error(__('Unable to create temporary extraction folder.', 'wpunity'));
+            $this->error(__('Unable to create temporary extraction folder.', 'wp-unity-webgl'));
             return false;
         }
         
         $zip = new ZipArchive;
         // Open the ZIP file
         if ($zip->open($this->zipPath) !== true) {
-            $this->error(sprintf(__('Unable to open the .zip file (%s)', 'wpunity'), $this->zipPath));
+            $this->error(sprintf(__('Unable to open the .zip file (%s)', 'wp-unity-webgl'), $this->zipPath));
             return false;
         }
         
@@ -38,7 +38,7 @@ class BuildExtractor {
         if (!$zip->extractTo($this->tmpDir)) {
             $zip->close();
             Utils::delete_folder2($this->tmpDir);
-            $this->error(__('Extraction failed to temporary folder.', 'wpunity'));
+            $this->error(__('Extraction failed to temporary folder.', 'wp-unity-webgl'));
             return false;
         }
         $zip->close();
@@ -117,11 +117,11 @@ class BuildExtractor {
     
     // Display an error message in the WordPress admin interface
     private function error(string $message): void {
-        echo "<p style='color:red;'>" . __('❌ Extraction error: ', 'wpunity') . wp_kses_post($message) . "</p>";
+        echo "<p style='color:red;'>" . __('❌ Extraction error: ', 'wp-unity-webgl') . wp_kses_post($message) . "</p>";
     }
     
     // Display an informational message in the WordPress admin interface
     private function info(string $message): void {
-        echo "<p style='color:black;'>" . __('ℹ️ Extraction info: ', 'wpunity') . wp_kses_post($message) . "</p>";
+        echo "<p style='color:black;'>" . __('ℹ️ Extraction info: ', 'wp-unity-webgl') . wp_kses_post($message) . "</p>";
     }
 }

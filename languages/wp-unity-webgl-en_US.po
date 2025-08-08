@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: WP Unity WebGL\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-01 10:57+0000\n"
-"PO-Revision-Date: 2025-08-04 18:21+0000\n"
+"PO-Revision-Date: 2025-08-08 16:48+0000\n"
 "Last-Translator: \n"
 "Language-Team: English (United States)\n"
 "Language: en_US\n"
@@ -64,12 +64,13 @@ msgid "Delete the MIME type for .wasm"
 msgstr "Delete the MIME type for .wasm"
 
 #. Description of the plugin
-msgid "Displays a Unity WebGL game inside an iframe."
+#| msgid "Displays a Unity WebGL game inside an iframe."
+msgid "Displays a Unity WebGL game inside your page."
 msgstr "Displays a Unity WebGL game inside an iframe."
 
 #: php/build-extractor.php:41
 msgid "Extraction failed to temporary folder."
-msgstr ""
+msgstr "Extraction failed to temporary folder."
 
 #: php/admin-page.php:70
 msgid "folder of your project and manage it easily within the admin dashboard."
@@ -79,6 +80,10 @@ msgstr ""
 #. URI of the plugin
 msgid "https://enosistudio.com/"
 msgstr "https://enosistudio.com/"
+
+#. Author URI of the plugin
+msgid "https://www.linkedin.com/in/baptiste-martin56/"
+msgstr "https://www.linkedin.com/in/baptiste-martin56/"
 
 #: php/admin-page.php:183
 msgid ""
@@ -139,8 +144,7 @@ msgid "Server configuration: Nginx detected."
 msgstr "Server configuration: Nginx detected."
 
 #: php/admin-page.php:194
-#, fuzzy, php-format
-#| msgid "Server configuration: %s detected."
+#, php-format
 msgid "Server configuration: unknown(%s) detected."
 msgstr "Server configuration: %s detected."
 
@@ -150,9 +154,9 @@ msgstr "Size (MB)"
 
 #: php/build-extractor.php:22
 msgid "Starting extraction"
-msgstr ""
+msgstr "Starting extraction"
 
-#: main.php:59
+#: main.php:60
 msgid "TempMsg"
 msgstr ""
 "This message is only visible to the admin and will disappear in 4 seconds"
@@ -162,15 +166,10 @@ msgid "The attempt to add or remove may fail for security reasons."
 msgstr "The attempt to add or remove may fail for security reasons."
 
 #: php/admin-page.php:170
-#| msgid ""
-#| "✅ The MIME type for .wasm files is already configured in the .htaccess."
 msgid "The MIME type for .wasm files is already configured in the .htaccess."
 msgstr "The MIME type for .wasm files is already configured in the .htaccess."
 
 #: php/admin-page.php:179
-#| msgid ""
-#| "⚠️ The MIME type for .wasm files is not configured in the .htaccess. A "
-#| "warning will be shown in the console at each build launch."
 msgid ""
 "The MIME type for .wasm files is not configured in the .htaccess. A warning "
 "will be shown in the console at each build launch."
@@ -184,7 +183,7 @@ msgstr "Unable to create target directory: "
 
 #: php/build-extractor.php:26
 msgid "Unable to create temporary extraction folder."
-msgstr ""
+msgstr "Unable to create temporary extraction folder."
 
 #: php/admin-page.php:263
 msgid "Unable to create the unity_webgl folder."
@@ -207,7 +206,7 @@ msgstr "Unable to open the .zip file (%s)"
 msgid "Unable to retrieve the WordPress upload directory."
 msgstr "Unable to retrieve the WordPress upload directory."
 
-#: main.php:109
+#: main.php:110
 #, php-format
 msgid "Unity build file not found: %s"
 msgstr "Unity build file not found: %s"
@@ -231,7 +230,7 @@ msgstr "WP Unity WebGL"
 
 #: php/build-extractor.php:125
 msgid "ℹ️ Extraction info: "
-msgstr ""
+msgstr "ℹ️ Extraction info: "
 
 #: php/unity-block.php:11
 msgid ""
@@ -247,9 +246,9 @@ msgstr "❌ Delete ALL builds?"
 
 #: php/build-extractor.php:120
 msgid "❌ Extraction error: "
-msgstr ""
+msgstr "❌ Extraction error: "
 
-#: main.php:117
+#: main.php:118
 msgid ""
 "🚫 Le jeu n’est pas disponible sur mobile. Merci de le lancer depuis un "
 "ordinateur pour une meilleure expérience."

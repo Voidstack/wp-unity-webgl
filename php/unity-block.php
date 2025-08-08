@@ -6,12 +6,12 @@ require_once __DIR__ . '/utils.php';
  */
 function wpunityGetTranslatableStrings(): array {
     return [
-        'buildChoose' => __('buildChoose', 'wpunity'),
-        'buildSelectionne' => __('Build sélectionné', 'wpunity'),
-        'warnExpectedRatio' => __("⚠️ Format attendu : nombre/nombre (ex: 4/3) \nSi le format est invalide, la valeur par défaut utilisée sera 4/3.", 'wpunity'),
-        'showOptions' => __('Afficher les options', 'wpunity'),
-        'showOnMobile' => __('Afficher sur mobile', 'wpunity'),
-        'showLogs' => __('Afficher les logs dans la console', 'wpunity')
+        'buildChoose' => __('buildChoose', 'wp-unity-webgl'),
+        'buildSelectionne' => __('Build sélectionné', 'wp-unity-webgl'),
+        'warnExpectedRatio' => __("⚠️ Format attendu : nombre/nombre (ex: 4/3) \nSi le format est invalide, la valeur par défaut utilisée sera 4/3.", 'wp-unity-webgl'),
+        'showOptions' => __('Afficher les options', 'wp-unity-webgl'),
+        'showOnMobile' => __('Afficher sur mobile', 'wp-unity-webgl'),
+        'showLogs' => __('Afficher les logs dans la console', 'wp-unity-webgl')
     ];
 }
 

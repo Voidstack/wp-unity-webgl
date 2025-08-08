@@ -1,51 +1,44 @@
-# WP Unity WebGL
+=== WP Unity WebGL ===
+Contributors: voidstack, baptiste-martin  
+Tags: unity, webgl, game, shortcode, upload  
+Requires at least: 5.0  
+Tested up to: 6.8  
+Requires PHP: 7.4  
+Stable tag: 0.1  
+License: GPL-3.0-or-later  
+License URI: https://www.gnu.org/licenses/gpl-3.0.html  
 
-**Author:** MARTIN Baptiste / Voidstack  
-**Tags:** unity, webgl, game, shortcode, upload  
-**Website:** [https://enosistudio.com/unitywp/](https://enosistudio.com/unitywp/)  
-**License:** [GPLv2 or later](https://www.gnu.org/licenses/gpl-2.0.html)
+Displays a Unity WebGL game inside your page using a shortcode.
 
----
+== Description ==
 
-## 🧩 Description
-
-**WP Unity WebGL** is a lightweight WordPress plugin that makes it easy to embed **Unity WebGL** uncompressed games into your posts or pages.  
 Showcase interactive Unity content directly on your site with just a few clicks.
 
----
+== Features ==
 
-## ✨ Features
+* Upload and embed Unity WebGL builds  
+* Shortcode support for quick integration (`/unity`)
+* Mobile visibility control  
+* Built-in loading screen  
+* Lightweight and performance-optimized  
+* English and French translations included  
 
-- Upload and embed Unity WebGL builds
-- Shortcode support for quick integration (`/unity`)
-- Mobile visibility control — Optionally hide content on mobile for performance
-- Built-in loading screen
-- Lightweight and performance-optimized
-- English and French translations included
+== Usage ==
 
----
+1. Upload your Unity WebGL build folder (in `.zip` format).  
+2. Use the `/unity` shortcode in any post or page.  
+3. Customize dimensions and options via the block settings.  
 
-## 🚀 Usage
+== Example ==
 
-1. Upload your Unity WebGL build folder (in `.zip` format).
-2. Use the `/unity` shortcode in any post or page.
-3. Customize dimensions and options via the block settings.
+[Live Example](https://enosistudio.com/unity-wp-exemple/)
 
----
+== Requirements ==
 
-## 🧪 Example
+* WordPress 6.8 or later  
+* Unity 6+ WebGL builds  
 
-👉 [Live Example](https://enosistudio.com/unity-wp-exemple/)
+== License ==
 
----
-
-## 📦 Requirements
-
-- WordPress **6.8** or later (may work with earlier versions)
-- Unity WebGL uncompressed build exported from **Unity 6** or later (older versions may work)
-
----
-
-## 📄 License
-
-This plugin is distributed under the **[GPLv2 or later](https://www.gnu.org/licenses/gpl-2.0.html)** license.
+This plugin is distributed under the GPLv3 or later license.  
+[https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)

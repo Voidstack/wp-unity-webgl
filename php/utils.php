@@ -27,7 +27,7 @@ class Utils {
             if ($file->isDir()){
                 rmdir($file->getRealPath());
             } else {
-                unlink($file->getRealPath());
+                wp_delete_file($file->getRealPath());
             }
         }
         rmdir($dir);
