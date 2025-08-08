@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: WP Unity WebGL\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-04 18:21+0000\n"
-"PO-Revision-Date: 2025-08-08 16:17+0000\n"
+"PO-Revision-Date: 2025-08-08 16:15+0000\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
@@ -220,7 +220,7 @@ msgstr "Nie udało się przesłać, kod błędu: %d"
 
 #: php/admin-page.php:70
 msgid "Use this page to add your Unity project by uploading the"
-msgstr "Na tej stronie możesz dodać swój projekt Unity, przesyłając folder"
+msgstr "Użyj tej strony, aby dodać swój projekt Unity, przesyłając go"
 
 #. Name of the plugin
 msgid "WP Unity WebGL"

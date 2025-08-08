@@ -4,7 +4,7 @@ require_once plugin_dir_path(__FILE__) . 'php/utils.php';
 /**
 * Plugin Name: WP Unity WebGL
 * Plugin URI:  https://enosistudio.com/
-* Description: Displays a Unity WebGL game inside an iframe.
+* Description: Displays a Unity WebGL game inside your page.
 * Version: 0.1
 * Author: MARTIN Baptiste / Voidstack
 * Author URI: https://www.linkedin.com/in/baptiste-martin56/

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: WP Unity WebGL\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-04 18:21+0000\n"
-"PO-Revision-Date: 2025-08-08 16:17+0000\n"
+"PO-Revision-Date: 2025-08-08 16:01+0000\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
@@ -77,7 +77,7 @@ msgstr "Nie udało się wyodrębnić pliku do folderu tymczasowego."
 #: php/admin-page.php:70
 msgid "folder of your project and manage it easily within the admin dashboard."
 msgstr ""
-"swojego projektu, a następnie łatwo nim zarządzać z poziomu panelu "
+"folder swojego projektu i łatwo nim zarządzać z poziomu panelu "
 "administratora."
 
 #. URI of the plugin
@@ -88,7 +88,7 @@ msgstr "https://enosistudio.com/"
 msgid ""
 "In that case, the configuration must be done manually in the .htaccess file."
 msgstr ""
-"W takim przypadku konfigurację należy wykonać ręcznie w pliku .htaccess."
+"In that case, the configuration must be done manually in the .htaccess file."
 
 #: php/admin-page.php:216
 msgid "Insufficient permissions."
@@ -202,7 +202,7 @@ msgstr "Nie można otworzyć pliku .zip (%s)"
 
 #: php/admin-page.php:253
 msgid "Unable to retrieve the WordPress upload directory."
-msgstr "Nie można znaleźć folderu przesyłania WordPress."
+msgstr "Nie można pobrać katalogu przesyłania WordPress."
 
 #: main.php:109
 #, php-format
@@ -220,7 +220,7 @@ msgstr "Nie udało się przesłać, kod błędu: %d"
 
 #: php/admin-page.php:70
 msgid "Use this page to add your Unity project by uploading the"
-msgstr "Na tej stronie możesz dodać swój projekt Unity, przesyłając folder"
+msgstr "Użyj tej strony, aby dodać swój projekt Unity, przesyłając go"
 
 #. Name of the plugin
 msgid "WP Unity WebGL"
