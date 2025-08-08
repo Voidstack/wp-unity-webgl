@@ -1,0 +1,190 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: WP Unity WebGL\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-30 06:47+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.8.0; wp-6.8.1; php-8.4.4\n"
+"X-Domain: wpunity"
+
+#: php/admin-page.php:152
+msgid "All builds have been deleted."
+msgstr ""
+
+#: php/admin-page.php:98
+msgid "Any server configuration change requires a manual server restart."
+msgstr ""
+
+#: php/admin-page.php:104 php/admin-page.php:111
+msgid ""
+"Automatic detection and configuration of the MIME type for .wasm files is "
+"only supported on Apache servers."
+msgstr ""
+
+#: php/admin-page.php:117
+msgid "Build Manager"
+msgstr ""
+
+#: php/unity-block.php:7
+msgid "buildChoose"
+msgstr ""
+
+#: php/admin-page.php:90
+msgid "Configure the MIME type for .wasm"
+msgstr ""
+
+#: php/admin-page.php:81
+msgid "Delete the MIME type for .wasm"
+msgstr ""
+
+#. Description of the plugin
+msgid "Displays a Unity WebGL game inside an iframe."
+msgstr ""
+
+#: php/admin-page.php:118
+msgid "folder of your project and manage it easily within the admin dashboard."
+msgstr ""
+
+#. URI of the plugin
+msgid "https://enosistudio.com/"
+msgstr ""
+
+#: php/admin-page.php:97
+msgid ""
+"In that case, the configuration must be done manually in the .htaccess file."
+msgstr ""
+
+#: php/admin-page.php:213
+msgid "Insufficient permissions."
+msgstr ""
+
+#. Author of the plugin
+msgid "MARTIN Baptiste / Voidstack"
+msgstr ""
+
+#: php/admin-page.php:156
+msgid "Name"
+msgstr ""
+
+#: php/admin-page.php:181
+msgid "No build found."
+msgstr ""
+
+#: php/admin-page.php:218
+msgid "No file sent."
+msgstr ""
+
+#: php/admin-page.php:237
+msgid "Only ZIP format is allowed."
+msgstr ""
+
+#: php/admin-page.php:157
+msgid "Path"
+msgstr ""
+
+#: php/admin-page.php:172
+msgid "Permanently delete build:"
+msgstr ""
+
+#: php/admin-page.php:103
+msgid ""
+"Please configure the MIME type for .wasm files in your Nginx configuration."
+msgstr ""
+
+#. %s is the link to Enosi Studio
+#: php/admin-page.php:194
+#, php-format
+msgid "Plugin developed by %s."
+msgstr ""
+
+#: php/admin-page.php:109
+#, php-format
+msgid "Server configuration: %s detected."
+msgstr ""
+
+#: php/admin-page.php:70
+msgid "Server configuration: Apache detected."
+msgstr ""
+
+#: php/admin-page.php:102
+msgid "Server configuration: Nginx detected."
+msgstr ""
+
+#: php/admin-page.php:158
+msgid "Size (MB)"
+msgstr ""
+
+#: main.php:65
+msgid "TempMsg"
+msgstr ""
+
+#: php/admin-page.php:96
+msgid "The attempt to add or remove may fail for security reasons."
+msgstr ""
+
+#: php/admin-page.php:254
+msgid "Unable to create the unity_webgl folder."
+msgstr ""
+
+#: php/admin-page.php:261
+msgid "Unable to initialize the WordPress filesystem."
+msgstr ""
+
+#: php/admin-page.php:244
+msgid "Unable to retrieve the WordPress upload directory."
+msgstr ""
+
+#: main.php:115
+#, php-format
+msgid "Unity build file not found: %s"
+msgstr ""
+
+#: php/admin-page.php:123
+msgid "Upload and Extract"
+msgstr ""
+
+#. %d is the upload error code
+#: php/admin-page.php:226
+msgid "Upload failed, error code: %d"
+msgstr ""
+
+#: php/admin-page.php:118
+msgid "Use this page to add your Unity project by uploading the"
+msgstr ""
+
+#. Name of the plugin
+msgid "WP Unity WebGL"
+msgstr ""
+
+#: php/admin-page.php:86
+msgid ""
+"⚠️ The MIME type for .wasm files is not configured in the .htaccess. A "
+"warning will be shown in the console at each build launch."
+msgstr ""
+
+#: php/admin-page.php:79
+msgid "✅ The MIME type for .wasm files is already configured in the .htaccess."
+msgstr ""
+
+#: php/admin-page.php:184
+msgid "❌ Delete ALL builds?"
+msgstr ""
+
+#: main.php:123
+msgid ""
+"🚫 Le jeu n’est pas disponible sur mobile. Merci de le lancer depuis un "
+"ordinateur pour une meilleure expérience."
+msgstr ""
+
+#: php/admin-page.php:186
+msgid "🧨 Delete all builds"
+msgstr ""
