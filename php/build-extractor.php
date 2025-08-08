@@ -30,6 +30,7 @@ class BuildExtractor {
         $zip = new ZipArchive;
         // Open the ZIP file
         if ($zip->open($this->zipPath) !== true) {
+            // translators: %s is the path to the .zip file that could not be opened.
             $this->error(sprintf(__('Unable to open the .zip file (%s)', 'wp-unity-webgl'), $this->zipPath));
             return false;
         }
@@ -50,9 +51,9 @@ class BuildExtractor {
         if (!$this->verifyExtractedFiles($this->tmpDir)) {
             Utils::delete_folder2($this->tmpDir);
             $this->error(
-                __('Missing expected build files. ', 'plugin-textdomain') .
+                __('Missing expected build files. ', 'wp-unity-webgl') .
                 Utils::array_to_string($this->expectedFiles) . '</br>' .
-                __('The .zip file MUST have the same name as the files it contains.', 'plugin-textdomain')
+                __('The .zip file MUST have the same name as the files it contains.', 'wp-unity-webgl')
             );
             return false;
         }
@@ -65,7 +66,7 @@ class BuildExtractor {
         // Move the temporary directory to the target location
         if (!rename($this->tmpDir, $this->targetDir)) {
             Utils::delete_folder2($this->tmpDir);
-            $this->error(__('Failed to move build to target directory.', 'plugin-textdomain'));
+            $this->error(__('Failed to move build to target directory.', 'wp-unity-webgl'));
             return false;
         }
         
@@ -83,7 +84,7 @@ class BuildExtractor {
             }
         }
         // Display found files for debugging
-        $this->info(__('Files found: ', 'plugin-textdomain') . Utils::array_to_string($foundFiles));
+        $this->info(__('Files found: ', 'wp-unity-webgl') . Utils::array_to_string($foundFiles));
         foreach ($this->expectedFiles as $expected) {
             if (!in_array($expected, $foundFiles)) {
                 return false;

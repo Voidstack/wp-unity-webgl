@@ -109,6 +109,7 @@ function unityBuildShortcode(array $atts): string
     
     // Check if the loader script exists, else show an error
     if (!file_exists($loader_file)) {
+        // translators: %s is the Unity build loader file path.
         return '<p style="color:red;">' . sprintf(esc_html__('Unity build file not found: %s', 'wp-unity-webgl'),esc_html($loader_file)) . '</p>';
     }
     
