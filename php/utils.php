@@ -70,10 +70,7 @@ class Utils {
     }
     
     // Détecte le serveur web utilisé (Apache ou Nginx).
-    public static function detectServer(): string {
-        $serverSoftware = isset($_SERVER['SERVER_SOFTWARE'])
-        ? wp_unslash($_SERVER['SERVER_SOFTWARE']) // retire les éventuels slashes
-        : '';
+    public static function detectServer(): string { $serverSoftware = isset($_SERVER['SERVER_SOFTWARE'])? sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'])): '';
         
         $serverSoftware = sanitize_text_field($serverSoftware); // sécurise la chaîne
         
@@ -94,10 +91,10 @@ class Utils {
     public static function isWasmMimeConfigured(): bool {
         $server = self::detectServer();
         if ($server === 'apache') {
-            $htaccessPath = $_SERVER['DOCUMENT_ROOT'] . '/.htaccess';
+            $htaccessPath = isset($_SERVER['DOCUMENT_ROOT']) ? sanitize_text_field( wp_unslash( $_SERVER['DOCUMENT_ROOT'] ) ) . '/.htaccess': '';
             $directive = 'AddType application/wasm .wasm';
             return file_exists($htaccessPath) && strpos(file_get_contents($htaccessPath), $directive) !== false;
-        } 
+        }
         return false;
     }
     
@@ -109,7 +106,10 @@ class Utils {
         $server = self::detectServer();
         
         if ($server === 'apache') {
-            $htaccessPath = $_SERVER['DOCUMENT_ROOT'] . '/.htaccess';
+            $htaccessPath = '';
+            if ( isset($_SERVER['DOCUMENT_ROOT']) ) {
+                $htaccessPath = sanitize_text_field( wp_unslash( $_SERVER['DOCUMENT_ROOT'] ) ) . '/.htaccess';
+            }
             $directive = "AddType application/wasm .wasm\n";
             
             if (!file_exists($htaccessPath)) {
@@ -120,8 +120,8 @@ class Utils {
             if (strpos($content, trim($directive)) !== false) return true;
             
             $content .= $directive;
-            return file_put_contents($htaccessPath, $content) !== false;  
-        } 
+            return file_put_contents($htaccessPath, $content) !== false;
+        }
         return false;
     }
     
@@ -133,10 +133,14 @@ class Utils {
         $server = self::detectServer();
         
         if ($server === 'apache') {
-            $htaccessPath = $_SERVER['DOCUMENT_ROOT'] . '/.htaccess';
-            $directive = "AddType application/wasm .wasm";
+            $htaccessPath = '';
+            if ( isset($_SERVER['DOCUMENT_ROOT']) ) {
+                $htaccessPath = sanitize_text_field( wp_unslash( $_SERVER['DOCUMENT_ROOT'] ) ) . '/.htaccess';
+            }            $directive = "AddType application/wasm .wasm";
             
-            if (!file_exists($htaccessPath)) return true;
+            if (!file_exists($htaccessPath)){
+                return true;
+            }
             
             $content = file_get_contents($htaccessPath);
             $newContent = str_replace($directive . "\n", '', $content);

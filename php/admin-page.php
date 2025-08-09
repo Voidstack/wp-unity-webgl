@@ -13,13 +13,13 @@ require_once __DIR__ . '/build-extractor.php';
 
 const STR_TITLE = "Unity WebGL";
 
-// Fonction WORDPRESS pour l'ajout de l'extention 
+// Fonction WORDPRESS pour l'ajout de l'extention
 add_action('admin_menu', function (): void {
     add_menu_page(STR_TITLE, STR_TITLE, 'manage_options', 'unity_webgl_admin', 'unityWebglAdminPage', '', 6);
 });
 
 add_action('admin_enqueue_scripts', function () {
-    wp_enqueue_style('mon-style-admin', plugin_dir_url(__FILE__) . '../css/admin-page.css');
+    wp_enqueue_style('mon-style-admin', plugin_dir_url(__FILE__) . '../css/admin-page.css', [], '1.0.0');
 });
 
 // Fonction WORDPRESS pour l'ajout d'un boutton pour la fenetre d'admin Unity GL
@@ -231,26 +231,37 @@ function unityWebglHandleUpload(): void
         return;
     }
     
+    if ( ! isset($_FILES['unity_zip']['tmp_name']) || empty($_FILES['unity_zip']['tmp_name']) ) {
+        unityWebglError(__('Temporary file missing.', 'wp-unity-webgl'));
+        return;
+    }
+    
     // Le transfert est vide ou erreur autre
-    if (empty($_FILES['unity_zip'])) {
+    // Le transfert est vide ou erreur autre
+    if ( empty($_FILES['unity_zip']) ) {
         unityWebglError(__('No file sent.', 'wp-unity-webgl'));
         return;
-    } elseif ($_FILES['unity_zip']['error'] !== UPLOAD_ERR_OK) {
+    } elseif ( ! isset($_FILES['unity_zip']['error']) || $_FILES['unity_zip']['error'] !== UPLOAD_ERR_OK ) {
+        $error_code = isset($_FILES['unity_zip']['error']) ? intval($_FILES['unity_zip']['error']) : 0;
         unityWebglError(
             /* translators: %d is the upload error code */
-            sprintf(__('Upload failed, error code: %d', 'wp-unity-webgl'),intval($_FILES['unity_zip']['error']))
+            sprintf(__('Upload failed, error code: %d', 'wp-unity-webgl'), $error_code)
         );
         return;
     }
     
     // Vérification du type MIME.
     $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    
+    // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
     $mime = finfo_file($finfo, $_FILES['unity_zip']['tmp_name']);
     finfo_close($finfo);
     if ($mime !== 'application/zip') {
         unityWebglError("seul le format ZIP est autorisé.");
         return;
     }
+    
+    // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
     $file = $_FILES['unity_zip'];
     
     // Check si l'extension est bien .zip ou .ZIP
@@ -275,11 +286,9 @@ function unityWebglHandleUpload(): void
     $target_dir = $upload_dir['basedir'] . $unityWebFolderName . sanitize_title($build_name);
     
     // Vérifie si le dossier unity_webgl existe, sinon le crée
-    if (!file_exists($upload_dir['basedir'] . $unityWebFolderName)) {
-        if (!wp_mkdir_p($upload_dir['basedir'] . $unityWebFolderName)) {
-            unityWebglError(__('Unable to create the unity_webgl folder.', 'wp-unity-webgl'));
-            return;
-        }
+    if (!file_exists($upload_dir['basedir'] . $unityWebFolderName) && !wp_mkdir_p($upload_dir['basedir'] . $unityWebFolderName)) {
+        unityWebglError(__('Unable to create the unity_webgl folder.', 'wp-unity-webgl'));
+        return;
     }
     
     // Initialise le système de fichiers WordPress

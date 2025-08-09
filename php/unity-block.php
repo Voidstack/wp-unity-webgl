@@ -2,8 +2,8 @@
 require_once __DIR__ . '/utils.php';
 
 /**
- * Returns an array of strings to translate for the JS interface.
- */
+* Returns an array of strings to translate for the JS interface.
+*/
 function wpunityGetTranslatableStrings(): array {
     return [
         'buildChoose' => __('buildChoose', 'wp-unity-webgl'),
@@ -16,8 +16,8 @@ function wpunityGetTranslatableStrings(): array {
 }
 
 /**
- * Registers the Unity WebGL block and enqueues the necessary editor script.
- */
+* Registers the Unity WebGL block and enqueues the necessary editor script.
+*/
 function unityEnqueueBlock(): void
 {
     // Register the editor JavaScript file
@@ -25,7 +25,8 @@ function unityEnqueueBlock(): void
         'wpunity-unity-block',
         plugins_url('../js/editor-unity-block.js', __FILE__),
         ['wp-blocks', 'wp-element', 'wp-editor', 'wp-i18n'],
-        filemtime(plugin_dir_path(__FILE__) . '../js/editor-unity-block.js')
+        filemtime(plugin_dir_path(__FILE__) . '../js/editor-unity-block.js'),
+        true
     );
     
     // Ajout des trad dans le script
