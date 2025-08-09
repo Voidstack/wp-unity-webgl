@@ -37,7 +37,7 @@ function unityEnqueueToolbarCss(): void {
 add_action('wp_enqueue_scripts', 'unityEnqueueToolbarCss');
 
 // Language
-load_plugin_textdomain('wp-unity-webgl', false, dirname(plugin_basename(__FILE__)) . '/languages');
+// load_plugin_textdomain('wp-unity-webgl', false, dirname(plugin_basename(__FILE__)) . '/languages');
 
 function unityEnqueueScripts(array $unityArgs): void {
     wp_enqueue_script(
@@ -127,7 +127,7 @@ function unityBuildShortcode(array $atts): string
         default => 'ERROR',
     };
     
-    $uuid = Utils::generate_uuid();
+    $uuid = Utils::generateUuid();
     unityEnqueueScripts([
         'buildUrl' => $build_url,
         'loaderName' => $loader_name,
@@ -142,18 +142,18 @@ function unityBuildShortcode(array $atts): string
     
     // Start output buffering to capture the HTML output
     ob_start(); ?>
-    <div id="<?=$uuid?>-error" class="unity-error"></div>
-    <div id="<?=$uuid?>-container" class="unity-container" style="<?=$styleSizeMode?>">
+    <div id="<?php echo esc_attr( $uuid ); ?>-error" class="unity-error"></div>
+    <div id="<?php echo esc_attr( $uuid ); ?>-container" class="unity-container" style="<?php echo esc_attr($styleSizeMode); ?>">
     <canvas
-    id="<?= $uuid ?>-canvas"
+    id="<?php echo esc_attr($uuid); ?>-canvas"
     class="unity-canvas"
-    data-build-url="<?= esc_attr($build_url) ?>"
-    data-loader-name="<?= esc_attr($loader_name) ?>"
-    data-show-options="<?= $showOptions ? 'true' : 'false' ?>"
-    data-show-logs="<?= $showLogs ? 'true' : 'false' ?>"
-    data-size-mode="<?= esc_attr($sizeMode) ?>"
-    data-fixed-height="<?= intval($fixedHeight) ?>"
-    data-aspect-ratio="<?= esc_attr($aspectRatio) ?>"
+    data-build-url="<?php echo esc_attr($build_url) ?>"
+    data-loader-name="<?php echo esc_attr($loader_name) ?>"
+    data-show-options="<?php echo $showOptions ? 'true' : 'false' ?>"
+    data-show-logs="<?php echo $showLogs ? 'true' : 'false' ?>"
+    data-size-mode="<?php echo esc_attr($sizeMode) ?>"
+    data-fixed-height="<?php echo intval($fixedHeight) ?>"
+    data-aspect-ratio="<?php echo esc_attr($aspectRatio) ?>"
     ></canvas>
     </div>
     <?php

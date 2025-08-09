@@ -38,7 +38,7 @@ class BuildExtractor {
         // Extract to the temporary directory
         if (!$zip->extractTo($this->tmpDir)) {
             $zip->close();
-            Utils::delete_folder2($this->tmpDir);
+            Utils::deleteFolder2($this->tmpDir);
             $this->error(__('Extraction failed to temporary folder.', 'wp-unity-webgl'));
             return false;
         }
@@ -49,7 +49,7 @@ class BuildExtractor {
         
         // Verify that all expected files are present
         if (!$this->verifyExtractedFiles($this->tmpDir)) {
-            Utils::delete_folder2($this->tmpDir);
+            Utils::deleteFolder2($this->tmpDir);
             $this->error(
                 __('Missing expected build files. ', 'wp-unity-webgl') .
                 Utils::array_to_string($this->expectedFiles) . '</br>' .
@@ -60,13 +60,19 @@ class BuildExtractor {
         
         // Delete the existing target directory if it exists
         if (file_exists($this->targetDir)) {
-            Utils::delete_folder2($this->targetDir);
+            Utils::deleteFolder2($this->targetDir);
         }
         
         // Move the temporary directory to the target location
-        if (!rename($this->tmpDir, $this->targetDir)) {
-            Utils::delete_folder2($this->tmpDir);
-            $this->error(__('Failed to move build to target directory.', 'wp-unity-webgl'));
+        global $wp_filesystem;
+        if ( ! $wp_filesystem ) {
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+            WP_Filesystem();
+        }
+        
+        if ( ! $wp_filesystem->move( $this->tmpDir, $this->targetDir, true ) ) {
+            Utils::deleteFolder2( $this->tmpDir );
+            $this->error( __( 'Failed to move build to target directory.', 'wp-unity-webgl' ) );
             return false;
         }
         
@@ -110,19 +116,21 @@ class BuildExtractor {
             // Workaround: rename to a temporary name, then to the final lowercase name
             if ($oldPath !== $newPath) {
                 $tmpPath = $dirPath . DIRECTORY_SEPARATOR . uniqid('tmp_', true);
-                rename($oldPath, $tmpPath);
-                rename($tmpPath, $newPath);
+                $fs = WPFilesystemSingleton::getInstance();
+                
+                $fs->move( $oldPath, $tmpPath, true ); // Étape 1 : renommage temporaire
+                $fs->move( $tmpPath, $newPath, true ); // Étape 2 : renommage vers la bonne casse
             }
         }
     }
     
     // Display an error message in the WordPress admin interface
     private function error(string $message): void {
-        echo "<p style='color:red;'>" . __('❌ Extraction error: ', 'wp-unity-webgl') . wp_kses_post($message) . "</p>";
+        echo "<p style='color:red;'>" . esc_html__( '❌ Extraction error: ', 'wp-unity-webgl' ) . wp_kses_post( $message ) . "</p>";
     }
     
     // Display an informational message in the WordPress admin interface
     private function info(string $message): void {
-        echo "<p style='color:black;'>" . __('ℹ️ Extraction info: ', 'wp-unity-webgl') . wp_kses_post($message) . "</p>";
+        echo "<p style='color:black;'>" . esc_html__( 'ℹ️ Extraction info: ', 'wp-unity-webgl' ) . wp_kses_post( $message ) . "</p>";
     }
 }

@@ -1,23 +1,23 @@
 <?php
+require_once __DIR__ . '/singleton-wp-filesystem.php';
 
 class Utils {
-    public static function generate_uuid(): string {
-        return $uuid = uniqid('unity_', true);
+    public static function generateUuid(): string {
+        return uniqid('unity_', true);
     }
     
     // Méthode qui permet la suppression d'un dossier Wordpress friendly.
-    public static function delete_folder($folder) {
+    public static function deleteFolder($folder) {
         if (is_dir($folder)) {
-            require_once(ABSPATH . 'wp-admin/includes/file.php');
-            WP_Filesystem();
-            global $wp_filesystem;
-            $wp_filesystem->delete($folder, true);
-            echo "<div style='color:green;'>✅ Succès : build '{$folder}' supprimé avec succès.</div>";
+            WPFilesystemSingleton::getInstance()->rmdir($folder, true);
+            echo "<div style='color:green;'>✅ Succès : build '" . esc_html( $folder ) . "' supprimé avec succès.</div>";
+        }else{
+            echo "<div style='color:green;'>Error : build '" . esc_html( $folder ) . " not a folder.</div>";
         }
     }
-
+    
     // Supprime un dossier
-    public static function delete_folder2(string $dir): void {
+    public static function deleteFolder2(string $dir): void {
         if (!file_exists($dir)) {
             return;
         }
@@ -25,12 +25,12 @@ class Utils {
         $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
         foreach($files as $file) {
             if ($file->isDir()){
-                rmdir($file->getRealPath());
+                WPFilesystemSingleton::getInstance()->rmdir($file->getRealPath());
             } else {
                 wp_delete_file($file->getRealPath());
             }
         }
-        rmdir($dir);
+        Utils::deleteFolder($dir);
     }
     
     public static function array_to_string(array $arr): string {
@@ -71,11 +71,21 @@ class Utils {
     
     // Détecte le serveur web utilisé (Apache ou Nginx).
     public static function detectServer(): string {
-        $serverSoftware = $_SERVER['SERVER_SOFTWARE'] ?? '';
-        if (stripos($serverSoftware, 'apache') !== false) return 'apache';
-        if (stripos($serverSoftware, 'nginx') !== false) return 'nginx';
-        return $serverSoftware || 'unknown';
+        $serverSoftware = isset($_SERVER['SERVER_SOFTWARE'])
+        ? wp_unslash($_SERVER['SERVER_SOFTWARE']) // retire les éventuels slashes
+        : '';
+        
+        $serverSoftware = sanitize_text_field($serverSoftware); // sécurise la chaîne
+        
+        if (stripos($serverSoftware, 'apache') !== false) {
+            return 'apache';
+        }
+        if (stripos($serverSoftware, 'nginx') !== false) {
+            return 'nginx';
+        }
+        return $serverSoftware ?: 'unknown';
     }
+    
     
     /**
     * Vérifie si le type MIME pour les fichiers .wasm est configuré dans le .htaccess.
@@ -141,10 +151,12 @@ class Utils {
     /**
     * Renomme tous les fichiers et dossiers extraits en minuscules, récursivement.
     */
-    public static function lowercase_recursive(string $dir): void {
+    public static function lowercaseRecursive(string $dir): void {
         $items = scandir($dir);
         foreach ($items as $item) {
-            if ($item === '.' || $item === '..') continue;
+            if ($item === '.' || $item === '..') {
+                continue;
+            }
             
             $oldPath = $dir . DIRECTORY_SEPARATOR . $item;
             $newName = mb_strtolower($item);
@@ -152,12 +164,14 @@ class Utils {
             
             // Si le nom change, renommer
             if ($newPath !== $oldPath) {
-                rename($oldPath, $newPath);
+                $fs = WPFilesystemSingleton::getInstance();
+                $fs->move( $oldPath, $tmpPath, true );
+                $fs->move( $tmpPath, $newPath, true );
             }
             
             if (is_dir($newPath)) {
                 self::lowercase_recursive($newPath);
             }
         }
-    }   
+    }
 }
