@@ -97,7 +97,7 @@ function unityWebglAdminPage(): void
         }
     }
     
-    $builds = Utils::list_builds($builds_dir);
+    $builds = Utils::listBuilds($builds_dir);
     
     // Supprimer tout les builds si demandé.
     if (isset($_POST['delete_all_builds'])) {
@@ -105,7 +105,7 @@ function unityWebglAdminPage(): void
             $path = $builds_dir . '/' . $build;
             Utils::deleteFolder($path);
         }
-        $builds = Utils::list_builds($builds_dir);
+        $builds = Utils::listBuilds($builds_dir);
         echo '<div class="notice notice-success"><p>' . esc_html__('All builds have been deleted.', 'wp-unity-webgl') . '</p></div>';
     }
     echo '<table style="width: 100%; border-collapse: collapse;">';

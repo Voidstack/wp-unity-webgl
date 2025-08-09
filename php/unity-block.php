@@ -58,7 +58,7 @@ function unityWebglLocalizeBuilds(): void
     $upload_dir = wp_upload_dir();
     $builds_dir = $upload_dir['basedir'] . '/unity_webgl';
     
-    $builds = Utils::list_builds($builds_dir);
+    $builds = Utils::listBuilds($builds_dir);
     
     wp_localize_script('wpunity-unity-block', 'unityBuildsData', ['builds' => $builds]);
 }

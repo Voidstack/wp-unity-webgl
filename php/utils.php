@@ -33,13 +33,13 @@ class Utils {
         Utils::deleteFolder($dir);
     }
     
-    public static function array_to_string(array $arr): string {
+    public static function arrayToString(array $arr): string {
         return implode(', ', $arr);
     }
     
     
     // Retourne la liste des sous-dossiers présents dans $builds_dir.
-    public static function list_builds($builds_dir) {
+    public static function listBuilds($builds_dir) {
         $builds = [];
         foreach (scandir($builds_dir) as $entry) {
             if ($entry !== '.' && $entry !== '..' && is_dir($builds_dir . '/' . $entry)) {
@@ -47,7 +47,7 @@ class Utils {
             }
         }
         return $builds;
-    }    
+    }
     
     /**
     * Calcule la taille en octets d'un fichier ou d'un dossier (récursivement).
