@@ -6,31 +6,37 @@ class Utils {
         return uniqid('unity_', true);
     }
     
-    // Méthode qui permet la suppression d'un dossier Wordpress friendly.
-    public static function deleteFolder($folder) {
-        if (is_dir($folder)) {
-            WPFilesystemSingleton::getInstance()->rmdir($folder, true);
-            echo "<div style='color:green;'>✅ Succès : build '" . esc_html( $folder ) . "' supprimé avec succès.</div>";
-        }else{
-            echo "<div style='color:green;'>Error : build '" . esc_html( $folder ) . " not a folder.</div>";
+    /**
+     * Deletes a folder and its contents in a WordPress-friendly way.
+     * Uses WPFilesystemSingleton for directories and wp_delete_file for files.
+     *
+     * @param string $dir Path to the directory to delete.
+     * @return bool True on success, false on failure.
+     */
+    public static function deleteFolder(string $dir): bool {
+        if (!is_dir($dir)) {
+            Utils::error(esc_html__( 'Not a valid directory', 'wp-unity-webgl' ) . ' : ' . $dir);
+            return false;
         }
-    }
-    
-    // Supprime un dossier
-    public static function deleteFolder2(string $dir): void {
-        if (!file_exists($dir)) {
-            return;
-        }
+
+        $fs = WPFilesystemSingleton::getInstance();
         $it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
         $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
-        foreach($files as $file) {
-            if ($file->isDir()){
-                WPFilesystemSingleton::getInstance()->rmdir($file->getRealPath());
+
+        foreach ($files as $file) {
+            $path = $file->getRealPath();
+            if ($file->isDir()) {
+                $fs->rmdir($path);
             } else {
-                wp_delete_file($file->getRealPath());
+                wp_delete_file($path);
             }
         }
-        Utils::deleteFolder($dir);
+
+        $success = $fs->rmdir($dir, true);
+        if (!$success) {
+            Utils::error(esc_html__( 'Failed to delete directory', 'wp-unity-webgl' ) . ' : ' . $dir);
+        }
+        return $success;
     }
     
     public static function arrayToString(array $arr): string {
@@ -38,7 +44,7 @@ class Utils {
     }
     
     
-    // Retourne la liste des sous-dossiers présents dans $builds_dir.
+    // Returns the list of subfolders present in $builds_dir.
     public static function listBuilds($builds_dir) {
         $builds = [];
         foreach (scandir($builds_dir) as $entry) {
@@ -50,10 +56,10 @@ class Utils {
     }
     
     /**
-    * Calcule la taille en octets d'un fichier ou d'un dossier (récursivement).
+    * Calculates the size in bytes of a file or directory (recursively).
     *
-    * @param string $path Chemin vers le fichier ou dossier.
-    * @return int|float Taille en octets, 0 si le chemin n'existe pas.
+    * @param string $path Path to the file or directory.
+    * @return int|float Size in bytes, 0 if the path does not exist.
     */
     public static function getSize(string $path): int|float {
         if (is_file($path)) {
@@ -69,10 +75,10 @@ class Utils {
         return $size;
     }
     
-    // Détecte le serveur web utilisé (Apache ou Nginx).
+    // Detects the web server used (Apache or Nginx).
     public static function detectServer(): string { $serverSoftware = isset($_SERVER['SERVER_SOFTWARE'])? sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'])): '';
         
-        $serverSoftware = sanitize_text_field($serverSoftware); // sécurise la chaîne
+        $serverSoftware = sanitize_text_field($serverSoftware); 
         
         if (stripos($serverSoftware, 'apache') !== false) {
             return 'apache';
@@ -85,8 +91,8 @@ class Utils {
     
     
     /**
-    * Vérifie si le type MIME pour les fichiers .wasm est configuré dans le .htaccess.
-    * @return bool True si la directive est présente, false sinon.
+    * Checks if the MIME type for .wasm files is configured in .htaccess.
+    * @return bool True if the directive is present, false otherwise.
     */
     public static function isWasmMimeConfigured(): bool {
         $server = self::detectServer();
@@ -98,9 +104,9 @@ class Utils {
         return false;
     }
     
-    /**
-    * Configure le type MIME pour les fichiers .wasm dans le .htaccess ou le fichier de configuration Nginx.
-    * @return bool True si la configuration a réussi, false sinon.
+    /*
+    * Configures the MIME type for .wasm files in the .htaccess or Nginx configuration file.
+    * @return bool True if the configuration was successful, false otherwise.
     */
     public static function setupWasmMime(): bool {
         $server = self::detectServer();
@@ -117,7 +123,10 @@ class Utils {
             }
             
             $content = file_get_contents($htaccessPath);
-            if (strpos($content, trim($directive)) !== false) return true;
+            if (strpos($content, trim($directive)) !== false)
+                {
+                return true;
+            }
             
             $content .= $directive;
             return file_put_contents($htaccessPath, $content) !== false;
@@ -126,8 +135,8 @@ class Utils {
     }
     
     /**
-    * Supprime la directive MIME pour les fichiers .wasm du .htaccess ou du fichier de configuration Nginx.
-    * @return bool True si la suppression a réussi, false sinon.
+    * Removes the MIME directive for .wasm files from the .htaccess or Nginx configuration file.
+    * @return bool True if the removal was successful, false otherwise.
     */
     public static function removeWasmMimeSetup(): bool {
         $server = self::detectServer();
@@ -153,7 +162,7 @@ class Utils {
     }
     
     /**
-    * Renomme tous les fichiers et dossiers extraits en minuscules, récursivement.
+    * Renames all extracted files and folders to lowercase, recursively.
     */
     public static function lowercaseRecursive(string $dir): void {
         $items = scandir($dir);
@@ -166,16 +175,30 @@ class Utils {
             $newName = mb_strtolower($item);
             $newPath = $dir . DIRECTORY_SEPARATOR . $newName;
             
-            // Si le nom change, renommer
+            // If the name changes, rename
             if ($newPath !== $oldPath) {
                 $fs = WPFilesystemSingleton::getInstance();
-                $fs->move( $oldPath, $tmpPath, true );
-                $fs->move( $tmpPath, $newPath, true );
+                $fs->rename($oldPath, $newPath, true);
             }
             
             if (is_dir($newPath)) {
                 self::lowercase_recursive($newPath);
             }
         }
+    }
+
+    // Display an error message in the WordPress admin interface
+    public static function error(string $message): void {
+        echo "<p style='color:red;'>❌ " . esc_html__( 'Error: ', 'wp-unity-webgl' ) . wp_kses_post( $message ) . "</p>";
+    }
+    
+    // Display an informational message in the WordPress admin interface
+    public static function info(string $message): void {
+        echo "<p style='color:black;'>ℹ️ " . esc_html__( 'Info: ', 'wp-unity-webgl' ) . wp_kses_post( $message ) . "</p>";
+    }
+
+    // Display a validation message in the WordPress admin interface
+    public static function valid(string $message): void {
+        echo "<p style='color:green;'>✅ " . esc_html__( 'Success: ', 'wp-unity-webgl' ) . wp_kses_post( $message ) . "</p>";
     }
 }

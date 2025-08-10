@@ -6,7 +6,7 @@ require_once __DIR__ . '/build-extractor.php';
 /**
 * Ce fichier contient toutes les méthodes nécessaires à la gestion
 * de la page d'administration de l'extension WordPress.
-* 
+*
 * Cette séparation facilite la maintenance en isolant la logique
 * liée uniquement à l'interface admin du reste du plugin.
 */
@@ -208,11 +208,6 @@ function unityWebglAdminServerConfig(): void
     echo "</div>";
 }
 
-// Affiche un message d'erreur dans l'interface admin
-function unityWebglError(string $message): void {
-    echo '<p style="color:red;">❌ Erreur : ' . esc_html( $message ) . '</p>';
-}
-
 // Méthod de téléversement d'un projet unity .zip
 function unityWebglHandleUpload(): void
 {
@@ -227,23 +222,23 @@ function unityWebglHandleUpload(): void
     
     // Problème de permission
     if (!current_user_can('manage_options')) {
-        unityWebglError(__('Insufficient permissions.', 'wp-unity-webgl'));
+        Utils::error(__('Insufficient permissions.', 'wp-unity-webgl'));
         return;
     }
     
     if ( ! isset($_FILES['unity_zip']['tmp_name']) || empty($_FILES['unity_zip']['tmp_name']) ) {
-        unityWebglError(__('Temporary file missing.', 'wp-unity-webgl'));
+        Utils::error(__('Temporary file missing.', 'wp-unity-webgl'));
         return;
     }
     
     // Le transfert est vide ou erreur autre
     // Le transfert est vide ou erreur autre
     if ( empty($_FILES['unity_zip']) ) {
-        unityWebglError(__('No file sent.', 'wp-unity-webgl'));
+        Utils::error(__('No file sent.', 'wp-unity-webgl'));
         return;
     } elseif ( ! isset($_FILES['unity_zip']['error']) || $_FILES['unity_zip']['error'] !== UPLOAD_ERR_OK ) {
         $error_code = isset($_FILES['unity_zip']['error']) ? intval($_FILES['unity_zip']['error']) : 0;
-        unityWebglError(
+        Utils::error(
             /* translators: %d is the upload error code */
             sprintf(__('Upload failed, error code: %d', 'wp-unity-webgl'), $error_code)
         );
@@ -257,7 +252,7 @@ function unityWebglHandleUpload(): void
     $mime = finfo_file($finfo, $_FILES['unity_zip']['tmp_name']);
     finfo_close($finfo);
     if ($mime !== 'application/zip') {
-        unityWebglError("seul le format ZIP est autorisé.");
+        Utils::error("seul le format ZIP est autorisé.");
         return;
     }
     
@@ -267,7 +262,7 @@ function unityWebglHandleUpload(): void
     // Check si l'extension est bien .zip ou .ZIP
     $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
     if (strtolower($ext) !== 'zip') {
-        unityWebglError(__('Only ZIP format MIME type is allowed.', 'wp-unity-webgl'));
+        Utils::error(__('Only ZIP format MIME type is allowed.', 'wp-unity-webgl'));
         return;
     }
     
@@ -275,7 +270,7 @@ function unityWebglHandleUpload(): void
     
     // Check si wordpress renvoi bien le upload directory.
     if (!is_array($upload_dir) || empty($upload_dir['basedir'])) {
-        unityWebglError(__('Unable to retrieve the WordPress upload directory.', 'wp-unity-webgl'));
+        Utils::error(__('Unable to retrieve the WordPress upload directory.', 'wp-unity-webgl'));
         return;
     }
     
@@ -287,13 +282,13 @@ function unityWebglHandleUpload(): void
     
     // Vérifie si le dossier unity_webgl existe, sinon le crée
     if (!file_exists($upload_dir['basedir'] . $unityWebFolderName) && !wp_mkdir_p($upload_dir['basedir'] . $unityWebFolderName)) {
-        unityWebglError(__('Unable to create the unity_webgl folder.', 'wp-unity-webgl'));
+        Utils::error(__('Unable to create the unity_webgl folder.', 'wp-unity-webgl'));
         return;
     }
     
     // Initialise le système de fichiers WordPress
     if(!WPFilesystemSingleton::getInstance()->getWpFilesystem()){
-        unityWebglError(__('Unable to initialize the WordPress filesystem.', 'wp-unity-webgl'));
+        Utils::error(__('Unable to initialize the WordPress filesystem.', 'wp-unity-webgl'));
         return;
     }
     
@@ -301,13 +296,13 @@ function unityWebglHandleUpload(): void
     
     // Vérifie si le dossier cible existe déjà et le supprime si nécessaire
     if (file_exists($target_dir) && is_dir($target_dir) && !$wp_filesystem->delete($target_dir, true)) {
-        unityWebglError(__('Unable to delete the previous build at: ', 'wp-unity-webgl') . $target_dir);
+        Utils::error(__('Unable to delete the previous build at: ', 'wp-unity-webgl') . $target_dir);
         return;
     }
     
     // Crée le dossier cible s'il n'existe pas
     if (!$wp_filesystem->is_dir($target_dir) && !wp_mkdir_p($target_dir)) {
-        unityWebglError(__('Unable to create target directory: ', 'wp-unity-webgl') . $target_dir);
+        Utils::error(__('Unable to create target directory: ', 'wp-unity-webgl') . $target_dir);
         return;
     }
     
@@ -323,7 +318,7 @@ function unityWebglHandleUpload(): void
     if ($extractor->extract()) {
         echo '<p style="color:green;">✅ Success: Build extracted and validated.</p>';
     }else{
-        Utils::deleteFolder2($target_dir);
+        Utils::deleteFolder($target_dir);
     }
 }
 ?>
