@@ -2,7 +2,7 @@
 require_once plugin_dir_path(__FILE__) . 'php/utils.php';
 
 /**
-* Plugin Name: WP Unity WebGL
+* Plugin Name: Unity WebGL Integrator
 * Plugin URI:  https://enosistudio.com/
 * Description: Displays a Unity WebGL game inside your page.
 * Version: 0.1
@@ -12,7 +12,7 @@ require_once plugin_dir_path(__FILE__) . 'php/utils.php';
 * License URI: https://www.gnu.org/licenses/gpl-3.0.html
 * Tested up to: 6.8.2
 * Stable tag: 0.1
-* Text Domain: wp-unity-webgl
+* Text Domain: unity-webgl-integrator
 * Domain Path: /languages
 */
 
@@ -37,7 +37,7 @@ function unityEnqueueToolbarCss(): void {
 add_action('wp_enqueue_scripts', 'unityEnqueueToolbarCss');
 
 // Language
-// load_plugin_textdomain('wp-unity-webgl', false, dirname(plugin_basename(__FILE__)) . '/languages');
+// load_plugin_textdomain('unity-webgl-integrator', false, dirname(plugin_basename(__FILE__)) . '/languages');
 
 function unityEnqueueScripts(array $unityArgs): void {
     wp_enqueue_script(
@@ -59,7 +59,7 @@ function unityEnqueueScripts(array $unityArgs): void {
         'aspectRatio' => $unityArgs['aspectRatio'],
         'urlAdmin' => admin_url('/wp-admin/admin.php'),
         'currentUserIsAdmin' => current_user_can('administrator'),
-        'admMessage' => __('TempMsg', 'wp-unity-webgl'),
+        'admMessage' => __('TempMsg', 'unity-webgl-integrator'),
         'instanceId' => $unityArgs['uuid'],
     ]);
     
@@ -110,7 +110,7 @@ function unityBuildShortcode(array $atts): string
     // Check if the loader script exists, else show an error
     if (!file_exists($loader_file)) {
         // translators: %s is the Unity build loader file path.
-        return '<p style="color:red;">' . sprintf(esc_html__('Unity build file not found: %s', 'wp-unity-webgl'),esc_html($loader_file)) . '</p>';
+        return '<p style="color:red;">' . sprintf(esc_html__('Unity build file not found: %s', 'unity-webgl-integrator'),esc_html($loader_file)) . '</p>';
     }
     
     // Extract the loader name from the loader filename (e.g. "Build")
@@ -118,7 +118,7 @@ function unityBuildShortcode(array $atts): string
     
     // If visitor is on mobile and game is not allowed on mobile, show a message
     if (wp_is_mobile() && !$showOnMobile) {
-        return '<p>' . esc_html__('🚫 Le jeu n’est pas disponible sur mobile. Merci de le lancer depuis un ordinateur pour une meilleure expérience.', 'wp-unity-webgl') . '</p>';
+        return '<p>🚫 ' . esc_html__('The game is not available on mobile. Please launch it on a computer for a better experience.', 'unity-webgl-integrator') . '</p>';
     }
     
     $styleSizeMode = match ($sizeMode) {

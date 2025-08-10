@@ -20,7 +20,7 @@ class BuildExtractor {
     }
     
     public function extract(): bool {
-        Utils::info(__('Starting extraction', 'wp-unity-webgl'));
+        Utils::info(__('Starting extraction', 'unity-webgl-integrator'));
         $result = true;
         
         if (!$this->createTempDirectory() || !$this->extractZipToTemp() || !$this->processExtractedFiles() || !$this->moveToTargetDirectory())
@@ -34,7 +34,7 @@ class BuildExtractor {
     // Create the temporary directory
     private function createTempDirectory(): bool {
         if (!wp_mkdir_p($this->tmpDir)) {
-            Utils::error(__('Unable to create temporary extraction folder.', 'wp-unity-webgl'));
+            Utils::error(__('Unable to create temporary extraction folder.', 'unity-webgl-integrator'));
             return false;
         }
         return true;
@@ -45,13 +45,13 @@ class BuildExtractor {
         $zip = new ZipArchive;
         if ($zip->open($this->zipPath) !== true) {
             // translators: %s is the path to the zip file that couldn't be opened.
-            Utils::error(sprintf(__('Unable to open the .zip file (%s)', 'wp-unity-webgl'), $this->zipPath));
+            Utils::error(sprintf(__('Unable to open the .zip file (%s)', 'unity-webgl-integrator'), $this->zipPath));
             return false;
         }
         if (!$zip->extractTo($this->tmpDir)) {
             $zip->close();
             Utils::deleteFolder($this->tmpDir);
-            Utils::error(__('Extraction failed to temporary folder.', 'wp-unity-webgl'));
+            Utils::error(__('Extraction failed to temporary folder.', 'unity-webgl-integrator'));
             return false;
         }
         $zip->close();
@@ -65,9 +65,9 @@ class BuildExtractor {
         if (!$this->verifyExtractedFiles($this->tmpDir)) {
             Utils::deleteFolder($this->tmpDir);
             Utils::error(
-                __('Missing expected build files. ', 'wp-unity-webgl') .
+                __('Missing expected build files. ', 'unity-webgl-integrator') .
                 Utils::arrayToString($this->expectedFiles) . '</br>' .
-                __('The .zip file MUST have the same name as the files it contains.', 'wp-unity-webgl')
+                __('The .zip file MUST have the same name as the files it contains.', 'unity-webgl-integrator')
             );
             return false;
         }
@@ -82,7 +82,7 @@ class BuildExtractor {
         $fsSingleton = WPFilesystemSingleton::getInstance();
         if (!$fsSingleton->move($this->tmpDir, $this->targetDir, true)) {
             Utils::deleteFolder($this->tmpDir);
-            Utils::error(__('Failed to move build to target directory.', 'wp-unity-webgl'));
+            Utils::error(__('Failed to move build to target directory.', 'unity-webgl-integrator'));
             return false;
         }
         return true;
@@ -99,7 +99,7 @@ class BuildExtractor {
             }
         }
         // Display found files for debugging
-        Utils::info(__('Files found: ', 'wp-unity-webgl') . Utils::arrayToString($foundFiles));
+        Utils::info(__('Files found: ', 'unity-webgl-integrator') . Utils::arrayToString($foundFiles));
         foreach ($this->expectedFiles as $expected) {
             if (!in_array($expected, $foundFiles)) {
                 return false;
