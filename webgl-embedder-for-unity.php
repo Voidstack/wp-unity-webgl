@@ -1,5 +1,7 @@
 <?php
-require_once plugin_dir_path(__FILE__) . 'php/utils.php';
+
+// empêche l'accès direct au fichier PHP via l'URL
+defined('ABSPATH') or die;
 
 /**
 * Plugin Name: WebGL Embedder For Unity
@@ -16,8 +18,7 @@ require_once plugin_dir_path(__FILE__) . 'php/utils.php';
 * Domain Path: /languages
 */
 
-// empêche l'accès direct au fichier PHP via l'URL
-defined('ABSPATH') or die;
+require_once plugin_dir_path(__FILE__) . 'php/utils.php';
 
 /** Permet de charger le script de la page d'administration, uniquement pour l'administration (optimisation) */
 if(is_admin()){

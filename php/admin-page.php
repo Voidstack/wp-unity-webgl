@@ -1,4 +1,7 @@
 <?php
+
+defined('ABSPATH') or die;
+
 require_once __DIR__ . '/utils.php';
 require_once __DIR__ . '/singleton-wp-filesystem.php';
 require_once __DIR__ . '/build-extractor.php';
