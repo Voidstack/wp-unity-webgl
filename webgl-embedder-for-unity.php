@@ -2,7 +2,7 @@
 require_once plugin_dir_path(__FILE__) . 'php/utils.php';
 
 /**
-* Plugin Name: Unity WebGL Integrator
+* Plugin Name: WebGL Embedder For Unity
 * Plugin URI:  https://enosistudio.com/
 * Description: Displays a Unity WebGL game inside your page.
 * Version: 0.1

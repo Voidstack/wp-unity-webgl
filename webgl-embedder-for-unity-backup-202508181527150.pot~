@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP Unity WebGL\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-18 15:27+0000\n"
+"POT-Creation-Date: 2025-08-10 09:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -198,7 +198,7 @@ msgstr ""
 msgid "Success: "
 msgstr ""
 
-#: webgl-embedder-for-unity.php:62
+#: main.php:62
 msgid "TempMsg"
 msgstr ""
 
@@ -214,7 +214,7 @@ msgstr ""
 msgid "The attempt to add or remove may fail for security reasons."
 msgstr ""
 
-#: webgl-embedder-for-unity.php:121
+#: main.php:121
 msgid ""
 "The game is not available on mobile. Please launch it on a computer for a "
 "better experience."
@@ -261,9 +261,13 @@ msgid "Unable to retrieve the WordPress upload directory."
 msgstr ""
 
 #. %s is the Unity build loader file path.
-#: webgl-embedder-for-unity.php:113
+#: main.php:113
 #, php-format
 msgid "Unity build file not found: %s"
+msgstr ""
+
+#. Name of the plugin
+msgid "Unity WebGL Integrator"
 msgstr ""
 
 #: php/admin-page.php:75
@@ -277,8 +281,4 @@ msgstr ""
 
 #: php/admin-page.php:69
 msgid "Use this page to add your Unity project by uploading the"
-msgstr ""
-
-#. Name of the plugin
-msgid "WebGL Embedder For Unity"
 msgstr ""

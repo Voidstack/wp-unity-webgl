@@ -1,4 +1,4 @@
-=== Unity WebGL Integrator ===
+=== WebGL Embedder For Unity ===
 Contributors: voidstack, baptiste-martin
 Tags: unity, webgl, game, shortcode, upload
 Requires at least: 5.0
