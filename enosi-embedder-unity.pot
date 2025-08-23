@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP Unity WebGL\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-18 15:27+0000\n"
+"POT-Creation-Date: 2025-08-28 06:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -16,21 +16,21 @@ msgstr ""
 "X-Loco-Version: 2.8.0; wp-6.8.1; php-8.4.4\n"
 "X-Domain: unity-webgl-integrator"
 
-#: php/admin-page.php:109
+#: php/admin-page.php:112
 msgid "All builds have been deleted."
 msgstr ""
 
-#: php/admin-page.php:193
+#: php/admin-page.php:196
 msgid "Any server configuration change requires a manual server restart."
 msgstr ""
 
-#: php/admin-page.php:199 php/admin-page.php:205
+#: php/admin-page.php:202 php/admin-page.php:208
 msgid ""
 "Automatic detection and configuration of the MIME type for .wasm files is "
 "only supported on Apache servers."
 msgstr ""
 
-#: php/admin-page.php:68
+#: php/admin-page.php:71
 msgid "Build Manager"
 msgstr ""
 
@@ -38,19 +38,19 @@ msgstr ""
 msgid "Choose a unity build"
 msgstr ""
 
-#: php/admin-page.php:184
+#: php/admin-page.php:187
 msgid "Configure the MIME type for .wasm"
 msgstr ""
 
-#: php/admin-page.php:143
+#: php/admin-page.php:146
 msgid "Delete all builds"
 msgstr ""
 
-#: php/admin-page.php:141
+#: php/admin-page.php:144
 msgid "Delete ALL builds?"
 msgstr ""
 
-#: php/admin-page.php:177
+#: php/admin-page.php:180
 msgid "Delete the MIME type for .wasm"
 msgstr ""
 
@@ -68,6 +68,10 @@ msgstr ""
 
 #. Description of the plugin
 msgid "Displays a Unity WebGL game inside your page."
+msgstr ""
+
+#. Name of the plugin
+msgid "ENOSI Embedder For Unity"
 msgstr ""
 
 #: php/utils.php:192
@@ -96,7 +100,7 @@ msgstr ""
 msgid "Files found: "
 msgstr ""
 
-#: php/admin-page.php:69
+#: php/admin-page.php:72
 msgid "folder of your project and manage it easily within the admin dashboard."
 msgstr ""
 
@@ -108,7 +112,7 @@ msgstr ""
 msgid "https://www.linkedin.com/in/baptiste-martin56/"
 msgstr ""
 
-#: php/admin-page.php:192
+#: php/admin-page.php:195
 msgid ""
 "In that case, the configuration must be done manually in the .htaccess file."
 msgstr ""
@@ -117,7 +121,7 @@ msgstr ""
 msgid "Info: "
 msgstr ""
 
-#: php/admin-page.php:225
+#: php/admin-page.php:228
 msgid "Insufficient permissions."
 msgstr ""
 
@@ -129,15 +133,15 @@ msgstr ""
 msgid "Missing expected build files. "
 msgstr ""
 
-#: php/admin-page.php:113
+#: php/admin-page.php:116
 msgid "Name"
 msgstr ""
 
-#: php/admin-page.php:139
+#: php/admin-page.php:142
 msgid "No build found."
 msgstr ""
 
-#: php/admin-page.php:237
+#: php/admin-page.php:240
 msgid "No file sent."
 msgstr ""
 
@@ -145,25 +149,25 @@ msgstr ""
 msgid "Not a valid directory"
 msgstr ""
 
-#: php/admin-page.php:265
+#: php/admin-page.php:268
 msgid "Only ZIP format MIME type is allowed."
 msgstr ""
 
-#: php/admin-page.php:114
+#: php/admin-page.php:117
 msgid "Path"
 msgstr ""
 
-#: php/admin-page.php:129
+#: php/admin-page.php:132
 msgid "Permanently delete build:"
 msgstr ""
 
-#: php/admin-page.php:198
+#: php/admin-page.php:201
 msgid ""
 "Please configure the MIME type for .wasm files in your Nginx configuration."
 msgstr ""
 
 #. %s is the link to Enosi Studio
-#: php/admin-page.php:150
+#: php/admin-page.php:153
 #, php-format
 msgid "Plugin developed by %s."
 msgstr ""
@@ -172,21 +176,21 @@ msgstr ""
 msgid "Selected build"
 msgstr ""
 
-#: php/admin-page.php:164
+#: php/admin-page.php:167
 msgid "Server configuration: Apache detected."
 msgstr ""
 
-#: php/admin-page.php:197
+#: php/admin-page.php:200
 msgid "Server configuration: Nginx detected."
 msgstr ""
 
 #. %s is the detected server configuration type.
-#: php/admin-page.php:204
+#: php/admin-page.php:207
 #, php-format
 msgid "Server configuration: unknown(%s) detected."
 msgstr ""
 
-#: php/admin-page.php:115
+#: php/admin-page.php:118
 msgid "Size (MB)"
 msgstr ""
 
@@ -198,11 +202,11 @@ msgstr ""
 msgid "Success: "
 msgstr ""
 
-#: webgl-embedder-for-unity.php:62
+#: enosi-embedder-unity.php:63
 msgid "TempMsg"
 msgstr ""
 
-#: php/admin-page.php:230
+#: php/admin-page.php:233
 msgid "Temporary file missing."
 msgstr ""
 
@@ -210,27 +214,27 @@ msgstr ""
 msgid "The .zip file MUST have the same name as the files it contains."
 msgstr ""
 
-#: php/admin-page.php:191
+#: php/admin-page.php:194
 msgid "The attempt to add or remove may fail for security reasons."
 msgstr ""
 
-#: webgl-embedder-for-unity.php:121
+#: enosi-embedder-unity.php:122
 msgid ""
 "The game is not available on mobile. Please launch it on a computer for a "
 "better experience."
 msgstr ""
 
-#: php/admin-page.php:178
+#: php/admin-page.php:181
 msgid "The MIME type for .wasm files is already configured in the .htaccess."
 msgstr ""
 
-#: php/admin-page.php:188
+#: php/admin-page.php:191
 msgid ""
 "The MIME type for .wasm files is not configured in the .htaccess. A warning "
 "will be shown in the console at each build launch."
 msgstr ""
 
-#: php/admin-page.php:305
+#: php/admin-page.php:308
 msgid "Unable to create target directory: "
 msgstr ""
 
@@ -238,15 +242,15 @@ msgstr ""
 msgid "Unable to create temporary extraction folder."
 msgstr ""
 
-#: php/admin-page.php:285
+#: php/admin-page.php:288
 msgid "Unable to create the unity_webgl folder."
 msgstr ""
 
-#: php/admin-page.php:299
+#: php/admin-page.php:302
 msgid "Unable to delete the previous build at: "
 msgstr ""
 
-#: php/admin-page.php:291
+#: php/admin-page.php:294
 msgid "Unable to initialize the WordPress filesystem."
 msgstr ""
 
@@ -256,29 +260,25 @@ msgstr ""
 msgid "Unable to open the .zip file (%s)"
 msgstr ""
 
-#: php/admin-page.php:273
+#: php/admin-page.php:276
 msgid "Unable to retrieve the WordPress upload directory."
 msgstr ""
 
 #. %s is the Unity build loader file path.
-#: webgl-embedder-for-unity.php:113
+#: enosi-embedder-unity.php:114
 #, php-format
 msgid "Unity build file not found: %s"
 msgstr ""
 
-#: php/admin-page.php:75
+#: php/admin-page.php:78
 msgid "Upload and Extract"
 msgstr ""
 
 #. %d is the upload error code
-#: php/admin-page.php:243
+#: php/admin-page.php:246
 msgid "Upload failed, error code: %d"
 msgstr ""
 
-#: php/admin-page.php:69
+#: php/admin-page.php:72
 msgid "Use this page to add your Unity project by uploading the"
-msgstr ""
-
-#. Name of the plugin
-msgid "WebGL Embedder For Unity"
 msgstr ""

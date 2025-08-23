@@ -15,7 +15,7 @@ class Utils {
      */
     public static function deleteFolder(string $dir): bool {
         if (!is_dir($dir)) {
-            Utils::error(esc_html__( 'Not a valid directory', 'webgl-embedder-for-unity' ) . ' : ' . $dir);
+            Utils::error(esc_html__( 'Not a valid directory', 'enosi-embedder-unity' ) . ' : ' . $dir);
             return false;
         }
 
@@ -34,7 +34,7 @@ class Utils {
 
         $success = $fs->rmdir($dir, true);
         if (!$success) {
-            Utils::error(esc_html__( 'Failed to delete directory', 'webgl-embedder-for-unity' ) . ' : ' . $dir);
+            Utils::error(esc_html__( 'Failed to delete directory', 'enosi-embedder-unity' ) . ' : ' . $dir);
         }
         return $success;
     }
@@ -189,16 +189,16 @@ class Utils {
 
     // Display an error message in the WordPress admin interface
     public static function error(string $message): void {
-        echo "<p style='color:red;'>❌ " . esc_html__( 'Error: ', 'webgl-embedder-for-unity' ) . wp_kses_post( $message ) . "</p>";
+        echo "<p style='color:red;'>❌ " . esc_html__( 'Error: ', 'enosi-embedder-unity' ) . wp_kses_post( $message ) . "</p>";
     }
     
     // Display an informational message in the WordPress admin interface
     public static function info(string $message): void {
-        echo "<p style='color:black;'>ℹ️ " . esc_html__( 'Info: ', 'webgl-embedder-for-unity' ) . wp_kses_post( $message ) . "</p>";
+        echo "<p style='color:black;'>ℹ️ " . esc_html__( 'Info: ', 'enosi-embedder-unity' ) . wp_kses_post( $message ) . "</p>";
     }
 
     // Display a validation message in the WordPress admin interface
     public static function valid(string $message): void {
-        echo "<p style='color:green;'>✅ " . esc_html__( 'Success: ', 'webgl-embedder-for-unity' ) . wp_kses_post( $message ) . "</p>";
+        echo "<p style='color:green;'>✅ " . esc_html__( 'Success: ', 'enosi-embedder-unity' ) . wp_kses_post( $message ) . "</p>";
     }
 }

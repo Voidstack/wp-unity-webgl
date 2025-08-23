@@ -4,7 +4,7 @@
 defined('ABSPATH') or die;
 
 /**
-* Plugin Name: WebGL Embedder For Unity
+* Plugin Name: ENOSI Embedder For Unity
 * Plugin URI:  https://enosistudio.com/
 * Description: Displays a Unity WebGL game inside your page.
 * Version: 0.1
@@ -14,19 +14,19 @@ defined('ABSPATH') or die;
 * License URI: https://www.gnu.org/licenses/gpl-3.0.html
 * Tested up to: 6.8.2
 * Stable tag: 0.1
-* Text Domain: webgl-embedder-for-unity
+* Text Domain: enosi-embedder-unity
 * Domain Path: /languages
 */
 
 require_once plugin_dir_path(__FILE__) . 'php/utils.php';
 
-/** Permet de charger le script de la page d'administration, uniquement pour l'administration (optimisation) */
+// Allows to load the administration page script, only for administration (optimization)
 if(is_admin()){
     require_once plugin_dir_path(__FILE__) . 'php/admin-page.php';
     require_once plugin_dir_path(__FILE__) . 'php/unity-block.php'; // ne s'exécute que dans l'éditeur de blocs (page/post avec Gutenberg)
 }
 
-// Ajout du main.css
+// Add of main.css
 function unityEnqueueToolbarCss(): void {
     wp_enqueue_style(
         'unity-toolbar-style',
@@ -38,7 +38,7 @@ function unityEnqueueToolbarCss(): void {
 add_action('wp_enqueue_scripts', 'unityEnqueueToolbarCss');
 
 // Language
-// load_plugin_textdomain('webgl-embedder-for-unity', false, dirname(plugin_basename(__FILE__)) . '/languages');
+// load_plugin_textdomain('enosi-embedder-unity', false, dirname(plugin_basename(__FILE__)) . '/languages');
 
 function unityEnqueueScripts(array $unityArgs): void {
     wp_enqueue_script(
@@ -49,7 +49,7 @@ function unityEnqueueScripts(array $unityArgs): void {
         true
     );
     
-    wp_localize_script('unity-webgl', 'UnityWebGLData', [
+    wp_localize_script('unity-webgl', 'EnosiUnityData', [
         'buildUrl' => $unityArgs['buildUrl'],
         'loaderName' => $unityArgs['loaderName'],
         'showOptions' => $unityArgs['showOptions'],
@@ -60,11 +60,11 @@ function unityEnqueueScripts(array $unityArgs): void {
         'aspectRatio' => $unityArgs['aspectRatio'],
         'urlAdmin' => admin_url('/wp-admin/admin.php'),
         'currentUserIsAdmin' => current_user_can('administrator'),
-        'admMessage' => __('TempMsg', 'webgl-embedder-for-unity'),
+        'admMessage' => __('TempMsg', 'enosi-embedder-unity'),
         'instanceId' => $unityArgs['uuid'],
     ]);
-    
-    // Permet au script client-unity-block d'import client-unity-toolbar
+
+    // Allows the client-unity-block script to import client-unity-toolbar
     if (!function_exists('unityScriptTypeModule')) {
         function unityScriptTypeModule(string $tag, string $handle): string {
             if ($handle === 'unity-webgl') {
@@ -111,7 +111,7 @@ function unityBuildShortcode(array $atts): string
     // Check if the loader script exists, else show an error
     if (!file_exists($loader_file)) {
         // translators: %s is the Unity build loader file path.
-        return '<p style="color:red;">' . sprintf(esc_html__('Unity build file not found: %s', 'webgl-embedder-for-unity'),esc_html($loader_file)) . '</p>';
+        return '<p style="color:red;">' . sprintf(esc_html__('Unity build file not found: %s', 'enosi-embedder-unity'),esc_html($loader_file)) . '</p>';
     }
     
     // Extract the loader name from the loader filename (e.g. "Build")
@@ -119,7 +119,7 @@ function unityBuildShortcode(array $atts): string
     
     // If visitor is on mobile and game is not allowed on mobile, show a message
     if (wp_is_mobile() && !$showOnMobile) {
-        return '<p>🚫 ' . esc_html__('The game is not available on mobile. Please launch it on a computer for a better experience.', 'webgl-embedder-for-unity') . '</p>';
+        return '<p>🚫 ' . esc_html__('The game is not available on mobile. Please launch it on a computer for a better experience.', 'enosi-embedder-unity') . '</p>';
     }
     
     $styleSizeMode = match ($sizeMode) {
